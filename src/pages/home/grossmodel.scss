@@ -1,0 +1,30 @@
+page-grossmodel{
+    animation: fade-in .8s ease-in-out;
+    @keyframes fade-in {
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  
+    .scroll-content {
+      background: #00ccb2;
+    }
+  
+    ion-icon, div {
+        color: rgb(7,33,58);
+        font-weight: bold;
+    }
+    .rowstyle{
+        justify-content:center;
+        align-items:center;
+        display:inline;
+        background: rgb(7,33,58);
+        border-radius:10px;
+        margin: 1rem;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        padding: 5px;
+        font-size: 10px;
+        font-weight: bold;
+        color:white;
+        font-size:18px;overflow:hide; height: 55px;border-width:1px;border-style: none none solid none;
+    }
+}

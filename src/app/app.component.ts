@@ -2,37 +2,53 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import {ScreenOrientation} from "@ionic-native/screen-orientation";
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { LoginPage } from '../pages/login/login';
+import { ContextData } from './context';
+import { SmreportPage } from '../pages/smreport/smreport';
+
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class YotrioSMRPT {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
+
+  contextdata:ContextData;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
-    this.initializeApp();
+  constructor(public platform: Platform, public statusBar: StatusBar, 
+    public splashScreen: SplashScreen,
+    public screenOrientation:ScreenOrientation) {
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
+      this.contextdata = ContextData.Create();
+      //初始化上下文
+      if(ContextData.inited === false){
+        ContextData.InitContextData();
+      }      
+
+      this.initializeApp();
+
+      //screenOrientation.lock('landscape-primary');
+      // used for an example of ngFor and navigation
+      this.pages = [
+        { title: '制造数据中心', component: HomePage },
+      { title: '营销数据中心', component: SmreportPage },
+        //{ title: '', component: SOCountPage }
+      ];
 
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+        this.statusBar.styleDefault();
+        setTimeout(()=>{
+          this.splashScreen.hide();
+        },100);      
     });
   }
 

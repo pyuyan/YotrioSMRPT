@@ -1,0 +1,35 @@
+<ion-header>
+</ion-header>
+
+<ion-content padding class="transparent-header" [ngStyle]="{'background-image': 'url(' + backgroundImage +')'}">
+  <div padding>
+    <ion-row>
+      <ion-col>
+        <img class="logo" src="assets/logo/logo.png" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list inset class="no-border">
+          <ion-item style="overflow: hidden; height: 25px;">
+            <ion-label>用户名</ion-label>
+            <ion-input type="text" [(ngModel)]="logindata.UserCode"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>密  码</ion-label>
+            <ion-input type="password" [(ngModel)]="logindata.UserPass"></ion-input>
+          </ion-item>
+          <ion-item id="Login-saveflag">
+            <ion-label>保存登录信息</ion-label>
+            <ion-toggle [(ngModel)]="logindata.SaveFlag" name="toggle-saveflag"></ion-toggle>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button class="login-button" (click)="login()">登录</button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
