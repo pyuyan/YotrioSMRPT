@@ -4,6 +4,7 @@ import { ViewChild,ElementRef } from '@angular/core';
 import { NgxEchartsService,NgxEchartsModule } from 'ngx-echarts';
 import { ContextData } from '../../app/context';
 import { GrossmodelPage } from './grossmodel';
+import { deepCopy } from 'ionic-angular/util/util';
 
 @IonicPage()
 @Component({
@@ -48,86 +49,51 @@ export class HomePage {
 
     tablevalues:any = {
         totalvalues:{
-            totalmny:18987,
-            totalgross:4215,
-            grossrate:0.2220
+            totalmny:0,
+            totalgross:0,
+            grossrate:0
         },
         groupvalues:[
-            {
-                groupname:'内部',
-                summny:12450,
-                sumgross:2976,
-                grossrate:0.2391
-            },
-            {
-                groupname:'外部',
-                summny:6195,
-                sumgross:1240,
-                grossrate:0.2002
-            },
+
         ],
         alertvalues:{
-            totalmfgcodecount:158,
-            totalunsetpricecount:116,
-            totalunsetpricemny:5488
+            totalmfgcodecount:0,
+            totalunsetpricecount:0,
+            totalunsetpricemny:0
         },
         groupbykindvalues:[
-            {
-                kind:'藤编家具',
-                ordermny:4326,
-                grossrate:0.2787
-            },
-            {
-                kind:'非编藤家具',
-                ordermny:11669,
-                grossrate:0.2249
-            },
-            {
-                kind:'秋千',
-                ordermny:303,
-                grossrate:0.066
-            },
-            {
-                kind:'伞',
-                ordermny:554,
-                grossrate:0.1848
-            },
-            {
-                kind:'帐篷',
-                ordermny:2135,
-                grossrate:0.1230
-            }
+
         ],
         groupbyareavalues:[
             {
                 areaname:'10000件以上',
                 areafilter:'>10000',
-                areamny:11044,
-                grossrate:0.1861
+                areamny:0,
+                grossrate:0
             },
             {
                 areaname:'5000-10000',
                 areafilter:'>10000',
-                areamny:1314,
-                grossrate:0.2558
+                areamny:0,
+                grossrate:0
             },
             {
                 areaname:'1000-5000',
                 areafilter:'>10000',
-                areamny:5595,
-                grossrate:0.2819
+                areamny:0,
+                grossrate:0
             },
             {
                 areaname:'500-1000',
                 areafilter:'>10000',
-                areamny:643,
-                grossrate:0.2268
+                areamny:0,
+                grossrate:0
             },
             {
                 areaname:'500件以下',
                 areafilter:'>10000',
-                areamny:392,
-                grossrate:0.2583
+                areamny:0,
+                grossrate:0
             }
         ]
     }
@@ -338,6 +304,101 @@ ManufactureDatas:any = {
         }     
     }
 
+    /**
+     * 刷新表格数据
+     * 2018-04-02
+     */
+    static UpdateTableDatas(originaldatas:any):any{
+        if(originaldatas){
+            let result:any = {
+                totalvalues:{
+                    totalmny:18987,
+                    totalgross:4215,
+                    grossrate:0.2220
+                },
+                groupvalues:[
+                    {
+                        groupname:'内部',
+                        summny:12450,
+                        sumgross:2976,
+                        grossrate:0.2391
+                    },
+                    {
+                        groupname:'外部',
+                        summny:6195,
+                        sumgross:1240,
+                        grossrate:0.2002
+                    },
+                ],
+                alertvalues:{
+                    totalmfgcodecount:158,
+                    totalunsetpricecount:116,
+                    totalunsetpricemny:5488
+                },
+                groupbykindvalues:[
+                    {
+                        kind:'藤编家具',
+                        ordermny:4326,
+                        grossrate:0.2787
+                    },
+                    {
+                        kind:'非编藤家具',
+                        ordermny:11669,
+                        grossrate:0.2249
+                    },
+                    {
+                        kind:'秋千',
+                        ordermny:303,
+                        grossrate:0.066
+                    },
+                    {
+                        kind:'伞',
+                        ordermny:554,
+                        grossrate:0.1848
+                    },
+                    {
+                        kind:'帐篷',
+                        ordermny:2135,
+                        grossrate:0.1230
+                    }
+                ],
+                groupbyareavalues:[
+                    {
+                        areaname:'10000件以上',
+                        areafilter:'>10000',
+                        areamny:11044,
+                        grossrate:0.1861
+                    },
+                    {
+                        areaname:'5000-10000',
+                        areafilter:'5000<?<10000',
+                        areamny:1314,
+                        grossrate:0.2558
+                    },
+                    {
+                        areaname:'1000-5000',
+                        areafilter:'1000<?<5000',
+                        areamny:5595,
+                        grossrate:0.2819
+                    },
+                    {
+                        areaname:'500-1000',
+                        areafilter:'500<?<1000',
+                        areamny:643,
+                        grossrate:0.2268
+                    },
+                    {
+                        areaname:'500件以下',
+                        areafilter:'?<500',
+                        areamny:392,
+                        grossrate:0.2583
+                    }
+                ]
+            }
+            return result;
+        }
+    }
+
     ionViewDidEnter(){
 
         //时钟刷新
@@ -350,31 +411,168 @@ ManufactureDatas:any = {
              },1000,this.clockctrl);
          }
 
+        let updateFunction = function(table_values,charts){
+            let tablename:string = 'TMP_SMTransferData';
+            if(ContextData.OriginalDatas[tablename].UpdateFlag){
+                //数据有更新，开始刷新窗体后台数据
+                let totalmny = 0;
+                let totalgross = 0;
+                let groupvalues:Array<any> = new Array<any>();
+                let groupnamevalues:Array<any> = new Array<any>();
+                let mfgcount:Array<any> = new Array<any>();
+                let mfgcountwithnotransfer:Array<any> = new Array<any>();
+                let totalmnywithnotransfer = 0;
+                let cond1group:Array<any> = new Array<any>(
+                    {
+                        areaname:'10000件以上',
+                        areafilter:'>10000',
+                        areamny:0,
+                        areagross:0,
+                        grossrate:0
+                    },
+                    {
+                        areaname:'5000-10000',
+                        areafilter:'5000<?<10000',
+                        areamny:0,
+                        areagross:0,
+                        grossrate:0
+                    },
+                    {
+                        areaname:'1000-5000',
+                        areafilter:'1000<?<5000',
+                        areamny:0,
+                        areagross:0,
+                        grossrate:0
+                    },
+                    {
+                        areaname:'500-1000',
+                        areafilter:'500<?<1000',
+                        areamny:0,
+                        areagross:0,
+                        grossrate:0
+                    },
+                    {
+                        areaname:'500件以下',
+                        areafilter:'?<500',
+                        areamny:0,
+                        areagross:0,
+                        grossrate:0
+                    }
+                );
+                ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
+                    let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+                    let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+                    let tmp_tranfermny = 0;
+                    if(datarow.TransferPrice>0)
+                        tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+                    totalmny += tmp_salemny;
+                    let tmp_gross = tmp_salemny-(Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny+tmp_tranfermny;
+                    totalgross += tmp_gross;
+
+
+                    //groupbyvalue
+                    let step = Number.parseInt(datarow.step);
+                    let ceiltotal = Number.parseFloat(datarow.ceiltotal);
+                    if(step>=20&&ceiltotal>10000){
+                        cond1group[0].areamny += tmp_salemny;
+                        cond1group[0].areagross += tmp_gross;
+                    }else if(datarow.step>=10&&ceiltotal>5000){
+                        cond1group[1].areamny += tmp_salemny;
+                        cond1group[1].areagross += tmp_gross;
+                    }else if(datarow.step>=2&&ceiltotal>1000){
+                        cond1group[2].areamny += tmp_salemny;
+                        cond1group[2].areagross += tmp_gross;
+                    }else if(datarow.step>=1&&ceiltotal>500){
+                        cond1group[3].areamny += tmp_salemny;
+                        cond1group[3].areagross += tmp_gross;
+                    }else{
+                        cond1group[4].areamny += tmp_salemny;
+                        cond1group[4].areagross += tmp_gross;
+                    }
+
+                    //alert values
+                    if(mfgcount.indexOf(datarow.MFGCode)<0)
+                        mfgcount.push(datarow.MFGCode);
+                    if(datarow.TransferPrice<=0){
+                        if(mfgcountwithnotransfer.indexOf(datarow.MFGCode)<0){
+                            mfgcountwithnotransfer.push(datarow.MFGCode);
+                            totalmnywithnotransfer += tmp_salemny;
+                        }
+                    }
+
+                    //group values
+                    let selfflag = datarow.SelfFlag;
+                    let groupidx = groupnamevalues.indexOf(selfflag);
+                    if(groupidx<0){
+                        //没有加入数组，新增数组元素
+                        groupnamevalues.push(selfflag);
+                        groupvalues.push({
+                            groupname:selfflag,
+                            summny:tmp_salemny,
+                            sumgross:tmp_gross,
+                            grossrate:0
+                        });
+                        //groupidx = groupnamevalues.indexOf(selfflag);
+                    }else{
+                        groupvalues[groupidx].summny += tmp_salemny;
+                        groupvalues[groupidx].sumgross += tmp_gross;
+                    }
+                });
+                //接单分组合计统计
+                table_values.groupvalues.length=0;
+                groupvalues.forEach(grouprow=>{
+                    grouprow.grossrate = grouprow.sumgross/grouprow.summny;
+                    table_values.groupvalues.push(grouprow);
+                });
+
+                //groupbyareavalues更新
+                table_values.groupbyareavalues.length=0;
+                cond1group.forEach(groupvalue=>{
+                    if(groupvalue.areamny>0)
+                        groupvalue.grossrate = groupvalue.areagross/groupvalue.areamny;
+                    else
+                        groupvalue.grossrate = 0;
+
+                    table_values.groupbyareavalues.push(groupvalue);
+                });
+
+                //接单合计值统计
+                table_values.totalvalues.totalmny=totalmny;
+                table_values.totalvalues.totalgross=totalgross;
+                table_values.totalvalues.grossrate=totalgross/totalmny;
+
+                //累计制造令信息
+                table_values.alertvalues.totalmfgcodecount = mfgcount.length;
+                table_values.alertvalues.totalunsetpricecount = mfgcountwithnotransfer.length;
+                table_values.alertvalues.totalunsetpricemny = totalmnywithnotransfer;
+
+                //数据刷新完毕，重置标志
+                ContextData.OriginalDatas[tablename].UpdateFlag = false;
+            }
+
+            //刷新图标
+            charts.forEach(element => {
+                element.ValueOptions.series.forEach(seriedata => {
+                    if(seriedata.name!='产值完成率'&&seriedata.name!='产值目标'){
+                        seriedata.data = [Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
+                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
+                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
+                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
+                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
+                            Math.ceil(Math.random()*10000)];
+                    }
+                    });
+                element.ChartObj.setOption(element.ValueOptions);
+            });
+         }
+
+        //首次登陆执行数据刷新
+        if(this.tablevalues.alertvalues.totalmfgcodecount==0){
+            setTimeout(updateFunction,500,this.tablevalues,this.chartObjList);
+        }
+
         //数据值定时刷新 1 分钟刷新
-    //     setInterval(function(table_values,charts){
-    //         table_values.totalvalues.totalmny=Math.ceil(Math.random()*10000);
-    //         table_values.totalvalues.totalgross=Math.ceil(Math.random()*10000);
-    //         table_values.totalvalues.grossrate=Math.random();
-    //         table_values.groupvalues.forEach(element => {
-    //             element.summny=Math.ceil(Math.random()*10000);
-    //             element.sumgross=Math.ceil(Math.random()*10000);
-    //             element.grossrate=Math.random();
-    //         });
-    //         //刷新图标
-    //         charts.forEach(element => {
-    //             element.ValueOptions.series.forEach(seriedata => {
-    //                 if(seriedata.name!='产值完成率'&&seriedata.name!='产值目标'){
-    //                     seriedata.data = [Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-    //                         Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-    //                         Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-    //                         Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-    //                         Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-    //                         Math.ceil(Math.random()*10000)];
-    //                 }
-    //                 });
-    //             element.ChartObj.setOption(element.ValueOptions);
-    //         });
-    //      },10000,this.tablevalues,this.chartObjList);
+        setInterval(updateFunction,10000,this.tablevalues,this.chartObjList);
     }
 
     OnManufactureBarClick(params:any){

@@ -7,6 +7,37 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 @Injectable()
 export class ContextData {
 
+  static timemarks:any = {
+    'TMP_SMTransferData':0
+  }
+
+  static OriginalDatas:any = {
+    TMP_SMTransferData:{
+      UpdateFlag:false,
+      DataValue:[] 
+    },
+  }
+
+  /**
+   * 设置新时间戳
+   * @param tablename 
+   * @param timemark 
+   */
+  public static SetTimeMark(tablename:string,timemark:Number){
+    ContextData.timemarks[tablename] = timemark;
+    console.log('DataTable '+tablename+' Last Updatetime is '+ContextData.timemarks[tablename]);
+  }
+
+  /**
+   * 获取时间戳
+   * @param tablename 
+   * @param timemark 
+   */
+  public static GetTimeMark(tablename:string):Number{
+    return ContextData.timemarks[tablename];
+  }
+
+
   static instance:ContextData;
 
   static inited:boolean = false;
@@ -44,8 +75,6 @@ export class ContextData {
   }
 
   static rightcontext:Array<any> = new Array<any>();
-
-  static originalData:any = null;
 
   /**
    * 初始化上下文

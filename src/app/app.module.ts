@@ -47,7 +47,6 @@ import { SmreportPageModule } from '../pages/smreport/smreport.module';
     ScreenOrientation,
     LoginsvrProvider,
     DatasvrProvider,
-    SQLite,
   ],
 })
 export class AppModule {}

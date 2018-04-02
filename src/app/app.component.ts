@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { ContextData } from './context';
 import { SmreportPage } from '../pages/smreport/smreport';
+import { DatasvrProvider } from '../providers/datasvr/datasvr';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class YotrioSMRPT {
 
   constructor(public platform: Platform, public statusBar: StatusBar, 
     public splashScreen: SplashScreen,
-    public screenOrientation:ScreenOrientation) {
+    public screenOrientation:ScreenOrientation,
+    private datasvr:DatasvrProvider) {
 
       this.contextdata = ContextData.Create();
       //初始化上下文
@@ -40,6 +42,20 @@ export class YotrioSMRPT {
       { title: '营销数据中心', component: SmreportPage },
         //{ title: '', component: SOCountPage }
       ];
+
+      let TMPDataRefresh = function(datasvrprovider:DatasvrProvider){
+        datasvrprovider.IsNeedUpdate('TMP_SMTransferData').then(flag=>{
+          if(flag){
+            datasvrprovider.SyncLastSMReportData('19').then(result=>{
+              console.log(ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag);
+            })
+          }
+        });
+      };
+
+      setTimeout(TMPDataRefresh,1,this.datasvr);
+
+      setInterval(TMPDataRefresh,10000,this.datasvr);
 
   }
 
