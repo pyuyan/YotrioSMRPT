@@ -459,6 +459,8 @@ ManufactureDatas:any = {
                         grossrate:0
                     }
                 );
+                let typegroupvalues:Array<any> = new Array<any>();
+                let typenamevalues:Array<any> = new Array<any>();
                 ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
                     let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
                     let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
