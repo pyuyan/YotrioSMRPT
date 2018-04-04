@@ -29,12 +29,7 @@ export class DatasvrProvider {
    * 获取ESB服务器地址
    */
   private GetESBAddress():string{
-    let str = this.contextdata.GetESBPortal();
-    if(str===null){
-      str = "/esbsv";
-    }
-    if(this.platform.is('mobileweb'))
-      str = "/esbsv";
+    let str = "/esbsv";
     return str;
   }  
 

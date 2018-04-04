@@ -409,7 +409,7 @@ profitdatas:any = {
                 let areatype = datarow.AreaType; //区域分类
                 let customer = datarow.Customer; //客户
                 let keydept = datarow.SaleDept; //业务指标部门
-                if(customer!='国内市场部客户'){
+                if(customer!='国内市场部客户'&&Number.parseFloat(datarow.TransferPrice)>0){
                     let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
                     let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
                     let tmp_tranfermny = 0;
@@ -512,11 +512,14 @@ profitdatas:any = {
             }
             charts[1].ChartObj.setOption(charts[1].ValueOptions);
 
-            topgroupvalues.forEach(groupvalue=>{
-                groupvalue.GrossRate = groupvalue.GrossMoney/groupvalue.OrderMoney;
-            });
-
             //前10毛利率数据刷新
+            topgroupvalues.forEach(groupvalue=>{
+                if(groupvalue.OrderMoney==0){
+                    groupvalue.GrossRate = 0;
+                }else{
+                    groupvalue.GrossRate = groupvalue.GrossMoney/groupvalue.OrderMoney;
+                }
+            });
             topgroupvalues.sort(function(a,b){
                 if(Number.parseFloat(a.GrossRate) > Number.parseFloat(b.GrossRate)){
                     return -1;
