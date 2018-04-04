@@ -33,6 +33,9 @@
                             <ion-col text-center style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
                                 {{rowdata.summny|thousands}}
                             </ion-col>
+                            <ion-col col-1 style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                <ion-icon name="search"></ion-icon>
+                            </ion-col>
                           </ion-row>
                         </ion-grid>    
                     </ion-card>
@@ -49,6 +52,9 @@
                               <ion-col (click)="OpenGrossModal(rowdata.groupname)" text-center style="color:#9bbb59;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
                                   {{rowdata.sumgross|thousands}}
                               </ion-col>
+                              <ion-col col-2 style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                    <ion-icon name="search"></ion-icon>
+                                </ion-col>
                             </ion-row>
                           </ion-grid>  
                     </ion-card>
@@ -64,6 +70,9 @@
                               </ion-col>
                               <ion-col text-center style="color:#c0504d;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
                                   {{rowdata.grossrate|percent}}
+                              </ion-col>
+                              <ion-col col-2 style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                    <ion-icon name="search"></ion-icon>
                               </ion-col>
                             </ion-row>
                           </ion-grid>  
