@@ -50,6 +50,7 @@ export class LoginPage {
         //初始化上下文
         this.contextdata = ContextData.Create();
 
+        this.contextdata.SetESBPortal('http://192.168.0.197:8280');    
    }
 
   login() {

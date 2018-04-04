@@ -38,6 +38,15 @@ export class DatasvrProvider {
     return str;
   }  
 
+   /**
+   * 调用关键业务部门档案API
+   */
+  CallKeyDeptAPI():Observable<Object>{
+    let currUrl = '';
+    currUrl = this.GetESBAddress() +'/getKeyDept/do';
+    console.log('Send getKeyDept Request to '+currUrl); 
+    return this.http.get(currUrl,{headers:this.headers});
+  }  
   
   /**
    * 调用最新更新时间API
@@ -58,6 +67,34 @@ export class DatasvrProvider {
     console.log('Send getSaleTransferData Request to '+currUrl); 
     return this.http.get(currUrl,{headers:this.headers});
   }    
+  
+  /**
+   * 获取关键业务部门档案信息
+   */
+  GetKeyDepts():Promise<Boolean>{
+    return this.CallKeyDeptAPI().toPromise().then(
+      result=>{
+        let depts:Array<any> = new Array<any>();
+        if(result['KeyDepts']){
+          depts = result['KeyDepts']['KeyDept'];
+        }
+        return depts;
+      }
+    ).catch(
+      err=>{
+        return new Array<any>();
+      }
+    ).then(values=>{
+      if(values){
+        values.forEach(value=>{
+          ContextData.GetKeyDepts().DeptNames.push(value['Name']);
+          ContextData.GetKeyDepts().DeptSalingTarget.push(Math.round(value['TargetMoney']));
+        });
+        return true;
+      }
+      return false;
+    });
+  }
 
   /**
    * 判断是否需要更新
@@ -109,7 +146,10 @@ export class DatasvrProvider {
     ).then(value=>{
       if(value){
         ContextData.OriginalDatas['TMP_SMTransferData'].DataValue = value;
-        ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag = true;
+        ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag = {        
+          homepage:true,
+          smreportpage:true
+        };
         return true;
       }
       return false;

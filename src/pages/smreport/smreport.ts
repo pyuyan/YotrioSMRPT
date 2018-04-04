@@ -13,6 +13,24 @@ export class SmreportPage {
 
     @ViewChild('clockcontrol') clockctrl:any
 
+    @ViewChild('smpie') smpie:ElementRef;
+    @ViewChild('smbar') smbar:ElementRef;
+
+    smpieInstance:any
+    smbarInstance:any
+
+    /**
+     * 表格数据格式化方法
+     */
+    GetFormatValue(coldata,i):string{
+        if(i==3||i==4||i==-1){
+            return (Number.parseFloat(coldata)).toFixed(2).toString()+' %'; 
+        }else{
+            return Math.round(Number.parseFloat(coldata)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    }
+
+
   totalsalemnydatas:any = {
     backgroundColor:'#07213a',
     padding: [
@@ -49,7 +67,7 @@ export class SmreportPage {
             color: '#FFFFFF'
         }},
         {
-       text: '18,987',
+       text: 0,
        textStyle:{
            fontSize:38,
            color: '#CCF600'
@@ -59,7 +77,7 @@ export class SmreportPage {
        y:'10%'
        },
         {
-       text: '4,215',
+       text: 0,
        textStyle:{
            fontSize:38,
            color: '#CCF600'
@@ -69,7 +87,7 @@ export class SmreportPage {
        y:'10%'
         },
         {
-       text: '22.20%',
+       text: 0,
        textStyle:{
            fontSize:38,
            color: '#CCF600'
@@ -85,7 +103,7 @@ export class SmreportPage {
         formatter: "{a} <br/>{b}: {c}",
     },
     legend: {
-        data: ['北美区','欧洲区','其他区'],
+        data: [],
         left:5,
         orient: 'vertical',
         top:0,
@@ -101,13 +119,16 @@ export class SmreportPage {
             type:'pie',
             radius: ['0%', '65%'],
             center:['20%','60%'],
-            color: ['#8064a2','#4bacc6', '#f79646'],
+            color: ['#8064a2','#4bacc6', '#f79646','#c0504d', '#9bbb59','#59DF97'],
             label: {
                 formatter:" {b}\n{c}",
                 position:'inner',
                 textStyle: {
                     fontSize:20,
                 }
+            },
+            tooltip:{
+                formatter:" {b}\n{c}",
             },
             itemStyle: {
                 normal: {
@@ -117,9 +138,7 @@ export class SmreportPage {
                 }
             },
             data:[
-                {value:11582, name:'北美区'},
-                {value:5433, name:'欧洲区'},
-                {value:4331, name:'其他区'}
+
             ]
         },
         {
@@ -127,13 +146,16 @@ export class SmreportPage {
             type:'pie',
             radius: ['0%', '65%'],
             center:['50%','60%'],
-            color: ['#8064a2','#4bacc6', '#f79646'],
+            color: ['#8064a2','#4bacc6', '#f79646','#c0504d', '#9bbb59','#59DF97'],
             label: {
                 formatter:" {b}\n{c}",
                 position:'inner',
                 textStyle: {
                     fontSize:20,
                 }
+            },
+            tooltip:{
+                formatter:" {b}\n{c}",
             },
             itemStyle: {
                 normal: {
@@ -143,9 +165,7 @@ export class SmreportPage {
                 }
             },
             data:[
-                {value:1922, name:'北美区'},
-                {value:1922, name:'欧洲区'},
-                {value:1240, name:'其他区'}
+
             ]
         },
         {
@@ -153,13 +173,16 @@ export class SmreportPage {
             type:'pie',
             radius: ['0%', '65%'],
             center:['80%','60%'],
-            color: ['#8064a2','#4bacc6', '#f79646'],
+            color: ['#8064a2','#4bacc6', '#f79646','#c0504d', '#9bbb59','#59DF97'],
             label: {
-                formatter:" {b}\n{c}",
+                formatter:" {b}\n{c} %",
                 position:'inner',
                 textStyle: {
                     fontSize:20,
                 }
+            },
+            tooltip:{
+                formatter:" {b}\n{c} %",
             },
             itemStyle: {
                 normal: {
@@ -169,13 +192,12 @@ export class SmreportPage {
                 }
             },
             data:[
-                {value:16.60, name:'北美区'},
-                {value:16.60, name:'欧洲区'},
-                {value:20.02, name:'其他区'}
+
             ]
         }        
     ]
   };
+
 
 colors:any = ['#c0504d', '#9bbb59', '#8064a2','#4bacc6', '#f79646', '#59DF97'];
 profitdatas:any = {
@@ -236,7 +258,7 @@ profitdatas:any = {
                 rotate:-30,
                 fontSize:16
             },
-            data: ['英国组','西班牙澳新组','荷比卢组','法国组','JJA组','TEST组','德瑞奥组','MWH组','家得宝组','塔吉特组','柯尔组','劳氏组','COS组','沃尔玛组','北美高端组']
+            data: []
         }
     ],
     yAxis: [
@@ -250,7 +272,8 @@ profitdatas:any = {
             axisLine: {
                 show:true,
                 lineStyle: {
-                    color: '#FFFFFF'
+                    color: '#FFFFFF',
+                    fontSize:14
                 }
             },
             axisLabel: {
@@ -264,15 +287,15 @@ profitdatas:any = {
             type: 'value',
             name: '百分比',
             min: 0,
-            max: 80,
+            max: 100,
             position: 'right',
-            interval:10,
+            interval:20,
             boundaryGap:false,
             axisLine: {
                 show:true,
                 lineStyle: {
                     color: '#FFFFFF',
-                    fontSize:10
+                    fontSize:14
                 }
             },
             axisLabel: {
@@ -288,7 +311,7 @@ profitdatas:any = {
             name:'销售目标',
             type:'bar',
             yAxisIndex: 0,
-            data:[27621 ,15000 ,10342 ,16599 ,16995 ,10000 ,73260 ,8533 ,41197 ,21120 ,16104 ,47444 ,9711 ,18480 ,36300],
+            data:[],
             animation:true,
             itemStyle:{
                 color:this.colors[3]
@@ -299,7 +322,7 @@ profitdatas:any = {
             name:'接单金额',
             type:'bar',
             yAxisIndex: 0,
-            data:[334 ,5076 ,0 ,2490 ,0 ,0 ,134 ,0 ,5302 ,0 ,0 ,0 ,0 ,0 ,5308],
+            data:[],
             animation:true,
             itemStyle:{
                 color:this.colors[0]
@@ -310,7 +333,7 @@ profitdatas:any = {
             name:'毛利金额',
             type:'bar',
             yAxisIndex: 0,
-            data:[30 ,881 ,0 ,431 ,0 ,0 ,24 ,0 ,1246 ,0 ,0 ,0 ,0 ,0 ,1605],
+            data:[],
             animation:true,
             itemStyle:{
                 color:this.colors[1]
@@ -321,7 +344,7 @@ profitdatas:any = {
             name:'完成率',
             type:'line',
             yAxisIndex: 1,
-            data:[1.21 ,33.84 ,0.00 ,15.00 ,0.00 ,0.00 ,0.18 ,0.00 ,12.87 ,0.00 ,0.00 ,0.00 ,0.00 ,0.00,0.00],
+            data:[],
             animation:true,
             itemStyle:{
                 color:this.colors[4]
@@ -332,7 +355,7 @@ profitdatas:any = {
             name:'毛利率',
             type:'line',
             yAxisIndex: 1,
-            data:[8.91 ,17.35 ,0.00 ,17.33 ,0.00 ,0.00 ,17.75 ,0.00 ,23.51 ,0.00 ,0.00 ,0.00 ,0.00 ,0.00,0.00],
+            data:[],
             animation:true,
             itemStyle:{
                 color:this.colors[5]
@@ -344,88 +367,10 @@ profitdatas:any = {
 
     tablevalues:any = {
         orderbyratevalues:[
-            {
-              "Customer": "SODIMAC",
-              "OrderMoney": 3318.2530943999986,
-              "GrossRate": 0.10065498684041553
-            },
-            {
-              "Customer": "JJA DEPARTMENT TRADING",
-              "OrderMoney": 2107.5412,
-              "GrossRate": 0.17471464965904343
-            },
-            {
-              "Customer": "Bunnings",
-              "OrderMoney": 1757.8012088,
-              "GrossRate": 0.3110057057095818
-            },
-            {
-              "Customer": "CASTORAMA\\KINGFISHER",
-              "OrderMoney": 334.4776,
-              "GrossRate": 0.089114654852821232
-            },
-            {
-              "Customer": "BRICORAMA",
-              "OrderMoney": 304.792,
-              "GrossRate": 0.12975537021969083
-            },
-            {
-              "Customer": "Toptip (Euro-group Far East LTD)",
-              "OrderMoney": 134.18784000000002,
-              "GrossRate": 0.17754506168368162
-            },
-            {
-              "Customer": "Creador",
-              "OrderMoney": 45.26,
-              "GrossRate": 0.25370000000000004
-            },
-            {
-              "Customer": "Carrefour",
-              "OrderMoney": 32.669436799999993,
-              "GrossRate": 0.3734687011806706
-            }
+
           ],
         orderbymnyvalues:[
-            {
-              "Customer": "永强(香港)有限公司",
-              "OrderMoney": 5308.3908588,
-              "GrossRate": 0.30230645121952604
-            },
-            {
-              "Customer": "Creador",
-              "OrderMoney": 45.26,
-              "GrossRate": 0.25370000000000004
-            },
-            {
-              "Customer": "YOTRIO CORPORATION",
-              "OrderMoney": 5301.6406522,
-              "GrossRate": 0.23505994486873949
-            },
-            {
-              "Customer": "Toptip (Euro-group Far East LTD)",
-              "OrderMoney": 134.18784000000002,
-              "GrossRate": 0.17754506168368162
-            },
-            {
-              "Customer": "JJA DEPARTMENT TRADING",
-              "OrderMoney": 2107.5412,
-              "GrossRate": 0.17471464965904343
-            },
-            {
-              "Customer": "BRICORAMA",
-              "OrderMoney": 304.792,
-              "GrossRate": 0.12975537021969083
-            },
-            {
-              "Customer": "SODIMAC",
-              "OrderMoney": 3318.2530943999986,
-              "GrossRate": 0.10065498684041553
-            },
-            {
-              "Customer": "CASTORAMA\\KINGFISHER",
-              "OrderMoney": 334.4776,
-              "GrossRate": 0.089114654852821232
-            }
+
           ]
     }
 
@@ -440,8 +385,214 @@ profitdatas:any = {
          this.contextdata = ContextData.Create();     
     }
 
+    //数据更新函数
+    updateFunction = function(table_values,charts,immediateflag){
+        let tablename:string = 'TMP_SMTransferData';
+        if(ContextData.OriginalDatas[tablename].UpdateFlag['smreportpage']||immediateflag){
+            
+            let customerarray:Array<any> = new Array<any>();
+            let topgroupvalues:Array<any> = new Array<any>();
+            let areanames:Array<any> = new Array<any>();
+            let areamoneys:Array<any> = new Array<any>();
+            let areagrosses:Array<any> = new Array<any>();
+            let totalmoney = 0;
+            let totalgross = 0;
+            let keydeptdata:any = ContextData.GetKeyDepts();
+            let keydeptmoneys:Array<any> = new Array<any>();
+            let keydeptgrosses:Array<any> = new Array<any>();
+            keydeptdata.DeptNames.forEach(dept => {
+                keydeptmoneys.push(0);
+                keydeptgrosses.push(0);
+            });
+            ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
+                let selfflag = datarow.SelfFlag; //内部外部
+                let areatype = datarow.AreaType; //区域分类
+                let customer = datarow.Customer; //客户
+                let keydept = datarow.SaleDept; //业务指标部门
+                if(customer!='国内市场部客户'){
+                    let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+                    let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+                    let tmp_tranfermny = 0;
+                    if(datarow.TransferPrice>0)
+                        tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+                    let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+
+                    //业务组接单数据收集
+                    let deptidx = keydeptdata.DeptNames.indexOf(keydept);
+                    if(deptidx>0){
+                        keydeptmoneys[deptidx] += tmp_salemny;
+                        keydeptgrosses[deptidx] += tmp_gross;
+                    }
+    
+                    //接单统计饼图数据收集
+                    totalmoney += tmp_salemny;
+                    totalgross += tmp_gross;
+                    let areaidx = areanames.indexOf(areatype);
+                    if(areaidx<0){
+                        //新增
+                        areanames.push(areatype);
+                        areamoneys.push(tmp_salemny);
+                        areagrosses.push(tmp_gross);
+                    }else{
+                        areamoneys[areaidx] += tmp_salemny;
+                        areagrosses[areaidx] += tmp_gross;
+                    }
+
+                    //TOP10表格数据收集
+                    if(datarow.InnerOrg=='False'){
+                        let custidx = customerarray.indexOf(customer);
+                        if(custidx<0){
+                            customerarray.push(customer);
+                            //tablevalues.orderbyratevalues
+                            topgroupvalues.push({
+                                Customer: customer,
+                                OrderMoney: tmp_salemny,
+                                GrossMoney: tmp_gross,
+                                GrossRate: 0
+                            });
+                        }else{
+                            topgroupvalues[custidx].OrderMoney += tmp_salemny;
+                            topgroupvalues[custidx].GrossMoney += tmp_gross;
+                        }
+                    }
+                }
+            });
+
+            //业务组分析数据更新
+            charts[0].ValueOptions.xAxis[0].data = keydeptdata.DeptNames;
+            charts[0].ValueOptions.series[0].data = keydeptdata.DeptSalingTarget;
+            charts[0].ValueOptions.series[1].data.length=0;
+            charts[0].ValueOptions.series[2].data.length=0;
+            charts[0].ValueOptions.series[3].data.length=0;
+            charts[0].ValueOptions.series[4].data.length=0;
+            for(let i=0;i<keydeptdata.DeptNames.length;i++){
+                charts[0].ValueOptions.series[1].data.push(Math.round(keydeptmoneys[i]));
+                charts[0].ValueOptions.series[2].data.push(Math.round(keydeptgrosses[i]));
+                if(charts[0].ValueOptions.series[0].data[i]==0){
+                    charts[0].ValueOptions.series[3].data.push('0.00');
+                }else{
+                    charts[0].ValueOptions.series[3].data.push((charts[0].ValueOptions.series[1].data[i]/charts[0].ValueOptions.series[0].data[i]*100).toFixed(2));
+                }
+                if(charts[0].ValueOptions.series[1].data[i]==0){
+                    charts[0].ValueOptions.series[4].data.push('0.00');
+                }else{
+                    charts[0].ValueOptions.series[4].data.push((charts[0].ValueOptions.series[2].data[i]/charts[0].ValueOptions.series[1].data[i]*100).toFixed(2));
+                }
+            };
+            charts[0].ChartObj.setOption(charts[0].ValueOptions);
+
+
+            //接单饼图数据更新
+            charts[1].ValueOptions.legend.data = areanames; //图例
+            charts[1].ValueOptions.title[3].text = Math.round(totalmoney).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //总金额
+            charts[1].ValueOptions.title[4].text = Math.round(totalgross).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); //总毛利
+            charts[1].ValueOptions.title[5].text = (totalgross/totalmoney*100).toFixed(2)+' %'; //毛利率
+            charts[1].ValueOptions.series[0].data.length=0;
+            charts[1].ValueOptions.series[1].data.length=0;
+            charts[1].ValueOptions.series[2].data.length=0;
+            for(let i=0;i<areanames.length;i++){
+                charts[1].ValueOptions.series[0].data.push(
+                    {
+                        value:Math.round(areamoneys[i]),
+                        name:areanames[i]
+                    }
+                );
+                charts[1].ValueOptions.series[1].data.push(
+                    {
+                        value:Math.round(areagrosses[i]),
+                        name:areanames[i]
+                    }
+                );
+                charts[1].ValueOptions.series[2].data.push(
+                    {
+                        value:(Math.round(areagrosses[i])/Math.round(areamoneys[i])*100).toFixed(2),
+                        name:areanames[i]
+                    }
+                );
+            }
+            charts[1].ChartObj.setOption(charts[1].ValueOptions);
+
+            topgroupvalues.forEach(groupvalue=>{
+                groupvalue.GrossRate = groupvalue.GrossMoney/groupvalue.OrderMoney;
+            });
+
+            //前10毛利率数据刷新
+            topgroupvalues.sort(function(a,b){
+                if(Number.parseFloat(a.GrossRate) > Number.parseFloat(b.GrossRate)){
+                    return -1;
+                }
+                else if( Number.parseFloat(a.GrossRate) < Number.parseFloat(b.GrossRate)){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }                
+            });            
+            table_values.orderbyratevalues.length=0;
+            for(var i=0;i<10;i++){
+                table_values.orderbyratevalues.push(topgroupvalues[i]);
+            }
+
+            //前10销售金额数据刷新
+            topgroupvalues.sort(function(a,b){
+                if(Number.parseFloat(a.OrderMoney) > Number.parseFloat(b.OrderMoney)){
+                    return -1;
+                }
+                else if( Number.parseFloat(a.OrderMoney) < Number.parseFloat(b.OrderMoney)){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }
+            });            
+            table_values.orderbymnyvalues.length=0;
+            for(var i=0;i<10;i++){
+                table_values.orderbymnyvalues.push(topgroupvalues[i]);
+            }            
+
+            ContextData.OriginalDatas[tablename].UpdateFlag['smreportpage'] = false;
+        }
+    }    
+
+    chartObjList:Array<any> = new Array<any>();
+
+    ionViewWillEnter(){
+        //图表控件对象获取
+        this.smbarInstance = this.echartsvr.echarts.init(this.smbar.nativeElement.querySelector('div'));
+        this.smbarInstance.setOption(this.profitdatas);
+        if(this.smbarInstance){
+            this.chartObjList.push(
+                {
+                    ChartObj:this.smbarInstance,
+                    ValueOptions:this.profitdatas
+                }
+            )
+        }
+        this.smpieInstance = this.echartsvr.echarts.init(this.smpie.nativeElement.querySelector('div'));
+        this.smpieInstance.setOption(this.totalsalemnydatas);
+        if(this.smpieInstance){
+            this.chartObjList.push(
+                {
+                    ChartObj:this.smpieInstance,
+                    ValueOptions:this.totalsalemnydatas
+                }
+            )
+        }        
+
+        //首次打开执行数据刷新
+        if(this.tablevalues.orderbymnyvalues.length==0){
+            setTimeout(this.updateFunction,500,this.tablevalues,this.chartObjList,true);
+        }
+    }
+
     ionViewDidEnter(){
 
+    }
+
+    /**
+     * 页面首次加载后
+     */
+    ionViewDidLoad(){
         //时钟刷新
         if(this.clockctrl){
             setInterval(function(clock_ctrl){
@@ -451,7 +602,11 @@ profitdatas:any = {
                 }
              },1000,this.clockctrl);
          }
+
+        //数据值定时刷新 1 分钟刷新
+        setInterval(this.updateFunction,60000,this.tablevalues,this.chartObjList,false);             
     }
+   
 
     onProfitbarClick(params:any){
         console.log(params);

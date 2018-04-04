@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
     <button ion-button menuToggle>
-        <ion-icon large name="menu"></ion-icon>
+        <ion-icon style="font-size: 50px;" name="menu"></ion-icon>
     </button>
     <ion-title style="padding:0% 0% 0% 0%;"><p align="center" style="color:white;font-size:60px;">永强集团营销数据中心</p></ion-title> 
     <ion-buttons end>
@@ -19,20 +19,20 @@
       <ion-col col-9>
           <ion-card class="maincontenttopstyle">
           <ion-card-content>
-          <div echarts #manufacturepie [options]="totalsalemnydatas" class="piediv" (chartClick)="onManufacturepieClick($event)"></div>     
+          <div echarts #smpie [options]="totalsalemnydatas" class="piediv" (chartClick)="onManufacturepieClick($event)"></div>     
           </ion-card-content>
           </ion-card>       
           <ion-card class="maincontentstyle">
-            <div echarts #profitbar [options]="profitdatas" class="bardiv" (chartClick)="onProfitbarClick($event)"></div>
+            <div echarts #smbar [options]="profitdatas" class="bardiv" (chartClick)="onProfitbarClick($event)"></div>
             <div class="profitgridstyle">
                 <ion-grid style="padding:0% 0% 0% 0%;overflow:hide;color:#FFFFFF;font-size:20px;" align-items-start>
                     <ion-row style="overflow:hide; height: 75px;border-width:1px;border-style: none none solid none;">
                       <ion-col style="overflow:auto;font-size:22px;"></ion-col>
                       <ion-col style="overflow:auto;font-size:22px;" *ngFor="let header of profitdatas.xAxis[0].data">{{header}}</ion-col>
                     </ion-row>
-                    <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of profitdatas.series">
+                    <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of profitdatas.series;index as i;">
                       <ion-col text-left align-self-center style="font-size:20px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>
-                      <ion-col text-right align-self-center style="font-size:20px;border-width:1px;border-style: none solid none solid;" *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
+                      <ion-col text-right align-self-center style="font-size:20px;border-width:1px;border-style: none solid none solid;" *ngFor="let coldata of rowdata.data">{{GetFormatValue(coldata,i)}}</ion-col>
                     </ion-row>
                   </ion-grid>      
             </div>
@@ -52,8 +52,8 @@
                           <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#59DF97;">接单金额</ion-col>
                           <ion-col text-center style="border-width:1px;border-style: none none none none;color:#59DF97;">毛利率</ion-col>
                       </ion-row>
-                      <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbymnyvalues">
-                          <ion-col col-5 text-left style="font-size:20px;border-width:1px;border-style: none dotted none none;color:#59DF97;">
+                      <ion-row style="overflow:hide; height: 55px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbymnyvalues">
+                          <ion-col col-5 text-left style="font-size:18px;border-width:1px;border-style: none dotted none none;color:#59DF97;">
                               {{rowdata.Customer}}
                           </ion-col>
                           <ion-col text-right style="border-width:1px;border-style: none dotted none none;color:#59DF97;">
@@ -73,8 +73,8 @@
                             <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#F6B19C;">接单金额</ion-col>
                             <ion-col text-center style="border-width:1px;border-style: none none none none;color:#F6B19C;">毛利率</ion-col>
                         </ion-row>
-                        <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbyratevalues">
-                            <ion-col text-left col-5 style="font-size:20px;border-width:1px;border-style: none dotted none none;color:#F6B19C;">
+                        <ion-row style="overflow:hide; height: 55px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbyratevalues">
+                            <ion-col text-left col-5 style="font-size:18px;border-width:1px;border-style: none dotted none none;color:#F6B19C;">
                                 {{rowdata.Customer}}
                             </ion-col>
                             <ion-col text-right style="border-width:1px;border-style: none dotted none none;color:#F6B19C;">

@@ -111,6 +111,7 @@ export class HomePage {
         alert.present(); 
     }    
 
+
 colors:any = ['#c0504d', '#9bbb59', '#8064a2','#4bacc6', '#f79646', '#59DF97'];
 ManufactureDatas:any = {
     color: this.colors,
@@ -119,7 +120,7 @@ ManufactureDatas:any = {
         trigger: 'axis',
         axisPointer: {
             type: 'cross'
-        }
+        },
     },
     grid: {
         left: '3%',
@@ -170,7 +171,7 @@ ManufactureDatas:any = {
                 rotate:-30,
                 fontSize:16
             },
-            data: ['一部','二部','三部','四部','五部','六七部','九部','十一部','十二部','奥特','金源','通一','伟峰','伊丽特','旭阳','浪人']
+            data: ['一部','二部','三部','四部','五部','六七部','九部','十一部','十二部','永旭','奥特','金源','通一','伟峰','伊丽特','旭阳','浪人']
         }
     ],
     yAxis: [
@@ -183,7 +184,8 @@ ManufactureDatas:any = {
             interval:10000,
             axisLine: {
                 lineStyle: {
-                    color: '#FFFFFF'
+                    color: '#FFFFFF',
+                    fontSize:14
                 }
             },
             axisLabel: {
@@ -205,7 +207,7 @@ ManufactureDatas:any = {
                 show:true,
                 lineStyle: {
                     color: '#FFFFFF',
-                    fontSize:10
+                    fontSize:14
                 }
             },
             axisLabel: {
@@ -221,7 +223,7 @@ ManufactureDatas:any = {
             name:'产值目标',
             type:'bar',
             yAxisIndex: 0,
-            data:[53000 ,31000 ,30000 ,25000 ,15000 ,37000 ,59500 ,10000 ,15000 ,10000 ,10000 ,10000 ,10000 ,10000 ,2000 ,5000],
+            data:[],
             animation:true,
             itemStyle:{
                 color:this.colors[3]
@@ -232,7 +234,7 @@ ManufactureDatas:any = {
             name:'接单产值',
             type:'bar',
             yAxisIndex: 0,
-            data:[3365 ,176 ,5308 ,112 ,364 ,750 ,2717 ,0 ,0 ,655 ,138 ,30 ,559 ,3685 ,78 ,1050],
+            data:[],
             animation:true,
             itemStyle:{
                 color:this.colors[0]
@@ -243,7 +245,7 @@ ManufactureDatas:any = {
             name:'完工产值',
             type:'bar',
             yAxisIndex: 0,
-            data:[0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ],
+            data:[ ],
             animation:true,
             itemStyle:{
                 color:this.colors[1]
@@ -254,10 +256,10 @@ ManufactureDatas:any = {
             name:'完工产值盈亏',
             type:'bar',
             yAxisIndex: 0,
-            data:[0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ],
+            data:[ ],
             animation:true,
             itemStyle:{
-                color:this.colors[4]
+                color:this.colors[4],
             },
             barGap:'0%'
         },        
@@ -265,10 +267,10 @@ ManufactureDatas:any = {
             name:'产值完成率',
             type:'line',
             yAxisIndex: 1,
-            data:[6.35,0.57,17.69,0.45,2.42,2.03,4.57,0,0,6.55,1.38,0.3,5.59,18.43,3.91,21.01 ],
+            data:[ ],
             animation:true,
             itemStyle:{
-                color:this.colors[5]
+                color:this.colors[5],
             },
             barGap:'0%'
         }
@@ -288,7 +290,244 @@ ManufactureDatas:any = {
          this.contextdata = ContextData.Create();     
     }
 
+    /**
+     * 表格数据格式化方法
+     */
+    GetFormatValue(coldata,i):string{
+        if(i==4){
+            return (Number.parseFloat(coldata)).toFixed(2).toString()+' %'; 
+        }else{
+            return Math.round(Number.parseFloat(coldata)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    }
+
     chartObjList:Array<any> = new Array<any>();
+
+    //数据更新函数
+    updateFunction = function(table_values,charts,immediateflag){
+        let tablename:string = 'TMP_SMTransferData';
+        if(ContextData.OriginalDatas[tablename].UpdateFlag['homepage']||immediateflag){
+            //数据有更新，开始刷新窗体后台数据
+            let totalmny = 0;
+            let totalgross = 0;
+            let groupvalues:Array<any> = new Array<any>();
+            let groupnamevalues:Array<any> = new Array<any>();
+            let mfgcount:Array<any> = new Array<any>();
+            let mfgcountwithnotransfer:Array<any> = new Array<any>();
+            let totalmnywithnotransfer = 0;
+            let cond1group:Array<any> = new Array<any>(
+                {
+                    areaname:'10000件以上',
+                    areafilter:'>10000',
+                    areamny:0,
+                    areagross:0,
+                    grossrate:0
+                },
+                {
+                    areaname:'5000-10000',
+                    areafilter:'5000<?<10000',
+                    areamny:0,
+                    areagross:0,
+                    grossrate:0
+                },
+                {
+                    areaname:'1000-5000',
+                    areafilter:'1000<?<5000',
+                    areamny:0,
+                    areagross:0,
+                    grossrate:0
+                },
+                {
+                    areaname:'500-1000',
+                    areafilter:'500<?<1000',
+                    areamny:0,
+                    areagross:0,
+                    grossrate:0
+                },
+                {
+                    areaname:'500件以下',
+                    areafilter:'?<500',
+                    areamny:0,
+                    areagross:0,
+                    grossrate:0
+                }
+            );
+            let typegroupvalues:Array<any> = new Array<any>();
+            let typenamevalues:Array<any> = new Array<any>();
+
+            let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部制造七部','制造九部',
+    '制造十一部','制造十二部','山东永旭','临海市奥特休闲用品制造有限公司','临海市金源工艺品有限公司',
+    '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','绍兴旭阳伞业有限公司','东阳市浪人工艺品有限公司'];
+            let barchartdatas:Array<any> = new Array<any>();
+            charts[0].ValueOptions.series.forEach(yaxis => {
+                if(yaxis.name=='产值目标')
+                    barchartdatas.push({data:[53000 ,31000 ,30000 ,25000 ,15000 ,37000 ,59500 ,10000 ,15000 ,10000,10000 ,10000 ,10000 ,10000 ,10000 ,2000 ,5000]});
+                else
+                    barchartdatas.push({data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]});
+            });
+
+            ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
+                let selfflag = datarow.SelfFlag; //内部外部
+                let mfgdept = datarow.MFGDept; //生产部门
+                let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+                let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+                let tmp_tranfermny = 0;
+                if(datarow.TransferPrice>0)
+                    tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+                let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+
+                //alert values
+                if(mfgcount.indexOf(datarow.MFGCode)<0)
+                    mfgcount.push(datarow.MFGCode);
+                if(selfflag&&mfgdept){
+                    totalmny += tmp_salemny;
+                    totalgross += tmp_gross;
+
+                //barchartdata
+                let deptidx = mfgdeptids.indexOf(mfgdept);
+                if('制造六部制造七部'.indexOf(mfgdept)>=0){
+                    deptidx = mfgdeptids.indexOf('制造六部制造七部');
+                }
+                if(deptidx>=0){
+                    barchartdatas[1].data[deptidx] += tmp_tranfermny;
+                    //barchartdatas[2].data[deptidx] += tmp_tranfermny;
+                    //barchartdatas[3].data[deptidx] += tmp_gross;
+                }
+
+                //groupbytype
+                let tmp_type = datarow.ItemType;
+                let typeidx = typenamevalues.indexOf(tmp_type);
+                if(typeidx<0){
+                    //没有加入数组，新增数组元素
+                    typenamevalues.push(tmp_type);
+                    typegroupvalues.push({
+                        kind:tmp_type,
+                        ordermny:tmp_salemny,
+                        grossmny:tmp_gross,
+                        grossrate:0
+                    });
+                    //groupidx = groupnamevalues.indexOf(selfflag);
+                }else{
+                    typegroupvalues[typeidx].ordermny += tmp_salemny;
+                    typegroupvalues[typeidx].grossmny += tmp_gross;
+                }
+
+                //groupbyvalue
+                let step = Number.parseInt(datarow.step);
+                let ceiltotal = Number.parseFloat(datarow.ceiltotal);
+                if(step>=20&&ceiltotal>10000){
+                    cond1group[0].areamny += tmp_salemny;
+                    cond1group[0].areagross += tmp_gross;
+                }else if(datarow.step>=10&&ceiltotal>5000){
+                    cond1group[1].areamny += tmp_salemny;
+                    cond1group[1].areagross += tmp_gross;
+                }else if(datarow.step>=2&&ceiltotal>1000){
+                    cond1group[2].areamny += tmp_salemny;
+                    cond1group[2].areagross += tmp_gross;
+                }else if(datarow.step>=1&&ceiltotal>500){
+                    cond1group[3].areamny += tmp_salemny;
+                    cond1group[3].areagross += tmp_gross;
+                }else{
+                    cond1group[4].areamny += tmp_salemny;
+                    cond1group[4].areagross += tmp_gross;
+                }
+
+                //group values
+                let groupidx = groupnamevalues.indexOf(selfflag);
+                if(groupidx<0){
+                    //没有加入数组，新增数组元素
+                    groupnamevalues.push(selfflag);
+                    groupvalues.push({
+                        groupname:selfflag,
+                        summny:tmp_salemny,
+                        sumgross:tmp_gross,
+                        grossrate:0
+                    });
+                    //groupidx = groupnamevalues.indexOf(selfflag);
+                }else{
+                    groupvalues[groupidx].summny += tmp_salemny;
+                    groupvalues[groupidx].sumgross += tmp_gross;
+                }   
+                }else{
+                    if(mfgcountwithnotransfer.indexOf(datarow.MFGCode)<0){
+                        mfgcountwithnotransfer.push(datarow.MFGCode);
+                        totalmnywithnotransfer += tmp_salemny;
+                    }
+                }
+
+            });
+            //接单分组合计统计
+            table_values.groupvalues.length=0;
+            groupvalues.forEach(grouprow=>{
+                grouprow.grossrate = grouprow.sumgross/grouprow.summny;
+                table_values.groupvalues.push(grouprow);
+            });
+
+
+            //groupbytype合计统计
+            table_values.groupbykindvalues.length=0;
+            typegroupvalues.forEach(groupvalue=>{
+                if(groupvalue.ordermny>0)
+                    groupvalue.grossrate = groupvalue.grossmny/groupvalue.ordermny;
+                else
+                    groupvalue.grossrate=0;
+
+                table_values.groupbykindvalues.push(groupvalue);
+            });
+            table_values.groupbykindvalues.sort(function(a, b){
+                if(Number.parseFloat(a.ordermny) > Number.parseFloat(b.ordermny)){
+                    return -1;
+                }
+                else if( Number.parseFloat(a.ordermny) < Number.parseFloat(b.ordermny)){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }
+            });
+
+            //groupbyareavalues更新
+            table_values.groupbyareavalues.length=0;
+            cond1group.forEach(groupvalue=>{
+                if(groupvalue.areamny>0)
+                    groupvalue.grossrate = groupvalue.areagross/groupvalue.areamny;
+                else
+                    groupvalue.grossrate = 0;
+
+                table_values.groupbyareavalues.push(groupvalue);
+            });
+
+            //接单合计值统计
+            table_values.totalvalues.totalmny=totalmny;
+            table_values.totalvalues.totalgross=totalgross;
+            table_values.totalvalues.grossrate=totalgross/totalmny;
+
+            //累计制造令信息
+            table_values.alertvalues.totalmfgcodecount = mfgcount.length;
+            table_values.alertvalues.totalunsetpricecount = mfgcountwithnotransfer.length;
+            table_values.alertvalues.totalunsetpricemny = totalmnywithnotransfer;
+
+            //刷新图表
+            for(let i=0;i<barchartdatas[1].data.length;i++){
+                barchartdatas[1].data[i] = Math.round(Number.parseFloat(barchartdatas[1].data[i])); //取整
+            }
+            charts.forEach(element => {
+                for(let i=0;i<element.ValueOptions.series.length;i++){
+                    element.ValueOptions.series[i].data = barchartdatas[i].data;
+                }
+
+                for(var i=0;i<element.ValueOptions.series[0].data.length;i++){
+                    if(element.ValueOptions.series[0].data[i]>0)
+                        element.ValueOptions.series[4].data[i] = (element.ValueOptions.series[1].data[i]/element.ValueOptions.series[0].data[i]*100).toFixed(2);
+                }
+
+                element.ChartObj.setOption(element.ValueOptions);
+            });
+
+            //数据刷新完毕，重置标志
+            ContextData.OriginalDatas[tablename].UpdateFlag['homepage'] = false;
+        }
+    }    
 
     ionViewWillEnter(){
         //图表控件对象获取
@@ -301,106 +540,25 @@ ManufactureDatas:any = {
                     ValueOptions:this.ManufactureDatas
                 }
             )
-        }     
-    }
+        }
 
-    /**
-     * 刷新表格数据
-     * 2018-04-02
-     */
-    static UpdateTableDatas(originaldatas:any):any{
-        if(originaldatas){
-            let result:any = {
-                totalvalues:{
-                    totalmny:18987,
-                    totalgross:4215,
-                    grossrate:0.2220
-                },
-                groupvalues:[
-                    {
-                        groupname:'内部',
-                        summny:12450,
-                        sumgross:2976,
-                        grossrate:0.2391
-                    },
-                    {
-                        groupname:'外部',
-                        summny:6195,
-                        sumgross:1240,
-                        grossrate:0.2002
-                    },
-                ],
-                alertvalues:{
-                    totalmfgcodecount:158,
-                    totalunsetpricecount:116,
-                    totalunsetpricemny:5488
-                },
-                groupbykindvalues:[
-                    {
-                        kind:'藤编家具',
-                        ordermny:4326,
-                        grossrate:0.2787
-                    },
-                    {
-                        kind:'非编藤家具',
-                        ordermny:11669,
-                        grossrate:0.2249
-                    },
-                    {
-                        kind:'秋千',
-                        ordermny:303,
-                        grossrate:0.066
-                    },
-                    {
-                        kind:'伞',
-                        ordermny:554,
-                        grossrate:0.1848
-                    },
-                    {
-                        kind:'帐篷',
-                        ordermny:2135,
-                        grossrate:0.1230
-                    }
-                ],
-                groupbyareavalues:[
-                    {
-                        areaname:'10000件以上',
-                        areafilter:'>10000',
-                        areamny:11044,
-                        grossrate:0.1861
-                    },
-                    {
-                        areaname:'5000-10000',
-                        areafilter:'5000<?<10000',
-                        areamny:1314,
-                        grossrate:0.2558
-                    },
-                    {
-                        areaname:'1000-5000',
-                        areafilter:'1000<?<5000',
-                        areamny:5595,
-                        grossrate:0.2819
-                    },
-                    {
-                        areaname:'500-1000',
-                        areafilter:'500<?<1000',
-                        areamny:643,
-                        grossrate:0.2268
-                    },
-                    {
-                        areaname:'500件以下',
-                        areafilter:'?<500',
-                        areamny:392,
-                        grossrate:0.2583
-                    }
-                ]
-            }
-            return result;
+        //首次打开执行数据刷新
+        if(this.tablevalues.alertvalues.totalmfgcodecount==0){
+            setTimeout(this.updateFunction,500,this.tablevalues,this.chartObjList,true);
         }
     }
 
+    /**
+     * 页面加载前执行
+     */
     ionViewDidEnter(){
+         
+    }
 
+    /**
+     * 页面首次加载后
+     */
+    ionViewDidLoad(){
         //时钟刷新
         if(this.clockctrl){
             setInterval(function(clock_ctrl){
@@ -411,170 +569,8 @@ ManufactureDatas:any = {
              },1000,this.clockctrl);
          }
 
-        let updateFunction = function(table_values,charts){
-            let tablename:string = 'TMP_SMTransferData';
-            if(ContextData.OriginalDatas[tablename].UpdateFlag){
-                //数据有更新，开始刷新窗体后台数据
-                let totalmny = 0;
-                let totalgross = 0;
-                let groupvalues:Array<any> = new Array<any>();
-                let groupnamevalues:Array<any> = new Array<any>();
-                let mfgcount:Array<any> = new Array<any>();
-                let mfgcountwithnotransfer:Array<any> = new Array<any>();
-                let totalmnywithnotransfer = 0;
-                let cond1group:Array<any> = new Array<any>(
-                    {
-                        areaname:'10000件以上',
-                        areafilter:'>10000',
-                        areamny:0,
-                        areagross:0,
-                        grossrate:0
-                    },
-                    {
-                        areaname:'5000-10000',
-                        areafilter:'5000<?<10000',
-                        areamny:0,
-                        areagross:0,
-                        grossrate:0
-                    },
-                    {
-                        areaname:'1000-5000',
-                        areafilter:'1000<?<5000',
-                        areamny:0,
-                        areagross:0,
-                        grossrate:0
-                    },
-                    {
-                        areaname:'500-1000',
-                        areafilter:'500<?<1000',
-                        areamny:0,
-                        areagross:0,
-                        grossrate:0
-                    },
-                    {
-                        areaname:'500件以下',
-                        areafilter:'?<500',
-                        areamny:0,
-                        areagross:0,
-                        grossrate:0
-                    }
-                );
-                let typegroupvalues:Array<any> = new Array<any>();
-                let typenamevalues:Array<any> = new Array<any>();
-                ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
-                    let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
-                    let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
-                    let tmp_tranfermny = 0;
-                    if(datarow.TransferPrice>0)
-                        tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
-                    totalmny += tmp_salemny;
-                    let tmp_gross = tmp_salemny-(Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny+tmp_tranfermny;
-                    totalgross += tmp_gross;
-
-
-                    //groupbyvalue
-                    let step = Number.parseInt(datarow.step);
-                    let ceiltotal = Number.parseFloat(datarow.ceiltotal);
-                    if(step>=20&&ceiltotal>10000){
-                        cond1group[0].areamny += tmp_salemny;
-                        cond1group[0].areagross += tmp_gross;
-                    }else if(datarow.step>=10&&ceiltotal>5000){
-                        cond1group[1].areamny += tmp_salemny;
-                        cond1group[1].areagross += tmp_gross;
-                    }else if(datarow.step>=2&&ceiltotal>1000){
-                        cond1group[2].areamny += tmp_salemny;
-                        cond1group[2].areagross += tmp_gross;
-                    }else if(datarow.step>=1&&ceiltotal>500){
-                        cond1group[3].areamny += tmp_salemny;
-                        cond1group[3].areagross += tmp_gross;
-                    }else{
-                        cond1group[4].areamny += tmp_salemny;
-                        cond1group[4].areagross += tmp_gross;
-                    }
-
-                    //alert values
-                    if(mfgcount.indexOf(datarow.MFGCode)<0)
-                        mfgcount.push(datarow.MFGCode);
-                    if(datarow.TransferPrice<=0){
-                        if(mfgcountwithnotransfer.indexOf(datarow.MFGCode)<0){
-                            mfgcountwithnotransfer.push(datarow.MFGCode);
-                            totalmnywithnotransfer += tmp_salemny;
-                        }
-                    }
-
-                    //group values
-                    let selfflag = datarow.SelfFlag;
-                    let groupidx = groupnamevalues.indexOf(selfflag);
-                    if(groupidx<0){
-                        //没有加入数组，新增数组元素
-                        groupnamevalues.push(selfflag);
-                        groupvalues.push({
-                            groupname:selfflag,
-                            summny:tmp_salemny,
-                            sumgross:tmp_gross,
-                            grossrate:0
-                        });
-                        //groupidx = groupnamevalues.indexOf(selfflag);
-                    }else{
-                        groupvalues[groupidx].summny += tmp_salemny;
-                        groupvalues[groupidx].sumgross += tmp_gross;
-                    }
-                });
-                //接单分组合计统计
-                table_values.groupvalues.length=0;
-                groupvalues.forEach(grouprow=>{
-                    grouprow.grossrate = grouprow.sumgross/grouprow.summny;
-                    table_values.groupvalues.push(grouprow);
-                });
-
-                //groupbyareavalues更新
-                table_values.groupbyareavalues.length=0;
-                cond1group.forEach(groupvalue=>{
-                    if(groupvalue.areamny>0)
-                        groupvalue.grossrate = groupvalue.areagross/groupvalue.areamny;
-                    else
-                        groupvalue.grossrate = 0;
-
-                    table_values.groupbyareavalues.push(groupvalue);
-                });
-
-                //接单合计值统计
-                table_values.totalvalues.totalmny=totalmny;
-                table_values.totalvalues.totalgross=totalgross;
-                table_values.totalvalues.grossrate=totalgross/totalmny;
-
-                //累计制造令信息
-                table_values.alertvalues.totalmfgcodecount = mfgcount.length;
-                table_values.alertvalues.totalunsetpricecount = mfgcountwithnotransfer.length;
-                table_values.alertvalues.totalunsetpricemny = totalmnywithnotransfer;
-
-                //数据刷新完毕，重置标志
-                ContextData.OriginalDatas[tablename].UpdateFlag = false;
-            }
-
-            //刷新图标
-            charts.forEach(element => {
-                element.ValueOptions.series.forEach(seriedata => {
-                    if(seriedata.name!='产值完成率'&&seriedata.name!='产值目标'){
-                        seriedata.data = [Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-                            Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,Math.ceil(Math.random()*10000) ,
-                            Math.ceil(Math.random()*10000)];
-                    }
-                    });
-                element.ChartObj.setOption(element.ValueOptions);
-            });
-         }
-
-        //首次登陆执行数据刷新
-        if(this.tablevalues.alertvalues.totalmfgcodecount==0){
-            setTimeout(updateFunction,500,this.tablevalues,this.chartObjList);
-        }
-
         //数据值定时刷新 1 分钟刷新
-        setInterval(updateFunction,10000,this.tablevalues,this.chartObjList);
+        setInterval(this.updateFunction,60000,this.tablevalues,this.chartObjList,false);             
     }
 
     OnManufactureBarClick(params:any){

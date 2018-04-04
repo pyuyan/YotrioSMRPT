@@ -6,14 +6,28 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 */
 @Injectable()
 export class ContextData {
-
+  //关键业务部门
+  static KeyDepts:any = {
+    DeptNames:[],
+    DeptSalingTarget:[]
+  };
+  public static SetKeyDepts(depts:any){
+    ContextData.KeyDepts = depts;
+  }
+  public static GetKeyDepts():any{
+    return ContextData.KeyDepts;
+  }
+  //更新时间戳
   static timemarks:any = {
     'TMP_SMTransferData':0
   }
 
   static OriginalDatas:any = {
     TMP_SMTransferData:{
-      UpdateFlag:false,
+      UpdateFlag:{
+        homepage:false,
+        smreportpage:false
+      },
       DataValue:[] 
     },
   }

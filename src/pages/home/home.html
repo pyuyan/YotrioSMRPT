@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
-    <button large ion-button menuToggle>
-        <ion-icon name="menu"></ion-icon>
+    <button ion-button menuToggle>
+        <ion-icon style="font-size: 50px;" name="menu"></ion-icon>
     </button>
     <ion-title style="padding:0% 0% 0% 0%;"><p align="center" style="color:white;font-size:60px;">永强集团制造数据中心</p></ion-title> 
     <ion-buttons end>
@@ -79,11 +79,11 @@
                 <ion-grid style="overflow:auto;color:#FFFFFF;" align-items-end>
                     <ion-row style="font-size:25px;overflow:hide; height: 55px;border-width:1px;border-style: none none solid none;">
                       <ion-col></ion-col>
-                      <ion-col *ngFor="let header of ManufactureDatas.xAxis[0].data">{{header}}</ion-col>
+                      <ion-col align-self-center *ngFor="let header of ManufactureDatas.xAxis[0].data">{{header}}</ion-col>
                     </ion-row>
-                    <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of ManufactureDatas.series">
+                    <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of ManufactureDatas.series;index as i;">
                       <ion-col text-left style="font-size:21px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>
-                      <ion-col text-right align-self-center style="font-size:22px;border-width:1px;border-style: none solid none none;" *ngFor="let coldata of rowdata.data">{{coldata|thousands}}</ion-col>
+                      <ion-col text-right align-self-center style="font-size:22px;border-width:1px;border-style: none solid none none;" *ngFor="let coldata of rowdata.data">{{GetFormatValue(coldata,i)}}</ion-col>
                     </ion-row>
                   </ion-grid>      
             </div>

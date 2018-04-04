@@ -53,10 +53,17 @@ export class YotrioSMRPT {
         });
       };
 
-      setTimeout(TMPDataRefresh,1,this.datasvr);
+      let GetKeyDepts = function(datasvrprovider:DatasvrProvider){
+        datasvrprovider.GetKeyDepts().then(result=>{
 
-      setInterval(TMPDataRefresh,10000,this.datasvr);
+        })
+      };
 
+      setTimeout(TMPDataRefresh,500,this.datasvr);
+      setTimeout(GetKeyDepts,1000,this.datasvr);
+
+      setInterval(TMPDataRefresh,60000,this.datasvr);
+      setInterval(GetKeyDepts,3600000,this.datasvr);
   }
 
   initializeApp() {

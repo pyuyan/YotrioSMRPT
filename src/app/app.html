@@ -1,13 +1,13 @@
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar color="slidecolor"> 
-      <ion-title><p align="center" style="color:white;">导航菜单</p></ion-title>
+      <ion-title><p align="center" style="font-size: 22px;color:white;">导航菜单</p></ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content color="slidecolor" style="background-color:#0D3E63;overflow: hidden;">
     <ion-list color="slidecolor">
-      <button style="background-color:#1C84D4 !important;color:white;" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+      <button text-center style="font-size: 22px;background-color:#1C84D4 !important;color:white;" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
       </button>
     </ion-list>
