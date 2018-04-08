@@ -377,9 +377,10 @@ ManufactureDatas:any = {
                 let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
 
                 //alert values
-                if(mfgcount.indexOf(datarow.MFGCode)<0)
-                    mfgcount.push(datarow.MFGCode);
                 if(selfflag&&mfgdept){
+                    if(mfgcount.indexOf(datarow.MFGCode)<0)
+                        mfgcount.push(datarow.MFGCode); //合规制造令统计
+
                     totalmny += tmp_salemny;
                     totalgross += tmp_gross;
 

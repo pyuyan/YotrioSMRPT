@@ -33,9 +33,6 @@
                             <ion-col text-center style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
                                 {{rowdata.summny|thousands}}
                             </ion-col>
-                            <ion-col col-1 style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                <ion-icon name="search"></ion-icon>
-                            </ion-col>
                           </ion-row>
                         </ion-grid>    
                     </ion-card>
@@ -52,9 +49,6 @@
                               <ion-col (click)="OpenGrossModal(rowdata.groupname)" text-center style="color:#9bbb59;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
                                   {{rowdata.sumgross|thousands}}
                               </ion-col>
-                              <ion-col col-2 style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                    <ion-icon name="search"></ion-icon>
-                                </ion-col>
                             </ion-row>
                           </ion-grid>  
                     </ion-card>
@@ -70,9 +64,6 @@
                               </ion-col>
                               <ion-col text-center style="color:#c0504d;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
                                   {{rowdata.grossrate|percent}}
-                              </ion-col>
-                              <ion-col col-2 style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                    <ion-icon name="search"></ion-icon>
                               </ion-col>
                             </ion-row>
                           </ion-grid>  
@@ -102,27 +93,36 @@
           <ion-card class="hintpartstyle">
               <ion-grid style="padding:20% 15% 0% 0%;overflow:hide;color:#4bacc6;" align-items-end>
                   <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:28px;">
+                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
                           累计制造令数量
                       </ion-col>
-                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:28px;">
+                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
                         {{tablevalues.alertvalues.totalmfgcodecount}}
                       </ion-col>
+                      <ion-col col-1 style="color:#4bacc6;border-width:1px;border-style: none none none none;font-size:26px;">
+                        <ion-icon name="md-search"></ion-icon>
+                      </ion-col>
                   </ion-row>
                   <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:28px;">
+                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
                           无转移价制造令数量
                       </ion-col>
-                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:28px;">
+                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
                           {{tablevalues.alertvalues.totalunsetpricecount}}
+                      </ion-col>
+                      <ion-col col-1 style="color:#4bacc6;border-width:1px;border-style: none none none none;font-size:26px;">
+                        <ion-icon name="md-search"></ion-icon>
                       </ion-col>
                   </ion-row>
                   <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:28px;">
+                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
                           无转移价金额
                       </ion-col>
-                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:28px;">
+                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
                           {{tablevalues.alertvalues.totalunsetpricemny|thousands}}
+                      </ion-col>
+                      <ion-col col-1 style="color:#4bacc6;border-width:1px;border-style: none none none none;font-size:26px;">
+                        <ion-icon name="md-search"></ion-icon>
                       </ion-col>
                   </ion-row>
                 </ion-grid>    
@@ -131,20 +131,24 @@
                         <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:28px;">分类统计</ion-col>
                     </ion-row>
                     <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                        <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:28px;">类型</ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:28px;">接单金额</ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:28px;">毛利率</ion-col>
+                        <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">类型</ion-col>
+                        <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">接单金额</ion-col>
+                        <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:26px;">毛利率</ion-col>
+                        <ion-col col-1 style="color:#9bbb59;border-width:1px;border-style: none none none none;font-size:26px;"></ion-col>
                     </ion-row>
                     <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.groupbykindvalues">
-                        <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:28px;">
+                        <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">
                             {{rowdata.kind}}
                         </ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:28px;">
+                        <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">
                             {{rowdata.ordermny|thousands}}
                         </ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:28px;">
+                        <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:26px;">
                             {{rowdata.grossrate|percent}}
                         </ion-col>
+                        <ion-col col-1 style="color:#9bbb59;border-width:1px;border-style: none none none none;font-size:26px;">
+                            <ion-icon name="md-search"></ion-icon>
+                          </ion-col>
                     </ion-row>
                   </ion-grid>  
                   <ion-grid style="padding:10% 15% 0% 0%;overflow:hide;color:#8064a2;" align-items-end>
@@ -152,19 +156,23 @@
                           <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:28px;">数量分布统计</ion-col>
                       </ion-row>
                       <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                          <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:28px;">区间</ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:28px;">接单金额</ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:28px;">毛利率</ion-col>
+                          <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">区间</ion-col>
+                          <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">接单金额</ion-col>
+                          <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:26px;">毛利率</ion-col>
+                          <ion-col col-1 style="color:#8064a2;border-width:1px;border-style: none none none none;font-size:26px;"></ion-col>
                       </ion-row>
                       <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.groupbyareavalues">
-                          <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:28px;">
+                          <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">
                               {{rowdata.areaname}}
                           </ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:28px;">
+                          <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">
                               {{rowdata.areamny|thousands}}
                           </ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:28px;">
+                          <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:26px;">
                               {{rowdata.grossrate|percent}}
+                          </ion-col>
+                          <ion-col col-1 style="color:#8064a2;border-width:1px;border-style: none none none none;font-size:26px;">
+                            <ion-icon name="md-search"></ion-icon>
                           </ion-col>
                       </ion-row>
                     </ion-grid>  
