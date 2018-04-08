@@ -409,7 +409,7 @@ profitdatas:any = {
                 let areatype = datarow.AreaType; //区域分类
                 let customer = datarow.Customer; //客户
                 let keydept = datarow.SaleDept; //业务指标部门
-                if(customer!='国内市场部客户'&&Number.parseFloat(datarow.TransferPrice)>0){
+                if(Number.parseFloat(datarow.TransferPrice)>0){
                     let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
                     let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
                     let tmp_tranfermny = 0;
@@ -417,13 +417,6 @@ profitdatas:any = {
                         tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
                     let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
 
-                    //业务组接单数据收集
-                    let deptidx = keydeptdata.DeptNames.indexOf(keydept);
-                    if(deptidx>0){
-                        keydeptmoneys[deptidx] += tmp_salemny;
-                        keydeptgrosses[deptidx] += tmp_gross;
-                    }
-    
                     //接单统计饼图数据收集
                     totalmoney += tmp_salemny;
                     totalgross += tmp_gross;
@@ -436,23 +429,33 @@ profitdatas:any = {
                     }else{
                         areamoneys[areaidx] += tmp_salemny;
                         areagrosses[areaidx] += tmp_gross;
-                    }
-
-                    //TOP10表格数据收集
-                    if(datarow.InnerOrg=='False'){
-                        let custidx = customerarray.indexOf(customer);
-                        if(custidx<0){
-                            customerarray.push(customer);
-                            //tablevalues.orderbyratevalues
-                            topgroupvalues.push({
-                                Customer: customer,
-                                OrderMoney: tmp_salemny,
-                                GrossMoney: tmp_gross,
-                                GrossRate: 0
-                            });
-                        }else{
-                            topgroupvalues[custidx].OrderMoney += tmp_salemny;
-                            topgroupvalues[custidx].GrossMoney += tmp_gross;
+                    }                    
+                    
+                    if(customer!='国内市场部客户'){
+    
+                        //业务组接单数据收集
+                        let deptidx = keydeptdata.DeptNames.indexOf(keydept);
+                        if(deptidx>0){
+                            keydeptmoneys[deptidx] += tmp_salemny;
+                            keydeptgrosses[deptidx] += tmp_gross;
+                        }
+    
+                        //TOP10表格数据收集
+                        if(datarow.InnerOrg=='False'){
+                            let custidx = customerarray.indexOf(customer);
+                            if(custidx<0){
+                                customerarray.push(customer);
+                                //tablevalues.orderbyratevalues
+                                topgroupvalues.push({
+                                    Customer: customer,
+                                    OrderMoney: tmp_salemny,
+                                    GrossMoney: tmp_gross,
+                                    GrossRate: 0
+                                });
+                            }else{
+                                topgroupvalues[custidx].OrderMoney += tmp_salemny;
+                                topgroupvalues[custidx].GrossMoney += tmp_gross;
+                            }
                         }
                     }
                 }
