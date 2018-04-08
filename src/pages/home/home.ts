@@ -416,16 +416,16 @@ ManufactureDatas:any = {
                 //groupbyvalue
                 let step = Number.parseInt(datarow.step);
                 let ceiltotal = Number.parseFloat(datarow.ceiltotal);
-                if(step>=20&&ceiltotal>10000){
+                if(ceiltotal>10000){
                     cond1group[0].areamny += tmp_salemny;
                     cond1group[0].areagross += tmp_gross;
-                }else if(datarow.step>=10&&ceiltotal>5000){
+                }else if(ceiltotal<=10000&&ceiltotal>5000){
                     cond1group[1].areamny += tmp_salemny;
                     cond1group[1].areagross += tmp_gross;
-                }else if(datarow.step>=2&&ceiltotal>1000){
+                }else if(ceiltotal<=5000&&ceiltotal>1000){
                     cond1group[2].areamny += tmp_salemny;
                     cond1group[2].areagross += tmp_gross;
-                }else if(datarow.step>=1&&ceiltotal>500){
+                }else if(ceiltotal<=1000&&ceiltotal>500){
                     cond1group[3].areamny += tmp_salemny;
                     cond1group[3].areagross += tmp_gross;
                 }else{
