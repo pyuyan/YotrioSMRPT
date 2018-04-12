@@ -5,6 +5,7 @@ import { NgxEchartsService,NgxEchartsModule } from 'ngx-echarts';
 import { ContextData } from '../../app/context';
 import { GrossmodelPage } from './grossmodel';
 import { deepCopy } from 'ionic-angular/util/util';
+import { MfgcountmodelPage } from './mfgcountmodel';
 
 @IonicPage()
 @Component({
@@ -45,6 +46,33 @@ export class HomePage {
         // },         200);    
         
         this.navCtrl.push(GrossmodelPage,{datatype:datatypename});
+    }
+
+    /**
+     * 打开无转移价明细
+     */
+    OpenDetailForUnTransfer(){
+
+    }
+
+    /**
+     * 打开明细信息
+     * @param datarow 
+     * @param i 
+     */
+    OpenDetail(datarow:any,i:number,type:number){
+        this.expanded = true;
+        this.contracted = !this.expanded;
+        this.showIcon = false;
+        setTimeout(() => {
+          const modal = this.modalCtrl.create(MfgcountmodelPage, {});
+          modal.onDidDismiss(data => {
+            this.expanded = false;
+            this.contracted = !this.expanded;
+            setTimeout(() => this.showIcon = true, 330);
+          });
+          modal.present();
+        },         200);  
     }
 
     tablevalues:any = {
@@ -415,7 +443,7 @@ ManufactureDatas:any = {
 
                 //groupbyvalue
                 let step = Number.parseInt(datarow.step);
-                let ceiltotal = Number.parseFloat(datarow.ceiltotal);
+                let ceiltotal = tmp_orderqty;//Number.parseFloat(datarow.ceiltotal);
                 if(ceiltotal>10000){
                     cond1group[0].areamny += tmp_salemny;
                     cond1group[0].areagross += tmp_gross;

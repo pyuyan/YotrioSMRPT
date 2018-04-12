@@ -432,7 +432,6 @@ profitdatas:any = {
                     }                    
                     
                     if(customer!='国内市场部客户'){
-    
                         //业务组接单数据收集
                         let deptidx = keydeptdata.DeptNames.indexOf(keydept);
                         if(deptidx>0){

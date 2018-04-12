@@ -4,11 +4,13 @@ import { HomePage } from './home';
 import { PipesModule } from '../../pipes/pipes.module';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { GrossmodelPage } from './grossmodel';
+import { MfgcountmodelPage } from './mfgcountmodel';
 
 @NgModule({
   declarations: [
     HomePage,
-    GrossmodelPage
+    GrossmodelPage,
+    MfgcountmodelPage
   ],
   imports: [
     IonicPageModule.forChild(HomePage),
@@ -17,10 +19,12 @@ import { GrossmodelPage } from './grossmodel';
   ],
   exports:[
     HomePage,
-    GrossmodelPage
+    GrossmodelPage,
+    MfgcountmodelPage
   ],
   entryComponents: [
-    GrossmodelPage
+    GrossmodelPage,
+    MfgcountmodelPage
   ],
 })
 export class HomePageModule {}

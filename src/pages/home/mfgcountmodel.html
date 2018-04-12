@@ -1,14 +1,30 @@
+<div class="modal_content">
 <ion-header>
-    <ion-navbar transparent>
-      <ion-buttons right>
-        <button ion-button (click)="dismiss(false)">
-            <ion-icon name="close"></ion-icon>
-        </button>
-      </ion-buttons>
-    </ion-navbar>
+        <ion-toolbar #toolbar no-border-top>
+                <ion-segment id="segment" [(ngModel)]="group">
+                  <ion-segment-button *ngFor="let groupvalue of groupvalues;index as n;" value={{groupvalue}}>
+                    {{groupvalue}}
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-toolbar>
 </ion-header>
-
 <ion-content padding >
+        <div [ngSwitch]="group">           
+                <ion-list *ngSwitchCase="group">
+                        <ion-item *ngFor="let row of dataset[group];index as n;">
+                                <ion-col>{{row.display}}</ion-col>
+                                <ion-col>{{row.display}}</ion-col>
+                                <ion-col>{{row.display}}</ion-col>
+                                <ion-note item-end>{{row.showvalue}}</ion-note>
+                                <ion-note item-end>{{row.showvalue}}</ion-note>
+                        </ion-item>
+                </ion-list>            
+        </div>
 
-    
 </ion-content>
+
+<ion-footer>
+    <button ion-button full color="danger" (click)="dismiss()">关闭
+    </button>
+</ion-footer>
+</div>
