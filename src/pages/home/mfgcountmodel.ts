@@ -12,77 +12,25 @@ export class MfgcountmodelPage {
 
     @ViewChild('toolbar') toolbar:Toolbar;
 
-    groupvalues:Array<any>  = ['DEMO1','DEMO2','DEMO3'];
-    dataset:any = {
-        DEMO1:[
-            {
-                display:'AAAAA1',
-                showvalue:10000,
-            },
-            {
-                display:'AAAAA1',
-                showvalue:10000,
-            },
-            {
-                display:'AAAAA1',
-                showvalue:10000,
-            },
-            {
-                display:'AAAAA1',
-                showvalue:10000,
-            },
-            {
-                display:'AAAAA1',
-                showvalue:10000,
-            },
-        ],
-        DEMO2:[
-            {
-                display:'BBBB1',
-                showvalue:10000,
-            },
-            {
-                display:'BBBB1',
-                showvalue:10000,
-            },
-            {
-                display:'BBBB1',
-                showvalue:10000,
-            },
-            {
-                display:'BBBB1',
-                showvalue:10000,
-            },
-            {
-                display:'BBBB1',
-                showvalue:10000,
-            },
-        ],
-        DEMO3:[
-            {
-                display:'CCCCC1',
-                showvalue:10000,
-            },
-            {
-                display:'CCCCC1',
-                showvalue:10000,
-            },
-            {
-                display:'CCCCC1',
-                showvalue:10000,
-            },
-            {
-                display:'CCCCC1',
-                showvalue:10000,
-            },
-            {
-                display:'CCCCC1',
-                showvalue:10000,
-            },
-        ]
+    deptidx:number = 0;
+
+    deptname:string = '';
+
+    /**
+     * 选择部门
+     * @param idx 
+     */
+    ChooseDeptment(idx:number){
+        this.deptidx = idx;
+        this.deptname = this.dataset[this.group].MFGDepts[this.deptidx];
     }
 
-    groupidx:number = 2;
+    groupvalues:Array<any>  = [];
+    dataset:any = {
+
+    }
+
+    groupidx:number = -1;
     group:string = '';
 
     constructor(
@@ -90,7 +38,13 @@ export class MfgcountmodelPage {
         public params: NavParams,
         public viewCtrl: ViewController
     ){
+        this.groupvalues = this.params.get('groupset');
+        this.dataset = this.params.get('groupdatas');
 
+
+        if(this.groupvalues.length>0)
+            this.group = this.groupvalues[Number.parseInt(this.params.get('groupindex'))];
+        this.deptname = this.dataset[this.group].MFGDepts[0];    
     }
 
     /**
@@ -100,11 +54,19 @@ export class MfgcountmodelPage {
         this.viewCtrl.dismiss();
     }
 
+    /**
+     * 工具栏页卡切换
+     */
+    segmentChanged(event:any){
+        this.deptidx = 0;
+        this.deptname = this.dataset[this.group].MFGDepts[0];
+    }
+
 
     /**
      * 页面加载后预处理
      */
     ionViewDidEnter(){
-        this.group = this.groupvalues[0];
+
     }
 }

@@ -28,6 +28,8 @@ export class YotrioSMRPT {
     private datasvr:DatasvrProvider) {
 
       this.contextdata = ContextData.Create();
+
+      this.contextdata.SetESBPortal('http://192.168.0.197:8280');    
       //初始化上下文
       if(ContextData.inited === false){
         ContextData.InitContextData();

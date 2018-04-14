@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, TextInput, IonicPage, List ,ModalController, AlertController } from 'ionic-angular';
+import { NavController, TextInput, IonicPage, List ,ModalController, AlertController, LoadingController } from 'ionic-angular';
 import { ViewChild,ElementRef } from '@angular/core';
 import { NgxEchartsService,NgxEchartsModule } from 'ngx-echarts';
 import { ContextData } from '../../app/context';
@@ -22,11 +22,6 @@ export class HomePage {
 
     @ViewChild('clockcontrol') clockctrl:any
 
-    expanded: any;
-    contracted: any;
-    showIcon = true;
-    preload  = true;
-
     OpenGrossModal(datatypename:any) {
         // let modal = this.modalCtrl.create(GrossmodelPage, {datatype:datatypename},{
         //     cssClass: "my-modal"
@@ -48,12 +43,6 @@ export class HomePage {
         this.navCtrl.push(GrossmodelPage,{datatype:datatypename});
     }
 
-    /**
-     * 打开无转移价明细
-     */
-    OpenDetailForUnTransfer(){
-
-    }
 
     /**
      * 打开明细信息
@@ -61,15 +50,141 @@ export class HomePage {
      * @param i 
      */
     OpenDetail(datarow:any,i:number,type:number){
-        this.expanded = true;
-        this.contracted = !this.expanded;
-        this.showIcon = false;
+        //进度条控件
+        let loader = this.loadingCtrl.create({
+            content: "正在读取明细数据..."
+        });
+        loader.present();
+
+        let tablename:string = 'TMP_SMTransferData';
+        let groups:Array<string> = new Array<string>();
+        let datas:any = {
+
+        };
+
+        //设置分类数组
+        if(type===0){
+            //未设转移价
+            groups = ['工厂未接单'];
+        }else if(type===1){
+            //产品分类
+            this.tablevalues.groupbykindvalues.forEach(element => {
+                groups.push(element.kind);
+            });
+        }else if(type===2){
+            //数量区间分组
+            groups = ['10000件以上','5000-10000','1000-5000','500-1000','500件以下'];
+        }
+
+        ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
+            let selfflag = datarow.SelfFlag; //内部外部
+            let mfgdept = datarow.MFGDept; //生产部门
+            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+            let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+            let tmp_tranfermny = 0;
+            if(datarow.TransferPrice>0)
+                tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+            let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+            let grouptype:any = '';
+            if(type===1){
+                //产品分类数据
+                grouptype = datarow.ItemType;
+            }else if(type===2){
+                //区间数据分类
+                if(tmp_orderqty>10000){
+                    grouptype = groups[0];
+                }else if(tmp_orderqty<=10000&&tmp_orderqty>5000){
+                    grouptype = groups[1];
+                }else if(tmp_orderqty<=5000&&tmp_orderqty>1000){
+                    grouptype = groups[2];
+                }else if(tmp_orderqty<=1000&&tmp_orderqty>500){
+                    grouptype = groups[3];
+                }else{
+                    grouptype = groups[4];
+                }
+            }else if(type==0){
+                //未设转移价数据
+                grouptype = '工厂未接单';
+                mfgdept = grouptype;
+            }
+
+            //数据拼装
+            if((selfflag&&datarow.MFGDept&&(type===1||type===2))
+                    ||(type===0&&(!datarow.MFGDept))){
+                        if(!datas[grouptype]){
+                            datas[grouptype] = {
+                                MFGDepts:[mfgdept],
+                                DetailDatas:{
+                                }
+                            }
+                        }
+                        if(!datas[grouptype].DetailDatas[mfgdept]){
+                            datas[grouptype].DetailDatas[mfgdept]=[{
+                                BusinessDate:datarow.BusinessDate,
+                                MFGCode:datarow.MFGCode,
+                                ItemName:datarow.ItemName,
+                                OrderQty:tmp_orderqty,
+                                SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
+                            }];
+                        }else{
+                            let deptidx = datas[grouptype].MFGDepts.indexOf(mfgdept);
+                            if(deptidx<0){
+                                datas[grouptype].MFGDepts.push(mfgdept);
+                                datas[grouptype].DetailDatas[mfgdept]=[{
+                                    BusinessDate:datarow.BusinessDate,
+                                    MFGCode:datarow.MFGCode,
+                                    ItemName:datarow.ItemName,
+                                    OrderQty:tmp_orderqty,
+                                    SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                    TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                    GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
+                                }];
+                            }else{
+                                datas[grouptype].DetailDatas[mfgdept].push(
+                                    {
+                                        BusinessDate:datarow.BusinessDate,
+                                        MFGCode:datarow.MFGCode,
+                                        ItemName:datarow.ItemName,
+                                        OrderQty:tmp_orderqty,
+                                        SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                        TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                        GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
+                                    }
+                                );
+                            }
+                        }
+            }
+        });
+        //部门排序
+        groups.forEach(g=>{
+            let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部','制造七部','制造九部',
+            '制造十一部','制造十二部','山东永旭','临海市奥特休闲用品制造有限公司','临海市金源工艺品有限公司',
+            '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','绍兴旭阳伞业有限公司','东阳市浪人工艺品有限公司'];
+            let depts:any = [];
+            mfgdeptids.forEach(dept=>{
+                if(datas[g].MFGDepts.indexOf(dept)>=0){
+                    depts.push(dept);
+                }
+            });
+            datas[g].MFGDepts = depts;
+        });
+        loader.dismiss();   //关闭进度条
+
+        let expanded:any = true;
+        let showIcon:any = false;
+        let contracted:any = !expanded;
         setTimeout(() => {
-          const modal = this.modalCtrl.create(MfgcountmodelPage, {});
+          const modal = this.modalCtrl.create(MfgcountmodelPage, {
+            groupset:groups,
+            groupdatas:datas,
+            groupindex:i
+        });
           modal.onDidDismiss(data => {
-            this.expanded = false;
-            this.contracted = !this.expanded;
-            setTimeout(() => this.showIcon = true, 330);
+            expanded = false;
+            contracted = !expanded;
+            setTimeout(() => showIcon = true, 330);
           });
           modal.present();
         },         200);  
@@ -313,6 +428,7 @@ ManufactureDatas:any = {
       private echartsvr:NgxEchartsService,
       public modalCtrl: ModalController,
       private alterCtrl:AlertController,
+      private loadingCtrl: LoadingController,
         ) {
          //初始化上下文
          this.contextdata = ContextData.Create();     
@@ -393,7 +509,7 @@ ManufactureDatas:any = {
                 else
                     barchartdatas.push({data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]});
             });
-
+            let tablename:string = 'TMP_SMTransferData';
             ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
                 let selfflag = datarow.SelfFlag; //内部外部
                 let mfgdept = datarow.MFGDept; //生产部门
