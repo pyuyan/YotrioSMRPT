@@ -9,46 +9,50 @@
               </ion-toolbar>
 </ion-header>
 <ion-content padding >
-        <div [ngSwitch]="group">           
-            <ion-row>
-                    <ion-col col-2>
-                            <ion-list style="padding:0%;width:100%" inset *ngSwitchCase="group">
-                              <button ion-item *ngFor="let dept of dataset[group].MFGDepts;index as n;" 
-                                    [ngStyle]="{'background-color':deptidx === n ? 'rgb(7,33,58)' : '#FFF','color':deptidx === n ? 'white' : '#000'}" (click)="ChooseDeptment(n)">
-                                  {{dept}}
-                                  <ion-icon item-end name='ios-arrow-dropright-outline'></ion-icon>
-                                </button> 
-                            </ion-list>
-                    </ion-col>
-                    <ion-col>
-                            <ion-list *ngSwitchCase="group">
-                                    <ion-item>
-                                        <ion-row style="background-color:rgb(7,33,58);color:white;">
-                                            <ion-col width-6>序号</ion-col>
-                                            <ion-col width-12>订单日期</ion-col>
-                                            <ion-col width-12>制造令号</ion-col>
-                                            <ion-col width-30>产品名称</ion-col>
-                                            <ion-col width-10>接单数量</ion-col>
-                                            <ion-col width-10>接单金额</ion-col>
-                                            <ion-col width-10>接单产值</ion-col>
-                                            <ion-col width-10>接单毛利率</ion-col>
-                                        </ion-row>
-                                    </ion-item>
-                                    <ion-item *ngFor="let row of dataset[group].DetailDatas[deptname];index as n;">
-                                        <ion-row>
-                                            <ion-col width-6>{{n+1}}</ion-col>
-                                            <ion-col width-12>{{row.BusinessDate}}</ion-col>
-                                            <ion-col width-12>{{row.MFGCode}}</ion-col>
-                                            <ion-col width-30>{{row.ItemName}}</ion-col>
-                                            <ion-col width-10>{{row.OrderQty}}</ion-col>
-                                            <ion-col width-10>{{row.SaleMoney}}</ion-col>
-                                            <ion-col width-10>{{row.TransferMoney}}</ion-col>
-                                            <ion-col width-10>{{row.GrossRate}}</ion-col>
-                                        </ion-row>
-                                    </ion-item>
-                            </ion-list>      
-                    </ion-col>                   
-            </ion-row>   
+        <div [ngSwitch]="group">
+            <ion-card>
+                <ion-card-content>
+                    <ion-row>
+                            <ion-col col-2>
+                                    <ion-list style="padding:0%;width:100%" inset *ngSwitchCase="group">
+                                      <button ion-item *ngFor="let dept of dataset[group].MFGDepts;index as n;" 
+                                            [ngStyle]="{'background-color':deptidx === n ? 'rgb(7,33,58)' : '#FFF','color':deptidx === n ? 'white' : '#000'}" (click)="ChooseDeptment(n)">
+                                          {{dept}}
+                                          <ion-icon item-end name='ios-arrow-dropright-outline'></ion-icon>
+                                        </button> 
+                                    </ion-list>
+                            </ion-col>
+                            <ion-col>
+                                    <ion-list *ngSwitchCase="group">
+                                            <ion-item>
+                                                <ion-row align-items-end style="background-color:rgb(7,33,58);color:white;">
+                                                    <ion-col text-left width-6>序号</ion-col>
+                                                    <ion-col text-left width-12>订单日期</ion-col>
+                                                    <ion-col text-left width-12>制造令号</ion-col>
+                                                    <ion-col text-left width-30>产品名称</ion-col>
+                                                    <ion-col text-left width-10>接单数量</ion-col>
+                                                    <ion-col text-left width-10>接单金额</ion-col>
+                                                    <ion-col text-left width-10>接单产值</ion-col>
+                                                    <ion-col text-left width-10>接单毛利率</ion-col>
+                                                </ion-row>
+                                            </ion-item>
+                                            <ion-item align-items-end *ngFor="let row of dataset[group].DetailDatas[deptname];index as n;">
+                                                <ion-row>
+                                                    <ion-col text-left width-6>{{n+1}}</ion-col>
+                                                    <ion-col text-left width-12>{{row.BusinessDate}}</ion-col>
+                                                    <ion-col text-left width-12>{{row.MFGCode}}</ion-col>
+                                                    <ion-col text-left width-30>{{row.ItemName}}</ion-col>
+                                                    <ion-col text-right width-10>{{row.OrderQty}}</ion-col>
+                                                    <ion-col text-right width-10>{{row.SaleMoney}}</ion-col>
+                                                    <ion-col text-right width-10>{{row.TransferMoney}}</ion-col>
+                                                    <ion-col text-right width-10>{{row.GrossRate}}</ion-col>
+                                                </ion-row>
+                                            </ion-item>
+                                    </ion-list>      
+                            </ion-col>                   
+                    </ion-row>      
+                </ion-card-content>             
+            </ion-card>           
         </div>
 </ion-content>
 
