@@ -20,6 +20,7 @@ import { PercentPipe } from '@angular/common';
 import { ThousandsPipe } from '../pipes/thousands/thousands';
 import { HomePageModule } from '../pages/home/home.module';
 import { SmreportPageModule } from '../pages/smreport/smreport.module';
+import { SecloginmodelPageModule } from '../pages/secloginmodel/secloginmodel.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { SmreportPageModule } from '../pages/smreport/smreport.module';
     IonicStorageModule.forRoot(),
     HomePageModule,
     SmreportPageModule,
+    SecloginmodelPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -48,9 +48,12 @@ export class YotrioSMRPT {
       let TMPDataRefresh = function(datasvrprovider:DatasvrProvider){
         datasvrprovider.IsNeedUpdate('TMP_SMTransferData').then(flag=>{
           if(flag){
+            datasvrprovider.GetKeyDepts().then(result=>{
+
+            });
             datasvrprovider.SyncLastSMReportData('19').then(result=>{
               console.log(ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag);
-            })
+            });
           }
         });
       };
@@ -62,10 +65,10 @@ export class YotrioSMRPT {
       };
 
       setTimeout(TMPDataRefresh,500,this.datasvr);
-      setTimeout(GetKeyDepts,1000,this.datasvr);
+      //setTimeout(GetKeyDepts,1000,this.datasvr);
 
-      setInterval(TMPDataRefresh,60000,this.datasvr);
-      setInterval(GetKeyDepts,3600000,this.datasvr);
+      setInterval(TMPDataRefresh,300000,this.datasvr);
+      //setInterval(GetKeyDepts,3600000,this.datasvr);
   }
 
   initializeApp() {

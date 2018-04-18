@@ -390,6 +390,7 @@ profitdatas:any = {
         let tablename:string = 'TMP_SMTransferData';
         if(ContextData.OriginalDatas[tablename].UpdateFlag['smreportpage']||immediateflag){
             
+            
             let customerarray:Array<any> = new Array<any>();
             let topgroupvalues:Array<any> = new Array<any>();
             let areanames:Array<any> = new Array<any>();

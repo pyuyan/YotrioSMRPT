@@ -29,13 +29,13 @@ export class DatasvrProvider {
    * 获取ESB服务器地址
    */
   private GetESBAddress():string{
-    // let str = this.contextdata.GetESBPortal();
-    // if(str===null){
-    //   str = "/esbsv";
-    // }
-    // if(this.platform.is('mobileweb'))
-    //   str = "/esbsv";
-    let str = "/esbsv";
+    let str = this.contextdata.GetESBPortal();
+    if(str===null){
+      str = "/esbsv";
+    }
+    if(this.platform.is('mobileweb'))
+      str = "/esbsv";
+    //let str = "/esbsv";
     return str;
   }  
 
@@ -87,6 +87,8 @@ export class DatasvrProvider {
       }
     ).then(values=>{
       if(values){
+        ContextData.GetKeyDepts().DeptNames.length = 0;
+        ContextData.GetKeyDepts().DeptSalingTarget.length = 0;
         values.forEach(value=>{
           ContextData.GetKeyDepts().DeptNames.push(value['Name']);
           ContextData.GetKeyDepts().DeptSalingTarget.push(Math.round(value['TargetMoney']));

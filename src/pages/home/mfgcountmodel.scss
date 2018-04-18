@@ -19,8 +19,8 @@ page-mfgcountmodel{
         top: calc(50% - (50%/2));
         left: 0;
         right: 0;
-        width: 60%;
-        height: 50%;
+        width: 70%;
+        height: 55%;
         padding: 10px;
         z-index: 100;
         margin: 0 auto;
@@ -37,4 +37,21 @@ page-mfgcountmodel{
         -webkit-box-sizing: border-box;
         overflow: hidden;
       }
+      .maincontentstyle{
+        color:#000;
+        background-color:white;
+        ion-card-header{
+            color:#FFFFFF;
+            background-color:rgb(7,33,58);
+        }
+        box-shadow: 0px 1px 3px white;
+        padding:0% 0% 0% 0%;
+    }
+    .maingridstyle{
+      color:#000;
+      background:white;
+      padding:0% 0% 0% 0%;
+      margin:0% 0% 0% 0px;
+      width:100%;
+  }
 }

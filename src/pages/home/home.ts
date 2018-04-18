@@ -3,9 +3,9 @@ import { NavController, TextInput, IonicPage, List ,ModalController, AlertContro
 import { ViewChild,ElementRef } from '@angular/core';
 import { NgxEchartsService,NgxEchartsModule } from 'ngx-echarts';
 import { ContextData } from '../../app/context';
-import { GrossmodelPage } from './grossmodel';
 import { deepCopy } from 'ionic-angular/util/util';
 import { MfgcountmodelPage } from './mfgcountmodel';
+import { SecloginmodelPage } from '../secloginmodel/secloginmodel';
 
 @IonicPage()
 @Component({
@@ -40,9 +40,8 @@ export class HomePage {
         //   modal.present();
         // },         200);    
         
-        this.navCtrl.push(GrossmodelPage,{datatype:datatypename});
+        //this.navCtrl.push(GrossmodelPage,{datatype:datatypename});
     }
-
 
     /**
      * 打开明细信息
@@ -50,144 +49,188 @@ export class HomePage {
      * @param i 
      */
     OpenDetail(datarow:any,i:number,type:number){
-        //进度条控件
-        let loader = this.loadingCtrl.create({
-            content: "正在读取明细数据..."
-        });
-        loader.present();
 
-        let tablename:string = 'TMP_SMTransferData';
-        let groups:Array<string> = new Array<string>();
-        let datas:any = {
+        // const modal2 = this.modalCtrl.create(SecloginmodelPage, {});
+        //     modal2.onDidDismiss(data => {
+        //         setTimeout(() => {
 
-        };
+        //         }, 200);
+        //     });
+        //     modal2.present();
 
-        //设置分类数组
-        if(type===0){
-            //未设转移价
-            groups = ['工厂未接单'];
-        }else if(type===1){
-            //产品分类
-            this.tablevalues.groupbykindvalues.forEach(element => {
-                groups.push(element.kind);
-            });
-        }else if(type===2){
-            //数量区间分组
-            groups = ['10000件以上','5000-10000','1000-5000','500-1000','500件以下'];
-        }
 
-        ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
-            let selfflag = datarow.SelfFlag; //内部外部
-            let mfgdept = datarow.MFGDept; //生产部门
-            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
-            let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
-            let tmp_tranfermny = 0;
-            if(datarow.TransferPrice>0)
-                tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
-            let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
-            let grouptype:any = '';
-            if(type===1){
-                //产品分类数据
-                grouptype = datarow.ItemType;
-            }else if(type===2){
-                //区间数据分类
-                if(tmp_orderqty>10000){
-                    grouptype = groups[0];
-                }else if(tmp_orderqty<=10000&&tmp_orderqty>5000){
-                    grouptype = groups[1];
-                }else if(tmp_orderqty<=5000&&tmp_orderqty>1000){
-                    grouptype = groups[2];
-                }else if(tmp_orderqty<=1000&&tmp_orderqty>500){
-                    grouptype = groups[3];
-                }else{
-                    grouptype = groups[4];
+        let alert = this.alterCtrl.create({
+            title: '身份验证',
+            message: '请输入安全密码',
+            inputs: [
+              {
+                name: 'password',
+                placeholder: '',
+                type: 'password',
+                handler:input=>{
+                    console.log(input);
                 }
-            }else if(type==0){
-                //未设转移价数据
-                grouptype = '工厂未接单';
-                mfgdept = grouptype;
-            }
+              },
+            ],
+            buttons: [
+              {
+                text: '取消',
+                handler: () => {
+                  
+                }
+              },
+              {
+                text: '确定',
+                handler: (data) => {
+                    if(data.password==='002489'){
+                    //进度条控件
+                    let loader = this.loadingCtrl.create({
+                        content: "正在读取明细数据..."
+                    });
+                    loader.present();
 
-            //数据拼装
-            if((selfflag&&datarow.MFGDept&&(type===1||type===2))
-                    ||(type===0&&(!datarow.MFGDept))){
-                        if(!datas[grouptype]){
-                            datas[grouptype] = {
-                                MFGDepts:[mfgdept],
-                                DetailDatas:{
-                                }
-                            }
-                        }
-                        if(!datas[grouptype].DetailDatas[mfgdept]){
-                            datas[grouptype].DetailDatas[mfgdept]=[{
-                                BusinessDate:datarow.BusinessDate,
-                                MFGCode:datarow.MFGCode,
-                                ItemName:datarow.ItemName,
-                                OrderQty:tmp_orderqty,
-                                SaleMoney:this.GetFormatValue(tmp_salemny,1),
-                                TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
-                                GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
-                            }];
-                        }else{
-                            let deptidx = datas[grouptype].MFGDepts.indexOf(mfgdept);
-                            if(deptidx<0){
-                                datas[grouptype].MFGDepts.push(mfgdept);
-                                datas[grouptype].DetailDatas[mfgdept]=[{
-                                    BusinessDate:datarow.BusinessDate,
-                                    MFGCode:datarow.MFGCode,
-                                    ItemName:datarow.ItemName,
-                                    OrderQty:tmp_orderqty,
-                                    SaleMoney:this.GetFormatValue(tmp_salemny,1),
-                                    TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
-                                    GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
-                                }];
+                    let tablename:string = 'TMP_SMTransferData';
+                    let groups:Array<string> = new Array<string>();
+                    let datas:any = {
+
+                    };
+
+                    //设置分类数组
+                    if(type===0){
+                        //未设转移价
+                        groups = ['工厂未接单'];
+                    }else if(type===1){
+                        //产品分类
+                        this.tablevalues.groupbykindvalues.forEach(element => {
+                            groups.push(element.kind);
+                        });
+                    }else if(type===2){
+                        //数量区间分组
+                        groups = ['10000件以上','5000-10000','1000-5000','500-1000','500件以下'];
+                    }
+
+                    ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
+                        let selfflag = datarow.SelfFlag; //内部外部
+                        let mfgdept = datarow.MFGDept; //生产部门
+                        let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+                        let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+                        let tmp_tranfermny = 0;
+                        if(datarow.TransferPrice>0)
+                            tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+                        let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+                        let grouptype:any = '';
+                        if(type===1){
+                            //产品分类数据
+                            grouptype = datarow.ItemType;
+                        }else if(type===2){
+                            //区间数据分类
+                            if(tmp_orderqty>10000){
+                                grouptype = groups[0];
+                            }else if(tmp_orderqty<=10000&&tmp_orderqty>5000){
+                                grouptype = groups[1];
+                            }else if(tmp_orderqty<=5000&&tmp_orderqty>1000){
+                                grouptype = groups[2];
+                            }else if(tmp_orderqty<=1000&&tmp_orderqty>500){
+                                grouptype = groups[3];
                             }else{
-                                datas[grouptype].DetailDatas[mfgdept].push(
-                                    {
-                                        BusinessDate:datarow.BusinessDate,
-                                        MFGCode:datarow.MFGCode,
-                                        ItemName:datarow.ItemName,
-                                        OrderQty:tmp_orderqty,
-                                        SaleMoney:this.GetFormatValue(tmp_salemny,1),
-                                        TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
-                                        GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
-                                    }
-                                );
+                                grouptype = groups[4];
                             }
+                        }else if(type==0){
+                            //未设转移价数据
+                            grouptype = '工厂未接单';
+                            mfgdept = grouptype;
                         }
-            }
-        });
-        //部门排序
-        groups.forEach(g=>{
-            let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部','制造七部','制造九部',
-            '制造十一部','制造十二部','山东永旭','临海市奥特休闲用品制造有限公司','临海市金源工艺品有限公司',
-            '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','绍兴旭阳伞业有限公司','东阳市浪人工艺品有限公司'];
-            let depts:any = [];
-            mfgdeptids.forEach(dept=>{
-                if(datas[g].MFGDepts.indexOf(dept)>=0){
-                    depts.push(dept);
-                }
-            });
-            datas[g].MFGDepts = depts;
-        });
-        loader.dismiss();   //关闭进度条
 
-        let expanded:any = true;
-        let showIcon:any = false;
-        let contracted:any = !expanded;
-        setTimeout(() => {
-          const modal = this.modalCtrl.create(MfgcountmodelPage, {
-            groupset:groups,
-            groupdatas:datas,
-            groupindex:i
-        });
-          modal.onDidDismiss(data => {
-            expanded = false;
-            contracted = !expanded;
-            setTimeout(() => showIcon = true, 330);
+                        //数据拼装
+                        if((selfflag&&datarow.MFGDept&&(type===1||type===2))
+                                ||(type===0&&(!datarow.MFGDept))){
+                                    if(!datas[grouptype]){
+                                        datas[grouptype] = {
+                                            MFGDepts:[mfgdept],
+                                            DetailDatas:{
+                                            }
+                                        }
+                                    }
+                                    if(!datas[grouptype].DetailDatas[mfgdept]){
+                                        datas[grouptype].DetailDatas[mfgdept]=[{
+                                            BusinessDate:datarow.BusinessDate,
+                                            MFGCode:datarow.MFGCode,
+                                            ItemName:datarow.ItemName,
+                                            OrderQty:tmp_orderqty,
+                                            SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                            TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                            GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
+                                        }];
+                                    }else{
+                                        let deptidx = datas[grouptype].MFGDepts.indexOf(mfgdept);
+                                        if(deptidx<0){
+                                            datas[grouptype].MFGDepts.push(mfgdept);
+                                            datas[grouptype].DetailDatas[mfgdept]=[{
+                                                BusinessDate:datarow.BusinessDate,
+                                                MFGCode:datarow.MFGCode,
+                                                ItemName:datarow.ItemName,
+                                                OrderQty:tmp_orderqty,
+                                                SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                                TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                                GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
+                                            }];
+                                        }else{
+                                            datas[grouptype].DetailDatas[mfgdept].push(
+                                                {
+                                                    BusinessDate:datarow.BusinessDate,
+                                                    MFGCode:datarow.MFGCode,
+                                                    ItemName:datarow.ItemName,
+                                                    OrderQty:tmp_orderqty,
+                                                    SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                                    TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                                    GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
+                                                }
+                                            );
+                                        }
+                                    }
+                        }
+                    });
+                    //部门排序
+                    groups.forEach(g=>{
+                        let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部','制造七部','制造九部',
+                        '制造十一部','制造十二部','山东永旭','临海市奥特休闲用品制造有限公司','临海市金源工艺品有限公司',
+                        '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','浙江浙佳工艺股份有限公司','工厂未接单'];
+                        let depts:any = [];
+                        mfgdeptids.forEach(dept=>{
+                            if(datas[g].MFGDepts.indexOf(dept)>=0){
+                                depts.push(dept);
+                            }
+                        });
+                        datas[g].MFGDepts = depts;
+                    });
+                    loader.dismiss();   //关闭进度条
+
+                    let expanded:any = true;
+                    let showIcon:any = false;
+                    let contracted:any = !expanded;
+                    setTimeout(() => {
+                        const modal = this.modalCtrl.create(MfgcountmodelPage, {
+                        groupset:groups,
+                        groupdatas:datas,
+                        groupindex:i
+                        });
+                        modal.onDidDismiss(data => {
+                            expanded = false;
+                            contracted = !expanded;
+                            setTimeout(() => showIcon = true, 200);
+                        });
+                        modal.present();
+                    },100);  
+                    }else{
+                        
+                    }
+                }
+              }
+            ]
           });
-          modal.present();
-        },         200);  
+      
+          alert.present();
+
     }
 
     tablevalues:any = {
@@ -314,7 +357,7 @@ ManufactureDatas:any = {
                 rotate:-30,
                 fontSize:16
             },
-            data: ['一部','二部','三部','四部','五部','六七部','九部','十一部','十二部','永旭','奥特','金源','通一','伟峰','伊丽特','旭阳','浪人']
+            data: ['一部','二部','三部','四部','五部','六七部','九部','十一部','十二部','永旭','奥特','金源','通一','伟峰','伊丽特','浙佳']
         }
     ],
     yAxis: [
@@ -501,13 +544,13 @@ ManufactureDatas:any = {
 
             let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部制造七部','制造九部',
     '制造十一部','制造十二部','山东永旭','临海市奥特休闲用品制造有限公司','临海市金源工艺品有限公司',
-    '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','绍兴旭阳伞业有限公司','东阳市浪人工艺品有限公司'];
+    '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','浙江浙佳工艺股份有限公司'];
             let barchartdatas:Array<any> = new Array<any>();
             charts[0].ValueOptions.series.forEach(yaxis => {
                 if(yaxis.name=='产值目标')
-                    barchartdatas.push({data:[53000 ,31000 ,30000 ,25000 ,15000 ,37000 ,59500 ,10000 ,15000 ,10000,10000 ,10000 ,10000 ,10000 ,10000 ,2000 ,5000]});
+                    barchartdatas.push({data:[53000 ,32000 ,29000 ,25000 ,15000 ,37000 ,59500 ,15000 ,10000 ,5000,10000 ,8000 ,10000 ,9000 ,13000 ,5000]});
                 else
-                    barchartdatas.push({data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]});
+                    barchartdatas.push({data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]});
             });
             let tablename:string = 'TMP_SMTransferData';
             ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {

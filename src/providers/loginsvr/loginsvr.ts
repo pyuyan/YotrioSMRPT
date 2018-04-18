@@ -34,8 +34,6 @@ export class LoginsvrProvider {
     }
     if(this.platform.is('mobileweb'))
       str = "/esbsv";
-    console.log(str);
-    console.log(this.platform);
     return str;
   }
 

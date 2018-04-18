@@ -3,13 +3,11 @@ import { IonicPageModule } from 'ionic-angular';
 import { HomePage } from './home';
 import { PipesModule } from '../../pipes/pipes.module';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { GrossmodelPage } from './grossmodel';
 import { MfgcountmodelPage } from './mfgcountmodel';
 
 @NgModule({
   declarations: [
     HomePage,
-    GrossmodelPage,
     MfgcountmodelPage
   ],
   imports: [
@@ -19,11 +17,9 @@ import { MfgcountmodelPage } from './mfgcountmodel';
   ],
   exports:[
     HomePage,
-    GrossmodelPage,
     MfgcountmodelPage
   ],
   entryComponents: [
-    GrossmodelPage,
     MfgcountmodelPage
   ],
 })

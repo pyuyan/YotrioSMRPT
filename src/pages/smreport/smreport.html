@@ -1,9 +1,9 @@
 <ion-header>
-    <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
+    <ion-navbar color="defaultbgcolor" style="height:80px" class="bar-positive" align-title="center" #navbar>
     <button ion-button menuToggle>
         <ion-icon style="font-size: 50px;" name="menu"></ion-icon>
     </button>
-    <ion-title style="padding:0% 0% 0% 0%;"><p align="center" style="color:white;font-size:60px;">永强集团营销数据中心</p></ion-title> 
+    <ion-title style="padding:0% 0% 0% 0%;"><p align="center" style="color:white;font-size:58px;">永强集团营销数据中心</p></ion-title> 
     <ion-buttons end>
         <button ion-button>
             <p align="center" style="color:white;font-size:25px;">单位(万元)&nbsp;&nbsp;</p>
@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col col-9>
           <ion-card class="maincontenttopstyle">
-          <ion-card-content>
+          <ion-card-content style="padding:0%">
           <div echarts #smpie [options]="totalsalemnydatas" class="piediv" (chartClick)="onManufacturepieClick($event)"></div>     
           </ion-card-content>
           </ion-card>       
@@ -28,7 +28,7 @@
                 <ion-grid style="padding:0% 0% 0% 0%;overflow:hide;color:#FFFFFF;font-size:20px;" align-items-start>
                     <ion-row style="overflow:hide; height: 75px;border-width:1px;border-style: none none solid none;">
                       <ion-col style="overflow:auto;font-size:22px;"></ion-col>
-                      <ion-col style="overflow:auto;font-size:22px;" *ngFor="let header of profitdatas.xAxis[0].data">{{header}}</ion-col>
+                      <ion-col text-center style="overflow:auto;font-size:22px;" *ngFor="let header of profitdatas.xAxis[0].data">{{header}}</ion-col>
                     </ion-row>
                     <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of profitdatas.series;index as i;">
                       <ion-col text-left align-self-center style="font-size:20px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>
@@ -43,18 +43,18 @@
               <ion-card-header>
               </ion-card-header>
               <ion-card-content>
-                  <ion-grid style="padding:0% 15% 0% 0%;overflow:hide;color:#59DF97;font-size:25px;" align-items-end>
-                      <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: none none none none;">
+                  <ion-grid style="padding:0% 15% 0% 0%;overflow:hide;color:#59DF97;font-size:25px;text-overflow: hide;white-space: nowrap;" align-items-end>
+                      <ion-row style="height: 45px;border-width:1px;border-style: none none none none;">
                           <ion-col text-center style="border-width:1px;border-style: none none none none;color:#59DF97;">接单金额前10名</ion-col>
                       </ion-row>
-                      <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                          <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#59DF97;">客户</ion-col>
+                      <ion-row style="height: 40px;border-width:1px;border-style: dotted none dotted none;">
+                          <ion-col col-6 text-center style="border-width:1px;border-style: none dotted none none;color:#59DF97;">客户</ion-col>
                           <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#59DF97;">接单金额</ion-col>
                           <ion-col text-center style="border-width:1px;border-style: none none none none;color:#59DF97;">毛利率</ion-col>
                       </ion-row>
-                      <ion-row style="overflow:hide; height: 55px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbymnyvalues">
-                          <ion-col col-5 text-left style="font-size:18px;border-width:1px;border-style: none dotted none none;color:#59DF97;">
-                              {{rowdata.Customer}}
+                      <ion-row style="height: 45px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbymnyvalues">
+                          <ion-col col-6 text-left style="font-size:18px;border-width:1px;border-style: none dotted none none;color:#59DF97;">
+                              {{rowdata.Customer|textorverflow:28}}
                           </ion-col>
                           <ion-col text-right style="border-width:1px;border-style: none dotted none none;color:#59DF97;">
                               {{rowdata.OrderMoney|thousands}}
@@ -64,18 +64,18 @@
                           </ion-col>
                       </ion-row>
                     </ion-grid>  
-                    <ion-grid style="padding:10% 15% 0% 0%;overflow:hide;color:#F6B19C;font-size:25px;" align-items-end>
-                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: none none none none;">
+                    <ion-grid style="padding:5% 15% 0% 0%;overflow:hide;color:#F6B19C;font-size:25px;text-overflow: hide;white-space: nowrap;" align-items-end>
+                        <ion-row style="height: 45px;border-width:1px;border-style: none none none none;">
                             <ion-col text-center style="border-width:1px;border-style: none none none none;color:#F6B19C;">接单毛利率前10名</ion-col>
                         </ion-row>
-                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                            <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#F6B19C;">客户</ion-col>
+                        <ion-row style="height: 40px;border-width:1px;border-style: dotted none dotted none;">
+                            <ion-col col-6 text-center style="border-width:1px;border-style: none dotted none none;color:#F6B19C;">客户</ion-col>
                             <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#F6B19C;">接单金额</ion-col>
                             <ion-col text-center style="border-width:1px;border-style: none none none none;color:#F6B19C;">毛利率</ion-col>
                         </ion-row>
-                        <ion-row style="overflow:hide; height: 55px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbyratevalues">
-                            <ion-col text-left col-5 style="font-size:18px;border-width:1px;border-style: none dotted none none;color:#F6B19C;">
-                                {{rowdata.Customer}}
+                        <ion-row style="height: 45px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.orderbyratevalues">
+                            <ion-col text-left col-6 style="font-size:18px;border-width:1px;border-style: none dotted none none;color:#F6B19C;">
+                                {{rowdata.Customer|textorverflow:28}}
                             </ion-col>
                             <ion-col text-right style="border-width:1px;border-style: none dotted none none;color:#F6B19C;">
                                 {{rowdata.OrderMoney|thousands}}
