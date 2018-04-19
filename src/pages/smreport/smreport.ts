@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, TextInput, IonicPage } from 'ionic-angular';
+import { NavController, TextInput, IonicPage, ModalController } from 'ionic-angular';
 import { ViewChild,ElementRef } from '@angular/core';
 import { NgxEchartsService,NgxEchartsModule } from 'ngx-echarts';
 import { ContextData } from '../../app/context';
+
+import { SmreportmodalPage } from '../smreportmodal/smreportmodal';
 
 @IonicPage()
 @Component({
@@ -378,7 +380,7 @@ profitdatas:any = {
 
     contextdata:ContextData;
 
-    constructor(public navCtrl: NavController,
+    constructor(public navCtrl: NavController, public modalCtrl: ModalController,
       private echartsvr:NgxEchartsService,
         ) {
          //初始化上下文
@@ -620,5 +622,48 @@ profitdatas:any = {
 
     onManufacturepieClick(params:any){
         console.log(params);
+    }
+
+    /**
+     * 营销数据中心点击毛利显示详情事件
+     */
+    showDetail() {
+        //对数据进行处理，主要是计算 产值，毛利率
+        let datas: any[] = [];
+        ContextData.OriginalDatas[ContextData.TableName].DataValue.forEach(datarow => {
+            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);//订单数量
+            let tmp_salemny  = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+            let tmp_tranfermny = 0;
+            if(datarow.TransferPrice>0)
+                tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+            let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+            let tmp_data = {
+                                BusinessDate:datarow.BusinessDate,
+                                Customer:datarow.Customer,
+                                ItemCode:datarow.ItemCode,
+                                MFGCode:datarow.MFGCode,
+                                ItemName:datarow.ItemName,
+                                OrderQty:tmp_orderqty,
+                                SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
+                            };
+            datas.push(tmp_data);
+        });
+
+        let expanded:any = true;
+        let showIcon:any = false;
+        let contracted:any = !expanded;
+        setTimeout(() => {
+            const modal = this.modalCtrl.create(SmreportmodalPage, {
+                data:datas
+            });
+            modal.onDidDismiss(data => {
+                expanded   = false;
+                contracted = !expanded;
+                setTimeout(() => showIcon = true, 200);
+            });
+            modal.present();
+        }, 100);  
     }
 }

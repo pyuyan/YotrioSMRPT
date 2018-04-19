@@ -6,6 +6,10 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 */
 @Injectable()
 export class ContextData {
+
+  //数据表名称
+  public static readonly TableName:string = 'TMP_SMTransferData';
+
   //关键业务部门
   static KeyDepts:any = {
     DeptNames:[],
@@ -28,14 +32,14 @@ export class ContextData {
         homepage:false,
         smreportpage:false
       },
-      DataValue:[] 
+      DataValue:[]
     },
   }
 
   /**
    * 设置新时间戳
-   * @param tablename 
-   * @param timemark 
+   * @param tablename
+   * @param timemark
    */
   public static SetTimeMark(tablename:string,timemark:Number){
     ContextData.timemarks[tablename] = timemark;
@@ -44,8 +48,8 @@ export class ContextData {
 
   /**
    * 获取时间戳
-   * @param tablename 
-   * @param timemark 
+   * @param tablename
+   * @param timemark
    */
   public static GetTimeMark(tablename:string):Number{
     return ContextData.timemarks[tablename];
