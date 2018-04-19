@@ -21,6 +21,7 @@ import { ThousandsPipe } from '../pipes/thousands/thousands';
 import { HomePageModule } from '../pages/home/home.module';
 import { SmreportPageModule } from '../pages/smreport/smreport.module';
 import { SecloginmodelPageModule } from '../pages/secloginmodel/secloginmodel.module';
+import { SmreportmodalPageModule } from '../pages/smreportmodal/smreportmodal.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SecloginmodelPageModule } from '../pages/secloginmodel/secloginmodel.mo
     IonicStorageModule.forRoot(),
     HomePageModule,
     SmreportPageModule,
-    SecloginmodelPageModule
+    SecloginmodelPageModule,
+    SmreportmodalPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

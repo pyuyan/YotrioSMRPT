@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col col-9>
           <ion-card class="maincontenttopstyle">
-          <ion-card-content style="padding:0%">
+          <ion-card-content style="padding:0%" (click)="showDetail()">
           <div echarts #smpie [options]="totalsalemnydatas" class="piediv" (chartClick)="onManufacturepieClick($event)"></div>     
           </ion-card-content>
           </ion-card>       
