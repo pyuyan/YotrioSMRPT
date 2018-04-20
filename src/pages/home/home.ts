@@ -12,9 +12,12 @@ import { SecloginmodelPage } from '../secloginmodel/secloginmodel';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage {
 
-    public backgroundImage = 'assets/imgs/bg2.jpg';    
+    public backgroundImage = 'assets/imgs/bg2.jpg';  
+
+    private readonly DEBUG:boolean = false;
 
     manufacturebarInstance:any
 
@@ -82,18 +85,15 @@ export class HomePage {
               {
                 text: '确定',
                 handler: (data) => {
-                    if(data.password==='002489'){
+                    if(data.password==='002489' || this.DEBUG){
                     //进度条控件
                     let loader = this.loadingCtrl.create({
                         content: "正在读取明细数据..."
                     });
                     loader.present();
 
-                    let tablename:string = 'TMP_SMTransferData';
                     let groups:Array<string> = new Array<string>();
-                    let datas:any = {
-
-                    };
+                    let datas:any = {};
 
                     //设置分类数组
                     if(type===0){
@@ -106,90 +106,162 @@ export class HomePage {
                         });
                     }else if(type===2){
                         //数量区间分组
-                        groups = ['10000件以上','5000-10000','1000-5000','500-1000','500件以下'];
+                        groups = ['10000件以上','5000-10000','1000-5000','200-1000','200件以下'];
                     }
 
-                    ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
-                        let selfflag = datarow.SelfFlag; //内部外部
-                        let mfgdept = datarow.MFGDept; //生产部门
-                        let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
-                        let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
-                        let tmp_tranfermny = 0;
-                        if(datarow.TransferPrice>0)
-                            tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
-                        let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
-                        let grouptype:any = '';
-                        if(type===1){
-                            //产品分类数据
-                            grouptype = datarow.ItemType;
-                        }else if(type===2){
+                    let grouptype:any = '';
+
+                    //按照料号 2018年4月20日16:40:41 slyfalcon
+                    let orginalData:Array<any> = ContextData.OriginalDatas[ContextData.TableName].DataValue;
+                    if (type === 2) {
+                        let itemGroupData:any = HomePage.getItemCodeGroupData(orginalData);
+                        for (let key in itemGroupData) {
+                            let datarows:any = itemGroupData[key];
+                            let orderQty:number = 0; //相同料号所有订单数量
+                            let assembleData:Array<any> = [];
+                            datarows.forEach(datarow => {
+                                let selfflag = datarow.SelfFlag; //内部外部
+                                let mfgdept = datarow.MFGDept; //生产部门
+                                let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+                                let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+                                let tmp_tranfermny = 0;
+                                if(datarow.TransferPrice>0)
+                                    tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+                                let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+
+                                let tmpAssamble:any = {
+                                    BusinessDate:datarow.BusinessDate,
+                                    MFGCode:datarow.MFGCode,
+                                    ItemName:datarow.ItemName,
+                                    OrderQty:tmp_orderqty,
+                                    SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                    TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                    GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4),
+                                    ItemCode:datarow.ItemCode,
+                                    MFGDept:datarow.MFGDept
+                                };
+
+                                //相同料号数据汇总
+                                if(selfflag&&mfgdept) {
+                                    orderQty+=tmp_orderqty;
+                                    assembleData.push([tmpAssamble]);
+                                }
+                            });
+
+
                             //区间数据分类
-                            if(tmp_orderqty>10000){
+                            if(orderQty>10000){
                                 grouptype = groups[0];
-                            }else if(tmp_orderqty<=10000&&tmp_orderqty>5000){
+                            }else if(orderQty<=10000&&orderQty>5000){
                                 grouptype = groups[1];
-                            }else if(tmp_orderqty<=5000&&tmp_orderqty>1000){
+                            }else if(orderQty<=5000&&orderQty>1000){
                                 grouptype = groups[2];
-                            }else if(tmp_orderqty<=1000&&tmp_orderqty>500){
+                            }else if(orderQty<=1000&&orderQty>200){
                                 grouptype = groups[3];
                             }else{
                                 grouptype = groups[4];
                             }
-                        }else if(type==0){
-                            //未设转移价数据
-                            grouptype = '工厂未接单';
-                            mfgdept = grouptype;
-                        }
 
-                        //数据拼装
-                        if((selfflag&&datarow.MFGDept&&(type===1||type===2))
-                                ||(type===0&&(!datarow.MFGDept))){
-                                    if(!datas[grouptype]){
-                                        datas[grouptype] = {
-                                            MFGDepts:[mfgdept],
-                                            DetailDatas:{
-                                            }
-                                        }
+                            //数据拼装
+                            assembleData.forEach(datarow => {
+                                let mfgdept = datarow[0].MFGDept; //生产部门
+                                if(!datas[grouptype]){
+                                    datas[grouptype] = {
+                                        MFGDepts:[mfgdept],
+                                        DetailDatas:{}
                                     }
-                                    if(!datas[grouptype].DetailDatas[mfgdept]){
-                                        datas[grouptype].DetailDatas[mfgdept]=[{
-                                            BusinessDate:datarow.BusinessDate,
-                                            MFGCode:datarow.MFGCode,
-                                            ItemName:datarow.ItemName,
-                                            OrderQty:tmp_orderqty,
-                                            SaleMoney:this.GetFormatValue(tmp_salemny,1),
-                                            TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
-                                            GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
-                                        }];
+                                }
+                                if(!datas[grouptype].DetailDatas[mfgdept]){
+                                    datas[grouptype].DetailDatas[mfgdept]=datarow;
+                                }else{
+                                    let deptidx = datas[grouptype].MFGDepts.indexOf(mfgdept);
+                                    if(deptidx<0){
+                                        datas[grouptype].MFGDepts.push(mfgdept);
+                                        datas[grouptype].DetailDatas[mfgdept]=datarow;
                                     }else{
-                                        let deptidx = datas[grouptype].MFGDepts.indexOf(mfgdept);
-                                        if(deptidx<0){
-                                            datas[grouptype].MFGDepts.push(mfgdept);
-                                            datas[grouptype].DetailDatas[mfgdept]=[{
-                                                BusinessDate:datarow.BusinessDate,
-                                                MFGCode:datarow.MFGCode,
-                                                ItemName:datarow.ItemName,
-                                                OrderQty:tmp_orderqty,
-                                                SaleMoney:this.GetFormatValue(tmp_salemny,1),
-                                                TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
-                                                GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
-                                            }];
-                                        }else{
-                                            datas[grouptype].DetailDatas[mfgdept].push(
-                                                {
-                                                    BusinessDate:datarow.BusinessDate,
-                                                    MFGCode:datarow.MFGCode,
-                                                    ItemName:datarow.ItemName,
-                                                    OrderQty:tmp_orderqty,
-                                                    SaleMoney:this.GetFormatValue(tmp_salemny,1),
-                                                    TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
-                                                    GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
-                                                }
-                                            );
-                                        }
+                                        datas[grouptype].DetailDatas[mfgdept].push(datarow[0]);
                                     }
-                        }
-                    });
+                                }
+                            });
+                        } //end
+
+                    } else {
+                        orginalData.forEach(datarow => {
+
+                            let selfflag = datarow.SelfFlag; //内部外部
+                            let mfgdept = datarow.MFGDept; //生产部门
+                            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+                            let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+                            let tmp_tranfermny = 0;
+                            if(datarow.TransferPrice>0)
+                                tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+                            let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+                            // let grouptype:any = '';
+                            /*if(type===1){
+                                //产品分类数据
+                                grouptype = datarow.ItemType;
+                            }else if(type===2){
+                                //区间数据分类
+                                if(tmp_orderqty>10000){
+                                    grouptype = groups[0];
+                                }else if(tmp_orderqty<=10000&&tmp_orderqty>5000){
+                                    grouptype = groups[1];
+                                }else if(tmp_orderqty<=5000&&tmp_orderqty>1000){
+                                    grouptype = groups[2];
+                                }else if(tmp_orderqty<=1000&&tmp_orderqty>200){
+                                    grouptype = groups[3];
+                                }else{
+                                    grouptype = groups[4];
+                                }
+                            }else if(type==0){
+                                //未设转移价数据
+                                grouptype = '工厂未接单';
+                                mfgdept = grouptype;
+                            }*/
+
+                            if(type===1){
+                                //产品分类数据
+                                grouptype = datarow.ItemType;
+                            } else if(type==0){
+                                //未设转移价数据
+                                grouptype = '工厂未接单';
+                                mfgdept = grouptype;
+                            }
+
+                            let assembleData:Array<any> = [{
+                                BusinessDate:datarow.BusinessDate,
+                                MFGCode:datarow.MFGCode,
+                                ItemName:datarow.ItemName,
+                                OrderQty:tmp_orderqty,
+                                SaleMoney:this.GetFormatValue(tmp_salemny,1),
+                                TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
+                                GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4),
+                                ItemCode:datarow.ItemCode
+                            }];
+
+                            //数据拼装
+                            if((selfflag&&datarow.MFGDept&&(type===1||type===2))
+                                    ||(type===0&&(!datarow.MFGDept))){
+                                if(!datas[grouptype]){
+                                    datas[grouptype] = {
+                                        MFGDepts:[mfgdept],
+                                        DetailDatas:{}
+                                    }
+                                }
+                                if(!datas[grouptype].DetailDatas[mfgdept]){
+                                    datas[grouptype].DetailDatas[mfgdept]=assembleData;
+                                }else{
+                                    let deptidx = datas[grouptype].MFGDepts.indexOf(mfgdept);
+                                    if(deptidx<0){
+                                        datas[grouptype].MFGDepts.push(mfgdept);
+                                        datas[grouptype].DetailDatas[mfgdept]=assembleData;
+                                    }else{
+                                        datas[grouptype].DetailDatas[mfgdept].push(assembleData[0]);
+                                    }
+                                }
+                            }
+                        });
+                    }
                     //部门排序
                     groups.forEach(g=>{
                         let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部','制造七部','制造九部',
@@ -204,7 +276,6 @@ export class HomePage {
                         datas[g].MFGDepts = depts;
                     });
                     loader.dismiss();   //关闭进度条
-
                     let expanded:any = true;
                     let showIcon:any = false;
                     let contracted:any = !expanded;
@@ -270,13 +341,13 @@ export class HomePage {
                 grossrate:0
             },
             {
-                areaname:'500-1000',
+                areaname:'200-1000',
                 areafilter:'>10000',
                 areamny:0,
                 grossrate:0
             },
             {
-                areaname:'500件以下',
+                areaname:'200件以下',
                 areafilter:'>10000',
                 areamny:0,
                 grossrate:0
@@ -492,8 +563,7 @@ ManufactureDatas:any = {
 
     //数据更新函数
     updateFunction = function(table_values,charts,immediateflag){
-        let tablename:string = 'TMP_SMTransferData';
-        if(ContextData.OriginalDatas[tablename].UpdateFlag['homepage']||immediateflag){
+        if(ContextData.OriginalDatas[ContextData.TableName].UpdateFlag['homepage']||immediateflag){
             //数据有更新，开始刷新窗体后台数据
             let totalmny = 0;
             let totalgross = 0;
@@ -525,15 +595,15 @@ ManufactureDatas:any = {
                     grossrate:0
                 },
                 {
-                    areaname:'500-1000',
-                    areafilter:'500<?<1000',
+                    areaname:'200-1000',
+                    areafilter:'200<?<1000',
                     areamny:0,
                     areagross:0,
                     grossrate:0
                 },
                 {
-                    areaname:'500件以下',
-                    areafilter:'?<500',
+                    areaname:'200件以下',
+                    areafilter:'?<200',
                     areamny:0,
                     areagross:0,
                     grossrate:0
@@ -552,8 +622,13 @@ ManufactureDatas:any = {
                 else
                     barchartdatas.push({data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]});
             });
-            let tablename:string = 'TMP_SMTransferData';
-            ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
+
+            //重新按照ItemCode料号组装数据 2018年4月20日16:01:17 slyfalcon
+            let orginalData:Array<any> = ContextData.OriginalDatas[ContextData.TableName].DataValue;
+            cond1group = HomePage.dataByItemCode(orginalData, cond1group);
+            //end
+
+            orginalData.forEach(datarow => {
                 let selfflag = datarow.SelfFlag; //内部外部
                 let mfgdept = datarow.MFGDept; //生产部门
                 let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
@@ -601,24 +676,24 @@ ManufactureDatas:any = {
                 }
 
                 //groupbyvalue
-                let step = Number.parseInt(datarow.step);
-                let ceiltotal = tmp_orderqty;//Number.parseFloat(datarow.ceiltotal);
-                if(ceiltotal>10000){
-                    cond1group[0].areamny += tmp_salemny;
-                    cond1group[0].areagross += tmp_gross;
-                }else if(ceiltotal<=10000&&ceiltotal>5000){
-                    cond1group[1].areamny += tmp_salemny;
-                    cond1group[1].areagross += tmp_gross;
-                }else if(ceiltotal<=5000&&ceiltotal>1000){
-                    cond1group[2].areamny += tmp_salemny;
-                    cond1group[2].areagross += tmp_gross;
-                }else if(ceiltotal<=1000&&ceiltotal>500){
-                    cond1group[3].areamny += tmp_salemny;
-                    cond1group[3].areagross += tmp_gross;
-                }else{
-                    cond1group[4].areamny += tmp_salemny;
-                    cond1group[4].areagross += tmp_gross;
-                }
+                // let step = Number.parseInt(datarow.step);
+                // let ceiltotal = tmp_orderqty;//Number.parseFloat(datarow.ceiltotal);
+                // if(ceiltotal>10000){
+                //     cond1group[0].areamny += tmp_salemny;
+                //     cond1group[0].areagross += tmp_gross;
+                // }else if(ceiltotal<=10000&&ceiltotal>5000){
+                //     cond1group[1].areamny += tmp_salemny;
+                //     cond1group[1].areagross += tmp_gross;
+                // }else if(ceiltotal<=5000&&ceiltotal>1000){
+                //     cond1group[2].areamny += tmp_salemny;
+                //     cond1group[2].areagross += tmp_gross;
+                // }else if(ceiltotal<=1000&&ceiltotal>200){
+                //     cond1group[3].areamny += tmp_salemny;
+                //     cond1group[3].areagross += tmp_gross;
+                // }else{
+                //     cond1group[4].areamny += tmp_salemny;
+                //     cond1group[4].areagross += tmp_gross;
+                // }
 
                 //group values
                 let groupidx = groupnamevalues.indexOf(selfflag);
@@ -713,7 +788,7 @@ ManufactureDatas:any = {
             });
 
             //数据刷新完毕，重置标志
-            ContextData.OriginalDatas[tablename].UpdateFlag['homepage'] = false;
+            ContextData.OriginalDatas[ContextData.TableName].UpdateFlag['homepage'] = false;
         }
     }    
 
@@ -765,4 +840,73 @@ ManufactureDatas:any = {
         console.log(params);
     }
 
+    /**
+     * 按照相同料号统计数量
+     * @param  {Array<any>} dataSet [原始接口数据]
+     * @return {Array<any>}         [返回后的组装数据]
+     */
+    private static dataByItemCode(dataSet:Array<any>, gourpData:Array<any>): Array<any> {
+        
+        let filteredData:any = HomePage.getItemCodeGroupData(dataSet);
+        for (let key in filteredData) {
+            let datarows:any = filteredData[key];
+            let orderQty:number = 0; //相同料号所有订单数量
+            let saleSum:number = 0;  //相同料号所有销售金额
+            let goss:number = 0;  //相同料号所有毛利总和
+
+            datarows.forEach(datarow => {
+                let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+                let tmp_salemny = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+                let tmp_tranfermny = 0;
+                if(datarow.TransferPrice>0)
+                    tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
+                let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+
+                //相同料号数据汇总
+                orderQty+=tmp_orderqty;
+                saleSum+=tmp_salemny;
+                goss+=tmp_gross;
+            });
+
+            let averageGoss = goss/Number.parseFloat(datarows.length);    //平均毛利
+
+            if(orderQty>10000){
+                gourpData[0].areamny += saleSum;
+                gourpData[0].areagross += averageGoss;
+            }else if(orderQty<=10000&&orderQty>5000){
+                gourpData[1].areamny += saleSum;
+                gourpData[1].areagross += averageGoss;
+            }else if(orderQty<=5000&&orderQty>1000){
+                gourpData[2].areamny += saleSum;
+                gourpData[2].areagross += averageGoss;
+            }else if(orderQty<=1000&&orderQty>200){
+                gourpData[3].areamny += saleSum;
+                gourpData[3].areagross += averageGoss;
+            }else{
+                gourpData[4].areamny += saleSum;
+                gourpData[4].areagross += averageGoss;
+            }
+        }
+
+        return gourpData;
+    }
+
+    /**
+     * 获取相同料号对象集合
+     * @param  {Array<any>} dataSet [原始接口数据]
+     * @return {Array<any>}
+     */
+    private static getItemCodeGroupData(dataSet:Array<any>): any {
+        //这里按照相同料号组装一个对象数据
+        let filteredData:any = {};
+        dataSet.forEach(datarow => {
+            let itemCode:string = datarow.ItemCode;
+            if (!filteredData[itemCode]) {
+                filteredData[itemCode] = [datarow];
+            } else {
+                filteredData[itemCode].push(datarow);
+            }
+        });
+        return filteredData;
+    }
 }
