@@ -291,7 +291,7 @@ export class HomePage {
     ShowMsg(){
         let alert = this.alterCtrl.create({
             title: '程序信息',
-            subTitle:document.documentElement.clientWidth.toString()+':'+document.documentElement.clientHeight.toString(),
+            subTitle:'client:'+document.documentElement.clientWidth.toString()+':'+document.documentElement.clientHeight.toString()+'; window:'+window.screen.width.toString()+':'+window.screen.height.toString(),
             buttons:['确定']
             });
         alert.present(); 

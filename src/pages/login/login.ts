@@ -64,13 +64,14 @@ export class LoginPage {
 
   }
 
-  ionViewDidLoad(){
-    let viewport = document.querySelector("meta[name=viewport]");
-    let content:string = 'viewport-fit=cover, width=device-width, initial-scale='+
+  ionViewWillEnter(){
+    //首页已经写死
+    // let viewport = document.querySelector("meta[name=viewport]");
+    // let content:string = 'viewport-fit=cover, width=device-width, initial-scale='+
     // Math.pow(document.documentElement.clientWidth/2380,1).toString()
-    1
-    +', minimum-scale=0.2, maximum-scale=3.0, user-scalable=no';
-    viewport.setAttribute('content',content);
+    // Math.pow(window.screen.width/document.documentElement.clientWidth, 1).toString()
+    // +', minimum-scale=0.2, maximum-scale=3.0, user-scalable=no';
+    // viewport.setAttribute('content',content);   
   }
 
   goToSignup() {
