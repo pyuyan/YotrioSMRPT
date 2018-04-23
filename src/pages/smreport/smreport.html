@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col col-9>
           <ion-card class="maincontenttopstyle">
-          <ion-card-content style="padding:0%" (click)="showDetail()">
+          <ion-card-content style="padding:0%" (click)="showDetail('Rate')">
           <div echarts #smpie [options]="totalsalemnydatas" class="piediv" (chartClick)="onManufacturepieClick($event)"></div>     
           </ion-card-content>
           </ion-card>       
@@ -28,7 +28,7 @@
                 <ion-grid style="padding:0% 0% 0% 0%;overflow:hide;color:#FFFFFF;font-size:20px;" align-items-start>
                     <ion-row style="overflow:hide; height: 75px;border-width:1px;border-style: none none solid none;">
                       <ion-col style="overflow:auto;font-size:22px;"></ion-col>
-                      <ion-col text-center style="overflow:auto;font-size:22px;" *ngFor="let header of profitdatas.xAxis[0].data">{{header}}</ion-col>
+                      <ion-col text-center style="overflow:auto;font-size:22px;" *ngFor="let header of profitdatas.xAxis[0].data" (click)="showDetail('Group', header)">{{header}}</ion-col>
                     </ion-row>
                     <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of profitdatas.series;index as i;">
                       <ion-col text-left align-self-center style="font-size:20px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>

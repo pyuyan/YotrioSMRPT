@@ -1,10 +1,21 @@
+import { Params } from './../../app/params';
 import { Component } from '@angular/core';
-import { NavController, TextInput, IonicPage, ModalController } from 'ionic-angular';
+import { NavController, TextInput, IonicPage, ModalController, LoadingController, AlertController } from 'ionic-angular';
 import { ViewChild,ElementRef } from '@angular/core';
 import { NgxEchartsService,NgxEchartsModule } from 'ngx-echarts';
 import { ContextData } from '../../app/context';
 
 import { SmreportmodalPage } from '../smreportmodal/smreportmodal';
+import { MfgcountmodelPage } from '../home/mfgcountmodel';
+import { CONTENT_ATTR } from '@angular/platform-browser/src/dom/dom_renderer';
+
+/**
+ * 定义显示的类型
+ */
+export enum DetailType {
+    GROUP = 'Group',
+    RATE = 'Rate'
+}
 
 @IonicPage()
 @Component({
@@ -380,9 +391,13 @@ profitdatas:any = {
 
     contextdata:ContextData;
 
-    constructor(public navCtrl: NavController, public modalCtrl: ModalController,
-      private echartsvr:NgxEchartsService,
-        ) {
+    constructor(
+        public navCtrl: NavController, 
+        public modalCtrl: ModalController,
+        private loadingCtrl: LoadingController,
+        private alterCtrl: AlertController,
+        private echartsvr:NgxEchartsService,
+    ) {
          //初始化上下文
          this.contextdata = ContextData.Create();     
     }
@@ -625,45 +640,216 @@ profitdatas:any = {
     }
 
     /**
-     * 营销数据中心点击毛利显示详情事件
+     * 营销数据中心点击显示详情事件入口
      */
-    showDetail() {
+    showDetail(type:string, args?: any) {
+        let alert = this.alterCtrl.create({
+            title: '身份验证',
+            message: '请输入安全密码',
+            inputs: [
+                {
+                    name: 'password',
+                    placeholder: '',
+                    type: 'password',
+                    handler: input => {
+                        console.log(input);
+                    }
+                },
+            ],
+            buttons: [
+                {
+                    text: '取消',
+                    handler: () => {}
+                },
+                {
+                    text: '确定',
+                    handler: (data) => {
+                        let errMsg:any = null;
+                        if (data.password === Params.DefaultPWD || Params.DEBUGMODE) {
+
+                            if (type === DetailType.RATE) {
+                                this._showRateDetail();
+                            } else if (type === DetailType.GROUP) {
+                                this._showGroupDetail(args);
+                            } else {
+                                errMsg = '类型错误';
+                            }
+
+                        } else {
+                            errMsg = '密码错误';
+                        }
+
+                        if (errMsg) {
+                            let alert = this.alterCtrl.create({
+                                title: errMsg,
+                                subTitle: errMsg,
+                                buttons: ['确定']
+                            });
+                            alert.present();
+                        }
+                    }
+                }
+            ],
+        });
+        alert.present();
+    }
+
+    private _showRateDetail() {
         //对数据进行处理，主要是计算 产值，毛利率
+        let loader = this.loadingCtrl.create({
+            content: "正在读取数据..."
+        });
+        loader.present();
+
         let datas: any[] = [];
         ContextData.OriginalDatas[ContextData.TableName].DataValue.forEach(datarow => {
             let tmp_orderqty = Number.parseFloat(datarow.OrderQty);//订单数量
-            let tmp_salemny  = tmp_orderqty*Number.parseFloat(datarow.SalePrice)*Number.parseFloat(datarow.ExchangeRate)/10000;
+            let tmp_salemny = tmp_orderqty * Number.parseFloat(datarow.SalePrice) * Number.parseFloat(datarow.ExchangeRate) / 10000;
             let tmp_tranfermny = 0;
-            if(datarow.TransferPrice>0)
-                tmp_tranfermny = tmp_orderqty*Number.parseFloat(datarow.TransferPrice)/10000;
-            let tmp_gross = tmp_salemny-((Number.parseFloat(datarow.NotConsume)+Number.parseFloat(datarow.DepreciateRate))*tmp_salemny)-tmp_tranfermny;
+            if (datarow.TransferPrice > 0)
+                tmp_tranfermny = tmp_orderqty * Number.parseFloat(datarow.TransferPrice) / 10000;
+            let tmp_gross = tmp_salemny - ((Number.parseFloat(datarow.NotConsume) + Number.parseFloat(datarow.DepreciateRate)) * tmp_salemny) - tmp_tranfermny;
+            let tmp_GrossRate = tmp_gross / tmp_salemny * 100;
             let tmp_data = {
-                                BusinessDate:datarow.BusinessDate,
-                                Customer:datarow.Customer,
-                                ItemCode:datarow.ItemCode,
-                                MFGCode:datarow.MFGCode,
-                                ItemName:datarow.ItemName,
-                                OrderQty:tmp_orderqty,
-                                SaleMoney:this.GetFormatValue(tmp_salemny,1),
-                                TransferMoney:this.GetFormatValue(tmp_tranfermny,1),
-                                GrossRate:this.GetFormatValue(tmp_gross/tmp_salemny*100,4)
-                            };
+                BusinessDate: datarow.BusinessDate,
+                Customer: datarow.Customer,
+                ItemCode: datarow.ItemCode,
+                MFGCode: datarow.MFGCode,
+                ItemName: datarow.ItemName,
+                OrderQty: tmp_orderqty,
+                SaleMoney: this.GetFormatValue(tmp_salemny, 1),
+                TransferMoney: this.GetFormatValue(tmp_tranfermny, 1),
+                GrossRate: this.GetFormatValue(tmp_GrossRate, 4),
+                RealGrossRate: tmp_GrossRate
+            };
             datas.push(tmp_data);
         });
 
-        let expanded:any = true;
-        let showIcon:any = false;
-        let contracted:any = !expanded;
+        //按照毛利递增排序
+        datas.sort((a:any, b:any) => {
+            return a.RealGrossRate > b.RealGrossRate ? 1 : -1;
+        });
+
+        loader.dismiss();
+
+        if (!Object.keys(datas).length) {
+            let alert = this.alterCtrl.create({
+                title: '暂无数据',
+                subTitle: '暂无数据',
+                buttons: ['确定']
+            });
+            alert.present();
+            return;
+        }
+
+        let expanded: any = true;
+        let showIcon: any = false;
+        let contracted: any = !expanded;
         setTimeout(() => {
             const modal = this.modalCtrl.create(SmreportmodalPage, {
-                data:datas
+                data: datas
             });
             modal.onDidDismiss(data => {
-                expanded   = false;
+                expanded = false;
                 contracted = !expanded;
                 setTimeout(() => showIcon = true, 200);
             });
             modal.present();
-        }, 100);  
+        }, 100);
     }
+
+    private _showGroupDetail(params: any) {
+        let loader = this.loadingCtrl.create({
+            content: "正在读取明细数据..."
+        });
+        loader.present();
+
+        let saleDept = params;
+        let groups: Array<string> = [saleDept];
+        let datas: any = {};
+        let grouptype: any = '';
+
+        let keydeptdata: any = ContextData.GetKeyDepts();
+        let orginalData: Array<any> = ContextData.OriginalDatas[ContextData.TableName].DataValue;
+
+        orginalData.forEach(datarow => {
+
+            let selfflag = datarow.SelfFlag; //内部外部
+            let customer = datarow.Customer; //客户
+            let tmp_saleDept = datarow.SaleDept; //组
+            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+            let tmp_salemny = tmp_orderqty * Number.parseFloat(datarow.SalePrice) * Number.parseFloat(datarow.ExchangeRate) / 10000;
+            let tmp_tranfermny = 0;
+            if (datarow.TransferPrice > 0)
+                tmp_tranfermny = tmp_orderqty * Number.parseFloat(datarow.TransferPrice) / 10000;
+            let tmp_gross = tmp_salemny - ((Number.parseFloat(datarow.NotConsume) + Number.parseFloat(datarow.DepreciateRate)) * tmp_salemny) - tmp_tranfermny;
+
+            let assembleData: Array<any> = [{
+                BusinessDate: datarow.BusinessDate,
+                MFGCode: datarow.MFGCode,
+                ItemName: datarow.ItemName,
+                OrderQty: tmp_orderqty,
+                SaleMoney: this.GetFormatValue(tmp_salemny, 1),
+                TransferMoney: this.GetFormatValue(tmp_tranfermny, 1),
+                GrossRate: this.GetFormatValue(tmp_gross / tmp_salemny * 100, 4),
+                ItemCode: datarow.ItemCode
+            }];
+
+            //只要指定的制造部数据
+            if (selfflag && 
+                customer && 
+                keydeptdata.DeptNames.indexOf(tmp_saleDept) > -1 && 
+                tmp_saleDept.indexOf(saleDept) > -1) 
+            {
+
+                if (!datas[saleDept]) {
+                    datas[saleDept] = {
+                        MFGDepts: [customer],   //所有客户
+                        DetailDatas: {}
+                    }
+                }
+                if (!datas[saleDept].DetailDatas[customer]) {
+                    datas[saleDept].DetailDatas[customer] = assembleData;
+                } else {
+                    let deptidx = datas[saleDept].MFGDepts.indexOf(customer);
+                    if (deptidx < 0) {
+                        datas[saleDept].MFGDepts.push(customer);
+                        datas[saleDept].DetailDatas[customer] = assembleData;
+                    } else {
+                        datas[saleDept].DetailDatas[customer].push(assembleData[0]);
+                    }
+                }
+            }
+        });
+
+        loader.dismiss();
+
+        if (!Object.keys(datas).length) {
+            let alert = this.alterCtrl.create({
+                title: '暂无数据',
+                subTitle: '暂无数据',
+                buttons: ['确定']
+            });
+            alert.present();
+            return ;
+        }
+
+        let expanded: any = true;
+        let showIcon: any = false;
+        let contracted: any = !expanded;
+        setTimeout(() => {
+            const modal = this.modalCtrl.create(MfgcountmodelPage, {
+                groupset: groups,
+                groupdatas: datas,
+                groupindex: 0
+            });
+            modal.onDidDismiss(data => {
+                expanded = false;
+                contracted = !expanded;
+                setTimeout(() => showIcon = true, 200);
+            });
+            modal.present();
+        }, 100); 
+    }
+    
 }

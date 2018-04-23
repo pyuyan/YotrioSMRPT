@@ -1,3 +1,4 @@
+import { Params } from './../../app/params';
 import { Component } from '@angular/core';
 import { NavController, TextInput, IonicPage, List ,ModalController, AlertController, LoadingController } from 'ionic-angular';
 import { ViewChild,ElementRef } from '@angular/core';
@@ -14,10 +15,12 @@ import { SecloginmodelPage } from '../secloginmodel/secloginmodel';
 })
 
 export class HomePage {
+    
+    public static readonly MFGDeptIds: any = ['制造一部', '制造二部', '制造三部', '制造四部', '制造五部', '制造六部制造七部', '制造九部',
+        '制造十一部', '制造十二部', '山东永旭', '临海市奥特休闲用品制造有限公司', '临海市金源工艺品有限公司',
+        '浙江通一休闲家具有限公司', '浙江伟峰工艺品有限公司', '浙江伊丽特工艺品有限公司', '浙江浙佳工艺灯饰股份有限公司'];
 
-    public backgroundImage = 'assets/imgs/bg2.jpg';  
-
-    private readonly DEBUG:boolean = false;
+    public backgroundImage = 'assets/imgs/bg2.jpg';
 
     manufacturebarInstance:any
 
@@ -85,7 +88,7 @@ export class HomePage {
               {
                 text: '确定',
                 handler: (data) => {
-                    if(data.password==='002489' || this.DEBUG){
+                    if (data.password === Params.DefaultPWD || Params.DEBUGMODE){
                     //进度条控件
                     let loader = this.loadingCtrl.create({
                         content: "正在读取明细数据..."
@@ -264,9 +267,7 @@ export class HomePage {
                     }
                     //部门排序
                     groups.forEach(g=>{
-                        let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部','制造七部','制造九部',
-                        '制造十一部','制造十二部','山东永旭','临海市奥特休闲用品制造有限公司','临海市金源工艺品有限公司',
-                        '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','浙江浙佳工艺股份有限公司','工厂未接单'];
+                        let mfgdeptids: any = HomePage.MFGDeptIds.concat(['工厂未接单']);
                         let depts:any = [];
                         mfgdeptids.forEach(dept=>{
                             if(datas[g].MFGDepts.indexOf(dept)>=0){
@@ -428,7 +429,7 @@ ManufactureDatas:any = {
                 rotate:-30,
                 fontSize:16
             },
-            data: ['一部','二部','三部','四部','五部','六七部','九部','十一部','十二部','永旭','奥特','金源','通一','伟峰','伊丽特','浙佳']
+            data: ['一部','二部','三部','四部','五部','六七部','九部','十一部','十二部','永旭','奥特','金源','通一','伟峰','伊丽特','浙佳', '其他']
         }
     ],
     yAxis: [
@@ -612,15 +613,18 @@ ManufactureDatas:any = {
             let typegroupvalues:Array<any> = new Array<any>();
             let typenamevalues:Array<any> = new Array<any>();
 
-            let mfgdeptids:any = ['制造一部','制造二部','制造三部','制造四部','制造五部','制造六部制造七部','制造九部',
-    '制造十一部','制造十二部','山东永旭','临海市奥特休闲用品制造有限公司','临海市金源工艺品有限公司',
-    '浙江通一休闲家具有限公司','浙江伟峰工艺品有限公司','浙江伊丽特工艺品有限公司','浙江浙佳工艺股份有限公司'];
+            let mfgdeptids: any = HomePage.MFGDeptIds;
+            
             let barchartdatas:Array<any> = new Array<any>();
             charts[0].ValueOptions.series.forEach(yaxis => {
                 if(yaxis.name=='产值目标')
-                    barchartdatas.push({data:[53000 ,32000 ,29000 ,25000 ,15000 ,37000 ,59500 ,15000 ,10000 ,5000,10000 ,8000 ,10000 ,9000 ,13000 ,5000]});
+                    // barchartdatas.push({ data: [53000, 32000, 29000, 25000, 15000, 37000, 59500, 15000, 10000, 5000, 10000, 8000, 10000, 9000, 13000, 5000] });
+                    //TODO 其他 栏目的目标为 多少？
+                    barchartdatas.push({ data: [53000, 32000, 29000, 25000, 15000, 37000, 59500, 15000, 10000, 5000, 10000, 8000, 10000, 9000, 13000, 5000, 5000] });
                 else
-                    barchartdatas.push({data:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]});
+                    // barchartdatas.push({ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] });
+                    // 加入 其他 栏目
+                    barchartdatas.push({ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] });
             });
 
             //重新按照ItemCode料号组装数据 2018年4月20日16:01:17 slyfalcon
@@ -655,6 +659,10 @@ ManufactureDatas:any = {
                     barchartdatas[1].data[deptidx] += tmp_tranfermny;
                     //barchartdatas[2].data[deptidx] += tmp_tranfermny;
                     //barchartdatas[3].data[deptidx] += tmp_gross;
+                } else {
+                    // 其他的
+                    // let lastBlank = charts[0].ValueOptions.xAxis[0].data.length;
+                    barchartdatas[1].data[16] += tmp_tranfermny;
                 }
 
                 //groupbytype
@@ -719,6 +727,7 @@ ManufactureDatas:any = {
                 }
 
             });
+
             //接单分组合计统计
             table_values.groupvalues.length=0;
             groupvalues.forEach(grouprow=>{
@@ -838,6 +847,141 @@ ManufactureDatas:any = {
 
     OnManufactureBarClick(params:any){
         console.log(params);
+    }
+
+    showGroupDetail(mdpt:string) {
+
+        let alert = this.alterCtrl.create({
+            title: '身份验证',
+            message: '请输入安全密码',
+            inputs: [
+                {
+                    name: 'password',
+                    placeholder: '',
+                    type: 'password',
+                    handler: input => {
+                        console.log(input);
+                    }
+                },
+            ],
+            buttons: [
+                {
+                    text: '取消',
+                    handler: () => { }
+                },
+                {
+                    text: '确定',
+                    handler: (data) => {
+                        if (data.password === Params.DefaultPWD || Params.DEBUGMODE) {
+                            this._showGroupDetail(mdpt);
+                        } else {
+                            let alert = this.alterCtrl.create({
+                                title: '密码错误',
+                                subTitle: '密码错误，请重新输入',
+                                buttons: ['确定']
+                            });
+                            alert.present();
+                        }
+                    }
+                }
+            ],
+        });
+        alert.present();
+    }
+
+    private _showGroupDetail(mdpt: string) {
+
+        let loader = this.loadingCtrl.create({
+            content: "正在读取明细数据..."
+        });
+        loader.present();
+
+        if (mdpt.indexOf('六七部') > -1) {
+            mdpt = '制造六部制造七部';
+        }
+
+        console.log('mdpt')
+        console.log(mdpt)
+
+        let groups: Array<string> = [mdpt];
+        let datas: any = {};
+        let grouptype: any = '';
+
+        let orginalData: Array<any> = ContextData.OriginalDatas[ContextData.TableName].DataValue;
+
+        orginalData.forEach(datarow => {
+
+            let selfflag = datarow.SelfFlag; //内部外部
+            let mfgdept = datarow.MFGDept; //生产部门
+            let customer = datarow.Customer; //客户
+            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
+            let tmp_salemny = tmp_orderqty * Number.parseFloat(datarow.SalePrice) * Number.parseFloat(datarow.ExchangeRate) / 10000;
+            let tmp_tranfermny = 0;
+            if (datarow.TransferPrice > 0)
+                tmp_tranfermny = tmp_orderqty * Number.parseFloat(datarow.TransferPrice) / 10000;
+            let tmp_gross = tmp_salemny - ((Number.parseFloat(datarow.NotConsume) + Number.parseFloat(datarow.DepreciateRate)) * tmp_salemny) - tmp_tranfermny;
+            
+            let assembleData: Array<any> = [{
+                BusinessDate: datarow.BusinessDate,
+                MFGCode: datarow.MFGCode,
+                ItemName: datarow.ItemName,
+                OrderQty: tmp_orderqty,
+                SaleMoney: this.GetFormatValue(tmp_salemny, 1),
+                TransferMoney: this.GetFormatValue(tmp_tranfermny, 1),
+                GrossRate: this.GetFormatValue(tmp_gross / tmp_salemny * 100, 4),
+                ItemCode: datarow.ItemCode
+            }];
+
+            //只要指定的制造部数据
+            if (selfflag && customer && (mfgdept.indexOf(mdpt) > -1 || mdpt.indexOf(mfgdept) > -1)){
+                if (!datas[mdpt]) {
+                    datas[mdpt] = {
+                        MFGDepts: [customer],   //所有客户
+                        DetailDatas: {}
+                    }
+                }
+                if (!datas[mdpt].DetailDatas[customer]) {
+                    datas[mdpt].DetailDatas[customer] = assembleData;
+                } else {
+                    let deptidx = datas[mdpt].MFGDepts.indexOf(customer);
+                    if (deptidx < 0) {
+                        datas[mdpt].MFGDepts.push(customer);
+                        datas[mdpt].DetailDatas[customer] = assembleData;
+                    } else {
+                        datas[mdpt].DetailDatas[customer].push(assembleData[0]);
+                    }
+                }
+            }
+        });
+        
+        loader.dismiss();
+
+        if (!Object.keys(datas).length) {
+            let alert = this.alterCtrl.create({
+                title: '暂无数据',
+                subTitle: '暂无数据',
+                buttons: ['确定']
+            });
+            alert.present();
+            return;
+        }
+        
+        let expanded: any = true;
+        let showIcon: any = false;
+        let contracted: any = !expanded;
+        setTimeout(() => {
+            const modal = this.modalCtrl.create(MfgcountmodelPage, {
+                groupset: groups,
+                groupdatas: datas,
+                groupindex: 0
+            });
+            modal.onDidDismiss(data => {
+                expanded = false;
+                contracted = !expanded;
+                setTimeout(() => showIcon = true, 200);
+            });
+            modal.present();
+        }, 100);  
     }
 
     /**
