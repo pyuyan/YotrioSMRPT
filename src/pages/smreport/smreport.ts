@@ -458,7 +458,7 @@ profitdatas:any = {
                         }
     
                         //TOP10表格数据收集
-                        if(datarow.InnerOrg=='False'){
+                        // if(datarow.InnerOrg=='False'){
                             let custidx = customerarray.indexOf(customer);
                             if(custidx<0){
                                 customerarray.push(customer);
@@ -473,7 +473,7 @@ profitdatas:any = {
                                 topgroupvalues[custidx].OrderMoney += tmp_salemny;
                                 topgroupvalues[custidx].GrossMoney += tmp_gross;
                             }
-                        }
+                        // }
                     }
                 }
             });
