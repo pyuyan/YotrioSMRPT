@@ -1,3 +1,4 @@
+import { dataHelper } from './../../util/helper/data';
 import { Params } from './../../app/params';
 import { Component } from '@angular/core';
 import { NavController, TextInput, IonicPage, ModalController, LoadingController, AlertController } from 'ionic-angular';
@@ -7,7 +8,6 @@ import { ContextData } from '../../app/context';
 
 import { SmreportmodalPage } from '../smreportmodal/smreportmodal';
 import { MfgcountmodelPage } from '../home/mfgcountmodel';
-import { CONTENT_ATTR } from '@angular/platform-browser/src/dom/dom_renderer';
 
 /**
  * 定义显示的类型
@@ -31,17 +31,6 @@ export class SmreportPage {
 
     smpieInstance:any
     smbarInstance:any
-
-    /**
-     * 表格数据格式化方法
-     */
-    GetFormatValue(coldata,i):string{
-        if(i==3||i==4||i==-1){
-            return (Number.parseFloat(coldata)).toFixed(2).toString()+' %'; 
-        }else{
-            return Math.round(Number.parseFloat(coldata)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-    }
 
 
   totalsalemnydatas:any = {
@@ -703,26 +692,7 @@ profitdatas:any = {
 
         let datas: any[] = [];
         ContextData.OriginalDatas[ContextData.TableName].DataValue.forEach(datarow => {
-            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);//订单数量
-            let tmp_salemny = tmp_orderqty * Number.parseFloat(datarow.SalePrice) * Number.parseFloat(datarow.ExchangeRate) / 10000;
-            let tmp_tranfermny = 0;
-            if (datarow.TransferPrice > 0)
-                tmp_tranfermny = tmp_orderqty * Number.parseFloat(datarow.TransferPrice) / 10000;
-            let tmp_gross = tmp_salemny - ((Number.parseFloat(datarow.NotConsume) + Number.parseFloat(datarow.DepreciateRate)) * tmp_salemny) - tmp_tranfermny;
-            let tmp_GrossRate = tmp_gross / tmp_salemny * 100;
-            let tmp_data = {
-                BusinessDate: datarow.BusinessDate,
-                Customer: datarow.Customer,
-                ItemCode: datarow.ItemCode,
-                MFGCode: datarow.MFGCode,
-                ItemName: datarow.ItemName,
-                OrderQty: tmp_orderqty,
-                SaleMoney: this.GetFormatValue(tmp_salemny, 1),
-                TransferMoney: this.GetFormatValue(tmp_tranfermny, 1),
-                GrossRate: this.GetFormatValue(tmp_GrossRate, 4),
-                RealGrossRate: tmp_GrossRate
-            };
-            datas.push(tmp_data);
+            datas.push(dataHelper.assemble(datarow));
         });
 
         //按照毛利递增排序
@@ -777,24 +747,7 @@ profitdatas:any = {
             let selfflag = datarow.SelfFlag; //内部外部
             let customer = datarow.Customer; //客户
             let tmp_saleDept = datarow.SaleDept; //组
-            let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
-            let tmp_salemny = tmp_orderqty * Number.parseFloat(datarow.SalePrice) * Number.parseFloat(datarow.ExchangeRate) / 10000;
-            let tmp_tranfermny = 0;
-            if (datarow.TransferPrice > 0)
-                tmp_tranfermny = tmp_orderqty * Number.parseFloat(datarow.TransferPrice) / 10000;
-            let tmp_gross = tmp_salemny - ((Number.parseFloat(datarow.NotConsume) + Number.parseFloat(datarow.DepreciateRate)) * tmp_salemny) - tmp_tranfermny;
-
-            let assembleData: Array<any> = [{
-                BusinessDate: datarow.BusinessDate,
-                MFGCode: datarow.MFGCode,
-                ItemName: datarow.ItemName,
-                OrderQty: tmp_orderqty,
-                SaleMoney: this.GetFormatValue(tmp_salemny, 1),
-                TransferMoney: this.GetFormatValue(tmp_tranfermny, 1),
-                GrossRate: this.GetFormatValue(tmp_gross / tmp_salemny * 100, 4),
-                ItemCode: datarow.ItemCode
-            }];
-
+            
             //只要指定的制造部数据
             if (selfflag && 
                 customer && 
@@ -808,6 +761,9 @@ profitdatas:any = {
                         DetailDatas: {}
                     }
                 }
+                
+                let assembleData: Array<any> = [dataHelper.assemble(datarow)];
+                
                 if (!datas[saleDept].DetailDatas[customer]) {
                     datas[saleDept].DetailDatas[customer] = assembleData;
                 } else {
