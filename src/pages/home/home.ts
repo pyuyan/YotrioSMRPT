@@ -1,4 +1,5 @@
 import { dataHelper } from './../../util/helper/data';
+import { mathHelper } from './../../util/helper/math';
 import { Params } from './../../app/params';
 import { Component } from '@angular/core';
 import { NavController, TextInput, IonicPage, List ,ModalController, AlertController, LoadingController } from 'ionic-angular';
@@ -28,6 +29,11 @@ export class HomePage {
     @ViewChild('manufacturebar') manufacturebar:ElementRef;
 
     @ViewChild('clockcontrol') clockctrl:any
+
+    //模板中需要调用，暂时解决
+    GetFormatValue(coldata, i): string {
+        return mathHelper.GetFormatValue(coldata, i);
+    }
 
     OpenGrossModal(datatypename:any) {
         // let modal = this.modalCtrl.create(GrossmodelPage, {datatype:datatypename},{
@@ -678,13 +684,13 @@ ManufactureDatas:any = {
 
             //groupbytype合计统计
             table_values.groupbykindvalues.length=0;
+
             typegroupvalues.forEach(groupvalue=>{
                 if(groupvalue.ordermny>0)
                     groupvalue.grossrate = groupvalue.grossmny/groupvalue.ordermny;
                 else
                     groupvalue.grossrate=0;
 
-                table_values.groupbykindvalues.push(groupvalue);
             });
             table_values.groupbykindvalues.sort(function(a, b){
                 if(Number.parseFloat(a.ordermny) > Number.parseFloat(b.ordermny)){

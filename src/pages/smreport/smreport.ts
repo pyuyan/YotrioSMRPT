@@ -1,4 +1,6 @@
 import { dataHelper } from './../../util/helper/data';
+import { mathHelper } from './../../util/helper/math';
+
 import { Params } from './../../app/params';
 import { Component } from '@angular/core';
 import { NavController, TextInput, IonicPage, ModalController, LoadingController, AlertController } from 'ionic-angular';
@@ -389,6 +391,10 @@ profitdatas:any = {
     ) {
          //初始化上下文
          this.contextdata = ContextData.Create();     
+    }
+
+    GetFormatValue(coldata, i): string {
+        return mathHelper.GetFormatValue(coldata, i);
     }
 
     //数据更新函数
