@@ -691,6 +691,9 @@ ManufactureDatas:any = {
                 else
                     groupvalue.grossrate=0;
 
+                //未设置分类的不显示
+                if (groupvalue.kind.indexOf('未设分类') === -1)
+                    table_values.groupbykindvalues.push(groupvalue);
             });
             table_values.groupbykindvalues.sort(function(a, b){
                 if(Number.parseFloat(a.ordermny) > Number.parseFloat(b.ordermny)){
