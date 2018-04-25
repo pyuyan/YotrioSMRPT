@@ -20,7 +20,7 @@ export class HomePage {
 
     public static readonly MFGDeptIds: any = ['制造一部', '制造二部', '制造三部', '制造四部', '制造五部', '制造六部制造七部', '制造九部',
         '制造十一部', '制造十二部', '山东永旭', '临海市奥特休闲用品制造有限公司', '临海市金源工艺品有限公司',
-        '浙江通一休闲家具有限公司', '浙江伟峰工艺品有限公司', '浙江伊丽特工艺品有限公司', '浙江浙佳工艺灯饰股份有限公司'];
+        '浙江通一休闲家具有限公司', '浙江伟峰工艺品有限公司', '浙江伊丽特工艺品有限公司', '浙江浙佳工艺灯饰有限公司'];
 
     public backgroundImage = 'assets/imgs/bg2.jpg';
 
@@ -841,9 +841,6 @@ export class HomePage {
         if (mdpt.indexOf('六七部') > -1) {
             mdpt = '制造六部制造七部';
         }
-
-        console.log('mdpt')
-        console.log(mdpt)
 
         let groups: Array<string> = [mdpt];
         let datas: any = {};
