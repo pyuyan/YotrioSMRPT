@@ -931,10 +931,12 @@ export class HomePage {
                     tmp_tranfermny = tmp_orderqty * Number.parseFloat(datarow.TransferPrice) / 10000;
                 let tmp_gross = tmp_salemny - ((Number.parseFloat(datarow.NotConsume) + Number.parseFloat(datarow.DepreciateRate)) * tmp_salemny) - tmp_tranfermny;
 
-                //相同料号数据汇总
-                orderQty += tmp_orderqty;
-                saleSum += tmp_salemny;
-                goss += tmp_gross;
+                //相同料号数据汇总，转移价必须大于0
+                if (datarow.SelfFlag && datarow.MFGDept && datarow.TransferPrice > 0) {
+                    orderQty += tmp_orderqty;
+                    saleSum += tmp_salemny;
+                    goss += tmp_gross;
+                }
             });
 
             let averageGoss = goss / Number.parseFloat(datarows.length);    //平均毛利
