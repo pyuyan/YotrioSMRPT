@@ -1,7 +1,8 @@
 import { dataHelper } from './../../util/helper/data';
-import { mathHelper } from './../../util/helper/math';
 
 import { Params } from './../../app/params';
+import { Base } from './../../common/base';
+
 import { Component } from '@angular/core';
 import { NavController, TextInput, IonicPage, ModalController, LoadingController, AlertController } from 'ionic-angular';
 import { ViewChild, ElementRef } from '@angular/core';
@@ -24,7 +25,7 @@ export enum DetailType {
     selector: 'page-smreport',
     templateUrl: 'smreport.html',
 })
-export class SmreportPage {
+export class SmreportPage extends Base{
 
     @ViewChild('clockcontrol') clockctrl: any
 
@@ -392,12 +393,9 @@ export class SmreportPage {
         private alterCtrl: AlertController,
         private echartsvr: NgxEchartsService,
     ) {
+        super();
         //初始化上下文
         this.contextdata = ContextData.Create();
-    }
-
-    GetFormatValue(coldata, i): string {
-        return mathHelper.GetFormatValue(coldata, i);
     }
 
     //数据更新函数
@@ -662,12 +660,7 @@ export class SmreportPage {
                         }
 
                         if (errMsg) {
-                            let alert = this.alterCtrl.create({
-                                title: errMsg,
-                                subTitle: errMsg,
-                                buttons: ['确定']
-                            });
-                            alert.present();
+                            super.showAlert(this.alterCtrl, errMsg, errMsg);
                         }
                     }
                 }
@@ -678,10 +671,7 @@ export class SmreportPage {
 
     private _showRateDetail() {
         //对数据进行处理，主要是计算 产值，毛利率
-        let loader = this.loadingCtrl.create({
-            content: "正在读取数据..."
-        });
-        loader.present();
+        let loader = super.showLoading(this.loadingCtrl, "正在读取数据...");
 
         let datas: any[] = [];
         ContextData.OriginalDatas[ContextData.TableName].DataValue.forEach(datarow => {
@@ -722,10 +712,7 @@ export class SmreportPage {
     }
 
     private _showGroupDetail(params: any) {
-        let loader = this.loadingCtrl.create({
-            content: "正在读取明细数据..."
-        });
-        loader.present();
+        let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
 
         let saleDept = params;
         let groups: Array<string> = [saleDept];
@@ -773,12 +760,7 @@ export class SmreportPage {
         loader.dismiss();
 
         if (!Object.keys(datas).length) {
-            let alert = this.alterCtrl.create({
-                title: '暂无数据',
-                subTitle: '暂无数据',
-                buttons: ['确定']
-            });
-            alert.present();
+            super.showAlert(this.alterCtrl, '暂无数据', '暂无数据');
             return;
         }
 

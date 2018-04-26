@@ -2,13 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {ScreenOrientation} from "@ionic-native/screen-orientation";
+import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { ContextData } from './context';
 import { SmreportPage } from '../pages/smreport/smreport';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
-
+import { Params } from './params';
 
 @Component({
   templateUrl: 'app.html'
@@ -18,65 +18,65 @@ export class YotrioSMRPT {
 
   rootPage: any = LoginPage;
 
-  contextdata:ContextData;
+  contextdata: ContextData;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{ title: string, component: any }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, 
+  constructor(public platform: Platform, public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    public screenOrientation:ScreenOrientation,
-    private datasvr:DatasvrProvider) {
+    public screenOrientation: ScreenOrientation,
+    private datasvr: DatasvrProvider) {
 
-      this.contextdata = ContextData.Create();
+    this.contextdata = ContextData.Create();
 
-      this.contextdata.SetESBPortal('http://192.168.0.197:8280');    
-      //初始化上下文
-      if(ContextData.inited === false){
-        ContextData.InitContextData();
-      }      
+    this.contextdata.SetESBPortal(Params.ESBPortal);
+    //初始化上下文
+    if (ContextData.inited === false) {
+      ContextData.InitContextData();
+    }
 
-      this.initializeApp();
+    this.initializeApp();
 
-      //screenOrientation.lock('landscape-primary');
-      // used for an example of ngFor and navigation
-      this.pages = [
-        { title: '制造数据中心', component: HomePage },
+    //screenOrientation.lock('landscape-primary');
+    // used for an example of ngFor and navigation
+    this.pages = [
+      { title: '制造数据中心', component: HomePage },
       { title: '营销数据中心', component: SmreportPage },
-        //{ title: '', component: SOCountPage }
-      ];
+      //{ title: '', component: SOCountPage }
+    ];
 
-      let TMPDataRefresh = function(datasvrprovider:DatasvrProvider){
-        datasvrprovider.IsNeedUpdate('TMP_SMTransferData').then(flag=>{
-          if(flag){
-            datasvrprovider.GetKeyDepts().then(result=>{
+    let TMPDataRefresh = function (datasvrprovider: DatasvrProvider) {
+      datasvrprovider.IsNeedUpdate('TMP_SMTransferData').then(flag => {
+        if (flag) {
+          datasvrprovider.GetKeyDepts().then(result => {
 
-            });
-            datasvrprovider.SyncLastSMReportData('19').then(result=>{
-              console.log(ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag);
-            });
-          }
-        });
-      };
+          });
+          datasvrprovider.SyncLastSMReportData('19').then(result => {
+            console.log(ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag);
+          });
+        }
+      });
+    };
 
-      let GetKeyDepts = function(datasvrprovider:DatasvrProvider){
-        datasvrprovider.GetKeyDepts().then(result=>{
+    let GetKeyDepts = function (datasvrprovider: DatasvrProvider) {
+      datasvrprovider.GetKeyDepts().then(result => {
 
-        })
-      };
+      })
+    };
 
-      setTimeout(TMPDataRefresh,500,this.datasvr);
-      //setTimeout(GetKeyDepts,1000,this.datasvr);
+    setTimeout(TMPDataRefresh, 500, this.datasvr);
+    //setTimeout(GetKeyDepts,1000,this.datasvr);
 
-      setInterval(TMPDataRefresh,300000,this.datasvr);
-      //setInterval(GetKeyDepts,3600000,this.datasvr);
+    setInterval(TMPDataRefresh, 300000, this.datasvr);
+    //setInterval(GetKeyDepts,3600000,this.datasvr);
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
-        this.statusBar.styleDefault();
-        setTimeout(()=>{
-          this.splashScreen.hide();
-        },100);      
+      this.statusBar.styleDefault();
+      setTimeout(() => {
+        this.splashScreen.hide();
+      }, 100);
     });
   }
 

@@ -1,6 +1,8 @@
 import { dataHelper } from './../../util/helper/data';
-import { mathHelper } from './../../util/helper/math';
+
 import { Params } from './../../app/params';
+import { Base } from './../../common/base';
+
 import { Component } from '@angular/core';
 import { NavController, TextInput, IonicPage, List, ModalController, AlertController, LoadingController } from 'ionic-angular';
 import { ViewChild, ElementRef } from '@angular/core';
@@ -16,7 +18,7 @@ import { SecloginmodelPage } from '../secloginmodel/secloginmodel';
     templateUrl: 'home.html'
 })
 
-export class HomePage {
+export class HomePage extends Base{
 
     public static readonly MFGDeptIds: any = ['制造一部', '制造二部', '制造三部', '制造四部', '制造五部', '制造六部制造七部', '制造九部',
         '制造十一部', '制造十二部', '山东永旭', '临海市奥特休闲用品制造有限公司', '临海市金源工艺品有限公司',
@@ -29,11 +31,6 @@ export class HomePage {
     @ViewChild('manufacturebar') manufacturebar: ElementRef;
 
     @ViewChild('clockcontrol') clockctrl: any
-
-    //模板中需要调用，暂时解决
-    GetFormatValue(coldata, i): string {
-        return mathHelper.GetFormatValue(coldata, i);
-    }
 
     OpenGrossModal(datatypename: any) {
         // let modal = this.modalCtrl.create(GrossmodelPage, {datatype:datatypename},{
@@ -97,10 +94,7 @@ export class HomePage {
                     handler: (data) => {
                         if (data.password === Params.DefaultPWD || Params.DEBUGMODE) {
                             //进度条控件
-                            let loader = this.loadingCtrl.create({
-                                content: "正在读取明细数据..."
-                            });
-                            loader.present();
+                            let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
 
                             let groups: Array<string> = new Array<string>();
                             let datas: any = {};
@@ -318,12 +312,9 @@ export class HomePage {
      * 
      */
     ShowMsg() {
-        let alert = this.alterCtrl.create({
-            title: '程序信息',
-            subTitle: 'client:' + document.documentElement.clientWidth.toString() + ':' + document.documentElement.clientHeight.toString() + '; window:' + window.screen.width.toString() + ':' + window.screen.height.toString(),
-            buttons: ['确定']
-        });
-        alert.present();
+        let title: string = '程序信息';
+        let subTitle: string = 'client:' + document.documentElement.clientWidth.toString() + ':' + document.documentElement.clientHeight.toString() + '; window:' + window.screen.width.toString() + ':' + window.screen.height.toString();
+        super.showAlert(this.alterCtrl, title, subTitle);
     }
 
 
@@ -502,6 +493,7 @@ export class HomePage {
         private alterCtrl: AlertController,
         private loadingCtrl: LoadingController,
     ) {
+        super();
         //初始化上下文
         this.contextdata = ContextData.Create();
     }
@@ -817,12 +809,7 @@ export class HomePage {
                         if (data.password === Params.DefaultPWD || Params.DEBUGMODE) {
                             this._showGroupDetail(mdpt);
                         } else {
-                            let alert = this.alterCtrl.create({
-                                title: '密码错误',
-                                subTitle: '密码错误，请重新输入',
-                                buttons: ['确定']
-                            });
-                            alert.present();
+                            super.showAlert(this.alterCtrl, '密码错误', '密码错误，请重新输入');
                         }
                     }
                 }
@@ -832,12 +819,8 @@ export class HomePage {
     }
 
     private _showGroupDetail(mdpt: string) {
-
-        let loader = this.loadingCtrl.create({
-            content: "正在读取明细数据..."
-        });
-        loader.present();
-
+        let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
+        
         if (mdpt.indexOf('六七部') > -1) {
             mdpt = '制造六部制造七部';
         }
@@ -882,12 +865,7 @@ export class HomePage {
         loader.dismiss();
 
         if (!Object.keys(datas).length) {
-            let alert = this.alterCtrl.create({
-                title: '暂无数据',
-                subTitle: '暂无数据',
-                buttons: ['确定']
-            });
-            alert.present();
+            super.showAlert(this.alterCtrl, '暂无数据', '暂无数据');
             return;
         }
 
