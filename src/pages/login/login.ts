@@ -5,6 +5,8 @@ import { LoginsvrProvider } from '../../providers/loginsvr/loginsvr';
 import { ContextData } from '../../app/context';
 import { SmreportPage } from '../smreport/smreport';
 
+//检查更新service
+import { UpdateService } from "./../../service/update";
 /**
  * Generated class for the LoginPage page.
  *
@@ -21,35 +23,37 @@ export class LoginPage {
   public loginForm: any;
   public backgroundImage = 'assets/imgs/mountin.jpeg';
 
-  logindata:any = {
-    UserCode:'00100001',
-    UserName:'',
-    OrgID:-1,
-    OrgCode:'',
-    OrgName:'',
-    UserPass:'123456',
-    DeptID:'',
-    DeptCode:'',
-    DeptName:'',
-    Location:'',
-    LocationName:'',
-    Token:'',
-    SaveFlag:true
+  logindata: any = {
+    UserCode: '00100001',
+    UserName: '',
+    OrgID: -1,
+    OrgCode: '',
+    OrgName: '',
+    UserPass: '123456',
+    DeptID: '',
+    DeptCode: '',
+    DeptName: '',
+    Location: '',
+    LocationName: '',
+    Token: '',
+    SaveFlag: true
   }
 
-  contextdata:ContextData;
+  contextdata: ContextData;
 
   constructor(
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public app: App,
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
-    private loginSvrTool:LoginsvrProvider,
+    private loginSvrTool: LoginsvrProvider,
+    private updateServ: UpdateService
   ) {
-        //初始化上下文
-        this.contextdata = ContextData.Create();
-   }
+    //初始化上下文
+    this.contextdata = ContextData.Create();
+    this.updateServ.checkUpdate();
+  }
 
   login() {
     const loading = this.loadingCtrl.create({
@@ -64,7 +68,7 @@ export class LoginPage {
 
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     //首页已经写死
     // let viewport = document.querySelector("meta[name=viewport]");
     // let content:string = 'viewport-fit=cover, width=device-width, initial-scale='+

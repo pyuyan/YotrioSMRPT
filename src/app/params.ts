@@ -16,4 +16,21 @@ export class Params {
      * ESB入口
      */
     public static readonly ESBPortal: string = 'http://192.168.0.197:8280';
+
+
+    /**
+     * ****************************************
+     * 以下配置为 app 更新相关的地址参数
+     * ****************************************
+     */
+
+    /**
+     * app更新检查的基准地址
+     */
+    public static readonly AppUpdateBaseUrl: string = 'http://192.166.0.161:2222/';
+    /**
+     * app更新检查的地址
+     */
+    public static readonly AppUpdateCheckUrl: string = Params.AppUpdateBaseUrl + 'app-version.json';
+
 }
