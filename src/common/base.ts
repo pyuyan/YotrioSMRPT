@@ -32,7 +32,7 @@ export abstract class Base {
     protected showLoading(
         loadingCtrl: LoadingController,
         message: string
-    ): Loading {
+    ): any {
         let loader = loadingCtrl.create({
             content: message,
             dismissOnPageChange: true //页面变化的时候自动关闭 loading
@@ -57,7 +57,7 @@ export abstract class Base {
         title: string,
         subTitle: string,
         buttons: Array<string> = ['确定']
-    ): Alert {
+    ): any {
         let alert = alertCtrl.create({
             title: title,
             subTitle: subTitle,
