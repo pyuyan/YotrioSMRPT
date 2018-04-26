@@ -785,6 +785,9 @@ export class HomePage extends Base{
 
     showGroupDetail(mdpt: string) {
 
+        //TODO 点击时候就进行异步数据运算，并且保存到缓存中
+        
+
         let alert = this.alterCtrl.create({
             title: '身份验证',
             message: '请输入安全密码',
@@ -820,7 +823,7 @@ export class HomePage extends Base{
 
     private _showGroupDetail(mdpt: string) {
         let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
-        
+        //TODO 去读缓存 若有
         if (mdpt.indexOf('六七部') > -1) {
             mdpt = '制造六部制造七部';
         }

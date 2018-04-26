@@ -53,7 +53,7 @@ export class UpdateService {
             .then(res => {
                 console.log('服务器的版本数据:');
                 console.log(res)
-
+                //TODO 考虑到没有写入权限时候的弹窗提示 2018年4月26日17:04:01
                 let currentVer = this.versionNumber;
                 let targetVer = res['version'];
                 if (mathHelper.versionCompare(targetVer, currentVer)) {
@@ -69,7 +69,7 @@ export class UpdateService {
 
     doUpdate(apkUrl: string, desc: string) {
         this.alertCtrl.create({
-            title: '发现新版本,是否立即升级？',
+            title: '发现新版本,是否升级？',
             subTitle: desc,
             buttons: [{
                 text: '取消'
