@@ -1,13 +1,37 @@
 import { NavController, IonicPage, ModalController, LoadingController, AlertController, ToastController, Toast } from 'ionic-angular';
+import { ViewChild, ElementRef } from '@angular/core';
 
 import { mathHelper } from './../util/helper/math';
+
+import { Params } from './../app/params';
 
 /**
  * 共用抽象类
  */
 export abstract class Base {
 
+    /**
+     * 用于时间显示
+     */
+    timevalue: string = (new Date()).toLocaleString();
+
+    @ViewChild('clockcontrol') clockctrl: any
+
     constructor() { }
+
+    /**
+     * 显示当前时间
+     */
+    showCurrentTime() {
+        if (this.clockctrl) {
+            setInterval(function (clock_ctrl) {
+                let timevalue: string = (new Date()).toLocaleString();
+                if (clock_ctrl) {
+                    clock_ctrl.setValue(timevalue);
+                }
+            }, 1000, this.clockctrl);
+        }
+    }
 
     /**
      * 格式化显示，模板调用
@@ -65,5 +89,29 @@ export abstract class Base {
         });
         alert.present();
         return alert;
+    }
+
+    /**
+     * 调试模式下显示打印的内容
+     * @param message 要打印的内容
+     * @param type 类型
+     */
+    protected debug(message: any, type: string = 'log') {
+        switch (type) {
+            case 'log':
+                Params.DEBUGMODE && console.log(message);
+                break;
+            case 'error':
+            case 'err':
+            case 'failed':
+                Params.DEBUGMODE && console.error(message);
+                break;
+            case 'group':
+                Params.DEBUGMODE && console.group(message);
+                break;
+            default:
+                Params.DEBUGMODE && console.log(message);
+                break;
+        }
     }
 }

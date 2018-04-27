@@ -383,8 +383,6 @@ export class SmreportPage extends Base {
         ]
     }
 
-    timevalue: any = (new Date()).toLocaleString();
-
     contextdata: ContextData;
 
     constructor(
@@ -599,14 +597,7 @@ export class SmreportPage extends Base {
      */
     ionViewDidLoad() {
         //时钟刷新
-        if (this.clockctrl) {
-            setInterval(function (clock_ctrl) {
-                let timevalue = (new Date()).toLocaleString();
-                if (clock_ctrl) {
-                    clock_ctrl.setValue(timevalue);
-                }
-            }, 1000, this.clockctrl);
-        }
+        super.showCurrentTime();
 
         //数据值定时刷新 1 分钟刷新
         setInterval(this.updateFunction, 60000, this.tablevalues, this.chartObjList, false);
@@ -614,11 +605,11 @@ export class SmreportPage extends Base {
 
 
     onProfitbarClick(params: any) {
-        console.log(params);
+        super.debug(params);
     }
 
     onManufacturepieClick(params: any) {
-        console.log(params);
+        super.debug(params);
     }
 
     /**
@@ -644,7 +635,7 @@ export class SmreportPage extends Base {
                     placeholder: '',
                     type: 'password',
                     handler: input => {
-                        console.log(input);
+                        super.debug(input);
                     }
                 },
             ],
@@ -686,10 +677,10 @@ export class SmreportPage extends Base {
         let loader = super.showLoading(this.loadingCtrl, "正在读取数据...");
 
         this.cacheServ.getData(DetailType.RATE).then(datas => {
-            console.log('_showRateDetail 缓存获取数据')
-            console.log(datas)
+            super.debug('_showRateDetail 缓存获取数据')
+            super.debug(datas)
             if (datas == null || datas === null) {
-                console.log('_showRateDetail 缓存未命中')
+                super.debug('_showRateDetail 缓存未命中')
                 datas = this.preProcessDetail();
             }
             loader.dismiss();
@@ -716,17 +707,17 @@ export class SmreportPage extends Base {
                 setTimeout(() => showIcon = true, 200);
             });
             modal.present();
-        }).catch(err => { console.log('cache 获取数据失败' + err) });;
+        }).catch(err => { super.debug('cache 获取数据失败' + err) });;
     }
 
     private _showGroupDetail(params: any) {
         let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
 
         this.cacheServ.getData(DetailType.GROUP + params).then(res => {
-            console.log('_showGroupDetail 缓存获取数据')
-            console.log(res)
+            super.debug('_showGroupDetail 缓存获取数据')
+            super.debug(res)
             if (res == null || res === null) {
-                console.log('_showGroupDetail 缓存未命中')
+                super.debug('_showGroupDetail 缓存未命中')
                 res = this.preProcessGroup(params);
             }
             loader.dismiss();
@@ -746,7 +737,7 @@ export class SmreportPage extends Base {
                 setTimeout(() => showIcon = true, 200);
             });
             modal.present();
-        }).catch(err => { console.log('cache 获取数据失败' + err) });
+        }).catch(err => { super.debug('cache 获取数据失败' + err) });
     }
 
     private preProcessDetail() {

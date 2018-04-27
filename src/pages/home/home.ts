@@ -30,8 +30,6 @@ export class HomePage extends Base {
 
     @ViewChild('manufacturebar') manufacturebar: ElementRef;
 
-    @ViewChild('clockcontrol') clockctrl: any
-
     OpenGrossModal(datatypename: any) {
         // let modal = this.modalCtrl.create(GrossmodelPage, {datatype:datatypename},{
         //     cssClass: "my-modal"
@@ -78,7 +76,7 @@ export class HomePage extends Base {
                     placeholder: '',
                     type: 'password',
                     handler: input => {
-                        console.log(input);
+                        super.debug(input);
                     }
                 },
             ],
@@ -317,7 +315,6 @@ export class HomePage extends Base {
         super.showAlert(this.alterCtrl, title, subTitle);
     }
 
-
     colors: any = ['#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#59DF97'];
     ManufactureDatas: any = {
         color: this.colors,
@@ -482,8 +479,6 @@ export class HomePage extends Base {
             }
         ]
     };
-
-    timevalue: any = (new Date()).toLocaleString();
 
     contextdata: ContextData;
 
@@ -767,21 +762,14 @@ export class HomePage extends Base {
      */
     ionViewDidLoad() {
         //时钟刷新
-        if (this.clockctrl) {
-            setInterval(function (clock_ctrl) {
-                let timevalue = (new Date()).toLocaleString();
-                if (clock_ctrl) {
-                    clock_ctrl.setValue(timevalue);
-                }
-            }, 1000, this.clockctrl);
-        }
+        super.showCurrentTime();
 
         //数据值定时刷新 1 分钟刷新
         setInterval(this.updateFunction, 60000, this.tablevalues, this.chartObjList, false);
     }
 
     OnManufactureBarClick(params: any) {
-        console.log(params);
+        super.debug(params);
     }
 
     showGroupDetail(mdpt: string) {
@@ -803,7 +791,7 @@ export class HomePage extends Base {
                     placeholder: '',
                     type: 'password',
                     handler: input => {
-                        console.log(input);
+                        super.debug(input);
                     }
                 },
             ],
@@ -831,10 +819,10 @@ export class HomePage extends Base {
         let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
         //去读缓存
         this.cacheServ.getData(mdpt).then(res => {
-            console.log('home 缓存获取数据')
-            console.log(res)
+            super.debug('home 缓存获取数据')
+            super.debug(res)
             if(res == null || res === null) {
-                console.log('home 缓存未命中')                
+                super.debug('home 缓存未命中')                
                 res = this.preProcessData(mdpt);
             }
             loader.dismiss();
@@ -853,7 +841,7 @@ export class HomePage extends Base {
                 setTimeout(() => showIcon = true, 200);
             });
             modal.present();
-        }).catch(err => { console.log('cache 获取数据失败' + err) });
+        }).catch(err => { super.debug('cache 获取数据失败' + err) });
     }
 
     /**

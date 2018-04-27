@@ -52,6 +52,7 @@ export class LoginPage {
   ) {
     //初始化上下文
     this.contextdata = ContextData.Create();
+    //这里做 更新检测
     this.updateServ.checkUpdate();
   }
 

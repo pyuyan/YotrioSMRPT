@@ -15,10 +15,8 @@ export class CacheService {
     constructor(public storage: Storage) { }
 
     setData(key: string = '', value: any) {
-        console.log('cache 设置数据')
         if (!value || Object.keys(value).length == 0 || value.length == 0) return;
         let _key: string = this.getRealKey(key);
-        console.log('cache key = ' + _key);
         return this.storage.set(_key, value);
     }
 
