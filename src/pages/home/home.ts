@@ -1,5 +1,5 @@
+import { CacheService } from './../../service/cache';
 import { dataHelper } from './../../util/helper/data';
-
 import { Params } from './../../app/params';
 import { Base } from './../../common/base';
 
@@ -18,7 +18,7 @@ import { SecloginmodelPage } from '../secloginmodel/secloginmodel';
     templateUrl: 'home.html'
 })
 
-export class HomePage extends Base{
+export class HomePage extends Base {
 
     public static readonly MFGDeptIds: any = ['制造一部', '制造二部', '制造三部', '制造四部', '制造五部', '制造六部制造七部', '制造九部',
         '制造十一部', '制造十二部', '山东永旭', '临海市奥特休闲用品制造有限公司', '临海市金源工艺品有限公司',
@@ -492,6 +492,7 @@ export class HomePage extends Base{
         public modalCtrl: ModalController,
         private alterCtrl: AlertController,
         private loadingCtrl: LoadingController,
+        private cacheServ: CacheService
     ) {
         super();
         //初始化上下文
@@ -785,8 +786,13 @@ export class HomePage extends Base{
 
     showGroupDetail(mdpt: string) {
 
-        //TODO 点击时候就进行异步数据运算，并且保存到缓存中
-        
+        if (mdpt.indexOf('六七部') > -1) {
+            mdpt = '制造六部制造七部';
+        }
+        //点击时候就进行异步数据运算，并且保存到缓存中，实际16ms+后处理
+        setTimeout(() => {
+            this.preProcessData(mdpt);
+        }, 10);
 
         let alert = this.alterCtrl.create({
             title: '身份验证',
@@ -823,71 +829,31 @@ export class HomePage extends Base{
 
     private _showGroupDetail(mdpt: string) {
         let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
-        //TODO 去读缓存 若有
-        if (mdpt.indexOf('六七部') > -1) {
-            mdpt = '制造六部制造七部';
-        }
-
-        let groups: Array<string> = [mdpt];
-        let datas: any = {};
-        let grouptype: any = '';
-
-        let orginalData: Array<any> = ContextData.OriginalDatas[ContextData.TableName].DataValue;
-
-        orginalData.forEach(datarow => {
-
-            let selfflag = datarow.SelfFlag; //内部外部
-            let mfgdept = datarow.MFGDept; //生产部门
-            let customer = datarow.Customer; //客户
-
-            //只要指定的制造部数据
-            if (selfflag && customer && (mfgdept.indexOf(mdpt) > -1 || mdpt.indexOf(mfgdept) > -1)) {
-                if (!datas[mdpt]) {
-                    datas[mdpt] = {
-                        MFGDepts: [customer],   //所有客户
-                        DetailDatas: {}
-                    }
-                }
-
-                let assembleData: Array<any> = [dataHelper.assemble(datarow)];
-
-                if (!datas[mdpt].DetailDatas[customer]) {
-                    datas[mdpt].DetailDatas[customer] = assembleData;
-                } else {
-                    let deptidx = datas[mdpt].MFGDepts.indexOf(customer);
-                    if (deptidx < 0) {
-                        datas[mdpt].MFGDepts.push(customer);
-                        datas[mdpt].DetailDatas[customer] = assembleData;
-                    } else {
-                        datas[mdpt].DetailDatas[customer].push(assembleData[0]);
-                    }
-                }
+        //去读缓存
+        this.cacheServ.getData(mdpt).then(res => {
+            console.log('home 缓存获取数据')
+            console.log(res)
+            if(res == null || res === null) {
+                console.log('home 缓存未命中')                
+                res = this.preProcessData(mdpt);
             }
-        });
+            loader.dismiss();
+            if (!Object.keys(res.groupdatas).length) {
+                super.showAlert(this.alterCtrl, '暂无数据', '暂无数据');
+                return;
+            }
 
-        loader.dismiss();
-
-        if (!Object.keys(datas).length) {
-            super.showAlert(this.alterCtrl, '暂无数据', '暂无数据');
-            return;
-        }
-
-        let expanded: any = true;
-        let showIcon: any = false;
-        let contracted: any = !expanded;
-        setTimeout(() => {
-            const modal = this.modalCtrl.create(MfgcountmodelPage, {
-                groupset: groups,
-                groupdatas: datas,
-                groupindex: 0
-            });
+            let expanded: any = true;
+            let showIcon: any = false;
+            let contracted: any = !expanded;
+            const modal = this.modalCtrl.create(MfgcountmodelPage, res);
             modal.onDidDismiss(data => {
                 expanded = false;
                 contracted = !expanded;
                 setTimeout(() => showIcon = true, 200);
             });
             modal.present();
-        }, 100);
+        }).catch(err => { console.log('cache 获取数据失败' + err) });
     }
 
     /**
@@ -960,5 +926,52 @@ export class HomePage extends Base{
             }
         });
         return filteredData;
+    }
+
+    private preProcessData(mdpt) {
+        let groups: Array<string> = [mdpt];
+        let datas: any = {};
+        let grouptype: any = '';
+
+        let orginalData: Array<any> = ContextData.OriginalDatas[ContextData.TableName].DataValue;
+
+        orginalData.forEach(datarow => {
+
+            let selfflag = datarow.SelfFlag; //内部外部
+            let mfgdept = datarow.MFGDept; //生产部门
+            let customer = datarow.Customer; //客户
+
+            //只要指定的制造部数据
+            if (selfflag && customer && (mfgdept.indexOf(mdpt) > -1 || mdpt.indexOf(mfgdept) > -1)) {
+                if (!datas[mdpt]) {
+                    datas[mdpt] = {
+                        MFGDepts: [customer],   //所有客户
+                        DetailDatas: {}
+                    }
+                }
+
+                let assembleData: Array<any> = [dataHelper.assemble(datarow)];
+
+                if (!datas[mdpt].DetailDatas[customer]) {
+                    datas[mdpt].DetailDatas[customer] = assembleData;
+                } else {
+                    let deptidx = datas[mdpt].MFGDepts.indexOf(customer);
+                    if (deptidx < 0) {
+                        datas[mdpt].MFGDepts.push(customer);
+                        datas[mdpt].DetailDatas[customer] = assembleData;
+                    } else {
+                        datas[mdpt].DetailDatas[customer].push(assembleData[0]);
+                    }
+                }
+            }
+        });
+
+        let res = {
+            groupset: groups,
+            groupdatas: datas,
+            groupindex: 0
+        };
+        this.cacheServ.setData(mdpt, res);
+        return res;
     }
 }

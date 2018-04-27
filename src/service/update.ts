@@ -1,4 +1,4 @@
-import { Platform, AlertController } from 'ionic-angular';
+import { Platform, AlertController, LoadingController, Content } from 'ionic-angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -20,6 +20,19 @@ export class UpdateService {
      */
     versionNumber: string = '0.0.0';
 
+    /**
+     * apk下载地址
+     */
+    apkUrl: string = '';
+    /**
+     * ios跳转的地址
+     */
+    ipaUrl: string = '';
+    /**
+     * 升级描述
+     */
+    updateDesc: string = '';
+
     headers = new HttpHeaders({
         'Content-Type': 'application/json'
     });
@@ -31,7 +44,8 @@ export class UpdateService {
         private transfer: FileTransfer,
         public platform: Platform,
         public alertCtrl: AlertController,
-        public http: HttpClient
+        public http: HttpClient,
+        public loadingCtrl: LoadingController
     ) {
         if (this.platformCouldUpdate()) {
             this.appVersion.getVersionNumber().then(v => {
@@ -58,7 +72,13 @@ export class UpdateService {
                 let targetVer = res['version'];
                 if (mathHelper.versionCompare(targetVer, currentVer)) {
                     console.log(targetVer)
-                    this.doUpdate(res['app_url_android'], res['desc'])
+                    if (res['app_url_android']) {
+                        this.apkUrl = res['app_url_android'];
+                        this.updateDesc = res['desc'] || '';
+                        this.doUpdate();
+                    } else {
+                        console.log('服务器获取版本数据成功，无安卓版本下载地址')
+                    }
                 }
             })
             .catch(err => {
@@ -67,33 +87,43 @@ export class UpdateService {
 
     }
 
-    doUpdate(apkUrl: string, desc: string) {
+    doUpdate(force: boolean = true) {
+
+        if (force) {
+            return this.downloadApp();
+        }
         this.alertCtrl.create({
             title: '发现新版本,是否升级？',
-            subTitle: desc,
+            subTitle: this.updateDesc,
             buttons: [{
                 text: '取消'
             }, {
                 text: '确定',
                 handler: () => {
-                    this.downloadApp(apkUrl);
+                    this.downloadApp();
                 }
             }]
         }).present();
     }
 
-    downloadApp(apkUrl: string) {
-        let alert = this.alertCtrl.create({
-            title: '下载进度：0%',
-            enableBackdropDismiss: false,
-            buttons: ['后台下载']
+    downloadApp() {
+        const desc = "系统版本升级中，请勿关机......下载进度：";
+        // let alert = this.alertCtrl.create({
+        //     title: '下载进度：0%',
+        //     enableBackdropDismiss: false,
+        //     buttons: ['后台下载']
+        // });
+        // alert.present();
+        let loading = this.loadingCtrl.create({
+            content: desc + '0%',
+            dismissOnPageChange: false
         });
-        alert.present();
+        loading.present();
 
         const fileTransfer: FileTransferObject = this.transfer.create();
         const apk = this.file.externalRootDirectory + 'Yotiro.apk'; //apk保存的目录
 
-        fileTransfer.download(apkUrl, apk).then(() => {
+        fileTransfer.download(this.apkUrl, apk).then(() => {
             this.fileOpener.open(apk, 'application/vnd.android.package-archive').then(() => {
                 console.log('File is opened')
             }).catch(e => {
@@ -103,10 +133,12 @@ export class UpdateService {
         fileTransfer.onProgress((event: ProgressEvent) => {
             let num = Math.floor(event.loaded / event.total * 100);
             if (num === 100) {
-                alert.dismiss();
+                // alert.dismiss();
+                loading.dismiss();
             } else {
-                let title = document.getElementsByClassName('alert-title')[0];
-                title && (title.innerHTML = '下载进度：' + num + '%');
+                // let title = document.getElementsByClassName('alert-title')[0];
+                // title && (title.innerHTML = '下载进度：' + num + '%');
+                loading.setContent(desc + num + '%');
             }
         });
     }

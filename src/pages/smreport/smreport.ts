@@ -1,4 +1,5 @@
 import { dataHelper } from './../../util/helper/data';
+import { CacheService } from './../../service/cache';
 
 import { Params } from './../../app/params';
 import { Base } from './../../common/base';
@@ -25,7 +26,7 @@ export enum DetailType {
     selector: 'page-smreport',
     templateUrl: 'smreport.html',
 })
-export class SmreportPage extends Base{
+export class SmreportPage extends Base {
 
     @ViewChild('clockcontrol') clockctrl: any
 
@@ -392,6 +393,7 @@ export class SmreportPage extends Base{
         private loadingCtrl: LoadingController,
         private alterCtrl: AlertController,
         private echartsvr: NgxEchartsService,
+        private cacheServ: CacheService
     ) {
         super();
         //初始化上下文
@@ -623,6 +625,16 @@ export class SmreportPage extends Base{
      * 营销数据中心点击显示详情事件入口
      */
     showDetail(type: string, args?: any) {
+
+        //点击时候就进行异步数据运算，并且保存到缓存中，实际16ms+后处理
+        setTimeout(() => {
+            if (type === DetailType.RATE) {
+                this.preProcessDetail();
+            } else if (type === DetailType.GROUP) {
+                this.preProcessGroup(args);
+            }
+        }, 10); //end 这里可以考虑多态优化下
+
         let alert = this.alterCtrl.create({
             title: '身份验证',
             message: '请输入安全密码',
@@ -673,6 +685,71 @@ export class SmreportPage extends Base{
         //对数据进行处理，主要是计算 产值，毛利率
         let loader = super.showLoading(this.loadingCtrl, "正在读取数据...");
 
+        this.cacheServ.getData(DetailType.RATE).then(datas => {
+            console.log('_showRateDetail 缓存获取数据')
+            console.log(datas)
+            if (datas == null || datas === null) {
+                console.log('_showRateDetail 缓存未命中')
+                datas = this.preProcessDetail();
+            }
+            loader.dismiss();
+
+            if (!Object.keys(datas).length) {
+                let alert = this.alterCtrl.create({
+                    title: '暂无数据',
+                    subTitle: '暂无数据',
+                    buttons: ['确定']
+                });
+                alert.present();
+                return;
+            }
+
+            let expanded: any = true;
+            let showIcon: any = false;
+            let contracted: any = !expanded;
+            const modal = this.modalCtrl.create(SmreportmodalPage, {
+                data: datas
+            });
+            modal.onDidDismiss(data => {
+                expanded = false;
+                contracted = !expanded;
+                setTimeout(() => showIcon = true, 200);
+            });
+            modal.present();
+        }).catch(err => { console.log('cache 获取数据失败' + err) });;
+    }
+
+    private _showGroupDetail(params: any) {
+        let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
+
+        this.cacheServ.getData(DetailType.GROUP + params).then(res => {
+            console.log('_showGroupDetail 缓存获取数据')
+            console.log(res)
+            if (res == null || res === null) {
+                console.log('_showGroupDetail 缓存未命中')
+                res = this.preProcessGroup(params);
+            }
+            loader.dismiss();
+
+            if (!Object.keys(res.groupdatas).length) {
+                super.showAlert(this.alterCtrl, '暂无数据', '暂无数据');
+                return;
+            }
+
+            let expanded: any = true;
+            let showIcon: any = false;
+            let contracted: any = !expanded;
+            const modal = this.modalCtrl.create(MfgcountmodelPage, res);
+            modal.onDidDismiss(data => {
+                expanded = false;
+                contracted = !expanded;
+                setTimeout(() => showIcon = true, 200);
+            });
+            modal.present();
+        }).catch(err => { console.log('cache 获取数据失败' + err) });
+    }
+
+    private preProcessDetail() {
         let datas: any[] = [];
         ContextData.OriginalDatas[ContextData.TableName].DataValue.forEach(datarow => {
             datas.push(dataHelper.assemble(datarow));
@@ -683,38 +760,12 @@ export class SmreportPage extends Base{
             return a.RealGrossRate > b.RealGrossRate ? 1 : -1;
         });
 
-        loader.dismiss();
-
-        if (!Object.keys(datas).length) {
-            let alert = this.alterCtrl.create({
-                title: '暂无数据',
-                subTitle: '暂无数据',
-                buttons: ['确定']
-            });
-            alert.present();
-            return;
-        }
-
-        let expanded: any = true;
-        let showIcon: any = false;
-        let contracted: any = !expanded;
-        setTimeout(() => {
-            const modal = this.modalCtrl.create(SmreportmodalPage, {
-                data: datas
-            });
-            modal.onDidDismiss(data => {
-                expanded = false;
-                contracted = !expanded;
-                setTimeout(() => showIcon = true, 200);
-            });
-            modal.present();
-        }, 100);
+        this.cacheServ.setData(DetailType.RATE, datas);
+        return datas;
     }
 
-    private _showGroupDetail(params: any) {
-        let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
-
-        let saleDept = params;
+    private preProcessGroup(dept) {
+        let saleDept = dept;
         let groups: Array<string> = [saleDept];
         let datas: any = {};
         let grouptype: any = '';
@@ -757,29 +808,12 @@ export class SmreportPage extends Base{
             }
         });
 
-        loader.dismiss();
-
-        if (!Object.keys(datas).length) {
-            super.showAlert(this.alterCtrl, '暂无数据', '暂无数据');
-            return;
-        }
-
-        let expanded: any = true;
-        let showIcon: any = false;
-        let contracted: any = !expanded;
-        setTimeout(() => {
-            const modal = this.modalCtrl.create(MfgcountmodelPage, {
-                groupset: groups,
-                groupdatas: datas,
-                groupindex: 0
-            });
-            modal.onDidDismiss(data => {
-                expanded = false;
-                contracted = !expanded;
-                setTimeout(() => showIcon = true, 200);
-            });
-            modal.present();
-        }, 100);
+        let res = {
+            groupset: groups,
+            groupdatas: datas,
+            groupindex: 0
+        };
+        this.cacheServ.setData(DetailType.GROUP + saleDept, res);
+        return res;
     }
-
 }

@@ -11,6 +11,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { LoginsvrProvider } from '../providers/loginsvr/loginsvr';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
 import { UpdateService } from '../service/update';
+import { CacheService } from '../service/cache';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
@@ -60,7 +61,7 @@ import { SmreportmodalPageModule } from '../pages/smreportmodal/smreportmodal.mo
     ScreenOrientation,
     LoginsvrProvider,
     DatasvrProvider,
-    UpdateService
+    UpdateService, CacheService
   ],
 })
 export class AppModule {}
