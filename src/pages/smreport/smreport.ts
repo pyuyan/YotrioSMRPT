@@ -686,12 +686,7 @@ export class SmreportPage extends Base {
             loader.dismiss();
 
             if (!Object.keys(datas).length) {
-                let alert = this.alterCtrl.create({
-                    title: '暂无数据',
-                    subTitle: '暂无数据',
-                    buttons: ['确定']
-                });
-                alert.present();
+                super.showAlert(this.alterCtrl, '暂无数据', '暂无数据');
                 return;
             }
 

@@ -27,7 +27,7 @@ export class Params {
     /**
      * app更新检查的基准地址
      */
-    public static readonly AppUpdateBaseUrl: string = 'http://192.166.0.161:2222/';
+    public static readonly AppUpdateBaseUrl: string = 'http://192.168.0.197:2222/';
     /**
      * app更新检查的地址
      */

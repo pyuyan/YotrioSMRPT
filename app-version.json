@@ -1,0 +1,8 @@
+{
+    "version": "1.0.5",
+    "release_date": "2018年4月27日15:21:18",
+    "desc": "版本：1.0.5 更新内容：更新地址正式启用",
+    "app_name": "yotrioSMRPT",
+    "app_url_android": "http://192.168.0.197:2222/android-armv7-debug.apk",
+    "app_url_iOS": ""
+}
