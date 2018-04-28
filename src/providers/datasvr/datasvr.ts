@@ -185,5 +185,22 @@ export class DatasvrProvider {
     });
   }
 
+  /**
+   * 同步税务数据到本地
+   * @param beginyear 开始年份 默认今年
+   * @param beginmonth 开始月份 默认今年第一个月
+   * @param endyear 结束年份 默认今年
+   * @param endmonth 结束月份，默认当前月
+   */
+  syncYearTaxData(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+    return this.CallYearTaxAPI(beginyear, beginmonth, endyear, endmonth).subscribe(res => {
+      let tmp_taxData = res['TaxDatas']['TaxData'];
+      if (tmp_taxData.length) {
+        ContextData.TaxDatas[ContextData.TableName].DataValue = tmp_taxData;
+        ContextData.TaxDatas[ContextData.TableName].UpdateFlag = true;
+      }
+    });
+  }
+
 
 }

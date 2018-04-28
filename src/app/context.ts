@@ -37,6 +37,16 @@ export class ContextData {
   }
 
   /**
+   * 税务数据
+   */
+  static TaxDatas: any = {
+    TMP_SMTransferData: {
+      UpdateFlag: false,
+      DataValue: []
+    },
+  }
+
+  /**
    * 设置新时间戳
    * @param tablename
    * @param timemark

@@ -588,10 +588,6 @@ export class SmreportPage extends Base {
         }
     }
 
-    ionViewDidEnter() {
-
-    }
-
     /**
      * 页面首次加载后
      */

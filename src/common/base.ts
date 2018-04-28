@@ -2,8 +2,7 @@ import { NavController, IonicPage, ModalController, LoadingController, AlertCont
 import { ViewChild, ElementRef } from '@angular/core';
 
 import { mathHelper } from './../util/helper/math';
-
-import { Params } from './../app/params';
+import { debugHelper } from './../util/helper/debug';
 
 /**
  * 共用抽象类
@@ -97,21 +96,6 @@ export abstract class Base {
      * @param type 类型
      */
     protected debug(message: any, type: string = 'log') {
-        switch (type) {
-            case 'log':
-                Params.DEBUGMODE && console.log(message);
-                break;
-            case 'error':
-            case 'err':
-            case 'failed':
-                Params.DEBUGMODE && console.error(message);
-                break;
-            case 'group':
-                Params.DEBUGMODE && console.group(message);
-                break;
-            default:
-                Params.DEBUGMODE && console.log(message);
-                break;
-        }
+        debugHelper.show(message, type);
     }
 }

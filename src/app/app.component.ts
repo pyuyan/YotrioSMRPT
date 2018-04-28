@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { ContextData } from './context';
 import { SmreportPage } from '../pages/smreport/smreport';
+import { TaxPage } from '../pages/tax/tax';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
 import { Params } from './params';
 
@@ -41,7 +42,8 @@ export class YotrioSMRPT {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: '制造数据中心', component: HomePage },
-      { title: '营销数据中心', component: SmreportPage },
+      { title: '营销数据中心', component: SmreportPage }, 
+      { title: '税收信息中心', component: TaxPage }, 
       //{ title: '', component: SOCountPage }
     ];
 
@@ -54,6 +56,8 @@ export class YotrioSMRPT {
           datasvrprovider.SyncLastSMReportData('19').then(result => {
             console.log(ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag);
           });
+          //年度税务数据
+          datasvrprovider.syncYearTaxData();
         }
       });
     };
