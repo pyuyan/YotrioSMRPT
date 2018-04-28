@@ -30,7 +30,8 @@ export class dataHelper {
             TransferMoney: mathHelper.GetFormatValue(tmp_tranfermny, 1),
             GrossRate: mathHelper.GetFormatValue(tmp_GrossRate, 4),
             ItemCode: datarow.ItemCode,
-            RealGrossRate: tmp_GrossRate
+            RealGrossRate: tmp_GrossRate,
+            Customer: datarow.Customer
         };
     }
 }
