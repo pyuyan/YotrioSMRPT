@@ -4,7 +4,11 @@ import { ContextData } from '../../app/context';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { HttpService } from "../../service/http";
+import { DateScene, DateService } from '../../service/date';
+import { debugHelper } from './../../util/helper/debug';
+
 import { DatePipe } from '@angular/common';
+
 /*
 连接ESB系统获取数据
 */
@@ -23,7 +27,8 @@ export class DatasvrProvider {
   constructor(
     public http: HttpClient,
     public platform: Platform,
-    public httpServ: HttpService
+    public httpServ: HttpService,
+    public dateServ: DateService,
   ) {
     //初始化上下文
     this.contextdata = ContextData.Create();
@@ -187,12 +192,21 @@ export class DatasvrProvider {
 
   /**
    * 同步税务数据到本地
-   * @param beginyear 开始年份 默认今年
-   * @param beginmonth 开始月份 默认今年第一个月
-   * @param endyear 结束年份 默认今年
-   * @param endmonth 结束月份，默认当前月
    */
-  syncYearTaxData(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+  syncYearTaxData() {
+
+    //声明为 Injectable() 的是全局单例，所以我们这里能取到 dateServ 在其他单页中设置的值，这样能动态取到不同时间段数据
+    let dateRange = this.dateServ.getDateRange(DateScene.TAX);
+    debugHelper.log('dateRange')
+    debugHelper.log(dateRange)
+    let beginyear = 2018, beginmonth = 1, endyear = 2018, endmonth = 0;
+    if (Object.keys(dateRange).length) {
+      beginyear = dateRange.beginyear;
+      beginmonth = dateRange.beginmonth;
+      endyear = dateRange.endyear;
+      endmonth = dateRange.endmonth;
+    }
+
     return this.CallYearTaxAPI(beginyear, beginmonth, endyear, endmonth).subscribe(res => {
       let tmp_taxData = res['TaxDatas']['TaxData'];
       if (tmp_taxData.length) {

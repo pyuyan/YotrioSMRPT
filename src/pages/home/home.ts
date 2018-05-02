@@ -1,3 +1,4 @@
+import { arrayHelper } from './../../util/helper/array';
 import { CacheService } from './../../service/cache';
 import { dataHelper } from './../../util/helper/data';
 import { Params } from './../../app/params';
@@ -116,7 +117,7 @@ export class HomePage extends Base {
                             //按照料号 2018年4月20日16:40:41 slyfalcon
                             let orginalData: Array<any> = ContextData.OriginalDatas[ContextData.TableName].DataValue;
                             if (type === 2) {
-                                let itemGroupData: any = HomePage.getItemCodeGroupData(orginalData);
+                                let itemGroupData: any = arrayHelper._group(orginalData, 'ItemCode');
                                 for (let key in itemGroupData) {
                                     let datarows: any = itemGroupData[key];
                                     let orderQty: number = 0; //相同料号所有订单数量
@@ -821,8 +822,8 @@ export class HomePage extends Base {
         this.cacheServ.getData(mdpt).then(res => {
             super.debug('home 缓存获取数据')
             super.debug(res)
-            if(res == null || res === null) {
-                super.debug('home 缓存未命中')                
+            if (res == null || res === null) {
+                super.debug('home 缓存未命中')
                 res = this.preProcessData(mdpt);
             }
             loader.dismiss();
@@ -851,7 +852,7 @@ export class HomePage extends Base {
      */
     private static dataByItemCode(dataSet: Array<any>, gourpData: Array<any>): Array<any> {
 
-        let filteredData: any = HomePage.getItemCodeGroupData(dataSet);
+        let filteredData: any = arrayHelper._group(dataSet, 'ItemCode');
         for (let key in filteredData) {
             let datarows: any = filteredData[key];
             let orderQty: number = 0; //相同料号所有订单数量
@@ -895,25 +896,6 @@ export class HomePage extends Base {
         }
 
         return gourpData;
-    }
-
-    /**
-     * 获取相同料号对象集合
-     * @param  {Array<any>} dataSet [原始接口数据]
-     * @return {Array<any>}
-     */
-    private static getItemCodeGroupData(dataSet: Array<any>): any {
-        //这里按照相同料号组装一个对象数据
-        let filteredData: any = {};
-        dataSet.forEach(datarow => {
-            let itemCode: string = datarow.ItemCode;
-            if (!filteredData[itemCode]) {
-                filteredData[itemCode] = [datarow];
-            } else {
-                filteredData[itemCode].push(datarow);
-            }
-        });
-        return filteredData;
     }
 
     private preProcessData(mdpt) {

@@ -13,6 +13,7 @@ import { DatasvrProvider } from '../providers/datasvr/datasvr';
 import { UpdateService } from '../service/update';
 import { CacheService } from '../service/cache';
 import { HttpService } from '../service/http';
+import { DateService } from '../service/date';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
@@ -60,11 +61,11 @@ import { TaxPageModule } from '../pages/tax/tax.module';
     StatusBar,
     SplashScreen,
     AppVersion, File, FileOpener, FileTransfer, FileTransferObject,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     ScreenOrientation,
     LoginsvrProvider,
     DatasvrProvider,
-    UpdateService, CacheService, HttpService
+    UpdateService, CacheService, HttpService, DateService
   ],
 })
-export class AppModule {}
+export class AppModule { }

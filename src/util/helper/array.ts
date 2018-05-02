@@ -30,4 +30,28 @@ export class arrayHelper {
         }, []);
     }
 
+    /**
+     * 一维对象数组按照 对象键分组
+     * @param arr 一维对象数组
+     * @param column 键
+     * e.g. 
+     * input:
+     * arr = [{name:'alex', age:'11', school:'sdf'}, {name:'bob', age:'12', school:'sdf'}];
+     * column = 'school'
+     * output:
+     * res = { sdf:[{name:'alex', age:'11', school:'sdf'}, {name:'bob', age:'12', school:'sdf'}] }
+     */
+    public static _group(arr: Array<any>, column: string) {
+        let res: any = {};
+        arr.forEach(row => {
+            let name: string = row[column];
+            if (!res[name]) {
+                res[name] = [row];
+            } else {
+                res[name].push(row);
+            }
+        });
+        return res;
+    }
+
 }

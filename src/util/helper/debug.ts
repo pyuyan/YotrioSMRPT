@@ -26,4 +26,16 @@ export class debugHelper {
                 break;
         }
     }
+
+    public static log(message: any) {
+        debugHelper.show(message, 'log');
+    }
+
+    public static error(message: any) {
+        debugHelper.show(message, 'err');
+    }
+
+    public static group(message: any) {
+        debugHelper.show(message, 'group');
+    }
 }

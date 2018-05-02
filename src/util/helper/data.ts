@@ -2,16 +2,16 @@
 import { mathHelper } from "./math";
 
 export class dataHelper {
-    
+
     constructor() {
-        
+
     }
 
     /**
      * 组装数据，用于计算
      * @param datarow 
      */
-    public static assemble(datarow:any) {
+    public static assemble(datarow: any) {
         let tmp_orderqty = Number.parseFloat(datarow.OrderQty);
         let tmp_salemny = tmp_orderqty * Number.parseFloat(datarow.SalePrice) * Number.parseFloat(datarow.ExchangeRate) / 10000;
         let tmp_tranfermny = 0;
@@ -19,7 +19,7 @@ export class dataHelper {
             tmp_tranfermny = tmp_orderqty * Number.parseFloat(datarow.TransferPrice) / 10000;
         let tmp_gross = tmp_salemny - ((Number.parseFloat(datarow.NotConsume) + Number.parseFloat(datarow.DepreciateRate)) * tmp_salemny) - tmp_tranfermny;
         let tmp_GrossRate = tmp_gross / tmp_salemny * 100;
-        
+
         return {
             BusinessDate: datarow.BusinessDate,
             MFGCode: datarow.MFGCode,

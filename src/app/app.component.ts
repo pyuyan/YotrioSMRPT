@@ -23,10 +23,13 @@ export class YotrioSMRPT {
 
   pages: Array<{ title: string, component: any }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar,
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public screenOrientation: ScreenOrientation,
-    private datasvr: DatasvrProvider) {
+    private datasvr: DatasvrProvider,
+  ) {
 
     this.contextdata = ContextData.Create();
 
@@ -42,8 +45,8 @@ export class YotrioSMRPT {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: '制造数据中心', component: HomePage },
-      { title: '营销数据中心', component: SmreportPage }, 
-      { title: '税收信息中心', component: TaxPage }, 
+      { title: '营销数据中心', component: SmreportPage },
+      { title: '税收数据中心', component: TaxPage },
       //{ title: '', component: SOCountPage }
     ];
 
