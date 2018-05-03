@@ -1,3 +1,5 @@
+import { mathHelper } from './math';
+
 /**
  * @description arrayHelper 工具类 有需要的再里面加
  * @author slyfalcon
@@ -54,4 +56,17 @@ export class arrayHelper {
         return res;
     }
 
+    /**
+     * 一维数组求和
+     * @param arr 一位数字，字符串 数组
+     * @param decimal 精确度 默认保留3位
+     */
+    public static _sum(arr: Array<any>, decimal: number = 3) {
+        let sum = arr.reduce((acc, val) => {
+            acc = mathHelper.isNumeric(acc) ? acc : parseFloat(acc);
+            val = mathHelper.isNumeric(val) ? val : parseFloat(val);
+            return acc + val;
+        });
+        return parseFloat(sum.toString()).toFixed(decimal);
+    }
 }

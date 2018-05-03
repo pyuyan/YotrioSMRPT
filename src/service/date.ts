@@ -14,6 +14,20 @@ export enum DateScene {
  */
 @Injectable()
 export class DateService {
+    private dateObj: any;
+    /**
+     * 当前月份
+     */
+    public currentMonth: number;
+
+    /**
+     * 涉及的近几年 e.g. 只是今年，去年，前年
+     */
+    public years: any = {
+        currentYear: 0,
+        lastYear: 0,
+        blastYear: 0
+    };
 
     /**
      * 日期使用场景
@@ -24,7 +38,16 @@ export class DateService {
      */
     public dateRangeSet: any = {};
 
-    constructor() { }
+    constructor() {
+        this.dateObj = new Date();
+        this.currentMonth = this.dateObj.getMonth() + 1;
+        let currentYear = this.dateObj.getFullYear();
+        this.years = {
+            currentYear: currentYear,
+            lastYear: currentYear - 1,
+            blastYear: currentYear - 2
+        };
+    }
 
     public setScene(scene: DateScene) {
         this.scene = scene;
@@ -33,14 +56,13 @@ export class DateService {
 
     public setDateRange(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
 
-        const dateObj = new Date();
-        let year = dateObj.getFullYear();
+        let year = this.dateObj.getFullYear();
 
         let params: any = {
             beginyear: beginyear == 0 ? year : beginyear,
             beginmonth: beginmonth,
             endyear: endyear == 0 ? year : endyear,
-            endmonth: endmonth == 0 ? dateObj.getMonth() + 1 : endmonth,
+            endmonth: endmonth == 0 ? this.dateObj.getMonth() + 1 : endmonth,
         };
 
         this.dateRangeSet[this.scene] = params;
@@ -50,4 +72,27 @@ export class DateService {
     public getDateRange(scene: DateScene) {
         return this.dateRangeSet[scene] || {};
     }
+
+    /**
+     * 设置今年开始到现在月份的时间范围 必须先调用 setScene 设置场景值
+     */
+    public setCurrentYear() {
+        this.setDateRange();
+    }
+
+    /**
+     * 设置去年开始时间范围 必须先调用 setScene 设置场景值
+     */
+    public setLastYear() {
+        this.setDateRange(this.years.lastYear, 1, this.years.lastYear, 12);
+    }
+
+    /**
+     * 设置前年开始时间范围 必须先调用 setScene 设置场景值
+     */
+    public setBeforeLastYear() {
+        this.setDateRange(this.years.blastYear, 1, this.years.blastYear, 12);
+    }
+
+
 }

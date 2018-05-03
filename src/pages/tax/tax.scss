@@ -1,10 +1,61 @@
 page-tax {
-    ion-navbar {
-      height: 80px;
+  ion-navbar {
+    height: 80px;
+  }
+  ion-content {
+    background-color: rgb(7, 33, 58) !important;
+  }
+  .segment-year {
+    width: 50%;
+    margin: 0;
+    margin-left: 25%;
+    ion-segment-button {
+      font-size: 4rem !important;
     }
-
-    ion-content {
-      background-color: rgb(7, 33, 58) !important;
+  }
+  .maincontenttopstyle {
+    color: #FFFFFF;
+    background-color: rgb(7, 33, 58);
+    ion-card-header {
+      color: #FFFFFF;
+      background-color: rgb(7, 33, 58);
     }
-
+    ion-card-content {
+      padding: 0;
+    }
+    box-shadow: 0px 1px 3px rgba(7, 33, 58, 0.2);
+    padding:0% 0% 0% 5%;
+  }
+  .piediv {
+    color: #FFFFFF;
+    background: rgb(7, 33, 58);
+    padding: 0%;
+    width: 100%;
+    height: 400px;
+  }
+  .maincontentstyle {
+    color: #FFFFFF;
+    background-color: rgb(7, 33, 58);
+    ion-card-header {
+      color: #FFFFFF;
+      background-color: rgb(7, 33, 58);
+    }
+    box-shadow: 0px 1px 3px rgba(7, 33, 58, 0.2);
+    padding:0% 0% 0% 5%;
+  }
+  .bardiv {
+    color: #FFFFFF;
+    background: rgb(7, 33, 58);
+    padding: 0%;
+    margin: 0%;
+    width: 100%;
+    height: 350px;
+  }
+  .profitgridstyle {
+    color: #FFFFFF;
+    background: rgb(7, 33, 58);
+    padding: 0% 0% 0% 0%;
+    margin: 0% 0% 0% 0px;
+    width: 100%;
+  }
 }

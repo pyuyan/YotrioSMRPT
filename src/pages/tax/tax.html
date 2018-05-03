@@ -17,9 +17,41 @@
 
 
 <ion-content padding>
-  <ion-grid>
-    <ion-col>
+  <ion-card class="segment-year">
+    <ion-toolbar no-border-top>
+      <ion-segment [(ngModel)]="choosedYear">
+        <ion-segment-button value="{{year}}" *ngFor="let year of Years;" (click)="chooseYear()">
+          {{year}}
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+  </ion-card>
 
-    </ion-col>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="maincontenttopstyle">
+          <ion-card-content>
+            <div echarts #taxPie [options]="taxPieData" class="piediv"></div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="maincontentstyle">
+          <div echarts #taxBar [options]="taxBarData" class="bardiv"></div>
+          <div class="profitgridstyle">
+            <ion-grid style="padding:0% 0% 0% 0%;overflow:hide;color:#FFFFFF;font-size:20px;" align-items-start>
+              <ion-row style="overflow:hide; height: 75px;border-width:1px;border-style: none none solid none;">
+                <ion-col style="overflow:auto;font-size:22px;"></ion-col>
+                <ion-col text-center style="overflow:auto;font-size:22px;" *ngFor="let header of taxBarxAxisAppend">{{header}}</ion-col>
+              </ion-row>
+              <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of taxBarSeriesAppend;index as i;">
+                <ion-col text-left align-self-center style="font-size:24px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>
+                <ion-col text-right align-self-center style="font-size:24px;border-width:1px;border-style: none solid none solid;" *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>

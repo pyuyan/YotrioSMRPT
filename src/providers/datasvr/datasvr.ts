@@ -87,15 +87,13 @@ export class DatasvrProvider {
    * @param endyear 结束年份 默认今年
    * @param endmonth 结束月份，默认当前月
    */
-  CallYearTaxAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
-    const dateObj = new Date();
-    let year = dateObj.getFullYear();
-    let endpoint = '/getYearTAX/do';
+  CallYearTaxAPI(beginyear: number, beginmonth: number, endyear: number, endmonth: number) {
+    const endpoint: string = '/getYearTAX/do';
     let params: any = {
-      beginyear: beginyear == 0 ? year : beginyear,
+      beginyear: beginyear,
       beginmonth: beginmonth,
-      endyear: endyear == 0 ? year : endyear,
-      endmonth: endmonth == 0 ? dateObj.getMonth() + 1 : endmonth,
+      endyear: endyear,
+      endmonth: endmonth,
     };
     return this.httpServ.get(endpoint, params);
   }
@@ -199,7 +197,9 @@ export class DatasvrProvider {
     let dateRange = this.dateServ.getDateRange(DateScene.TAX);
     debugHelper.log('dateRange')
     debugHelper.log(dateRange)
-    let beginyear = 2018, beginmonth = 1, endyear = 2018, endmonth = 0;
+    let years = this.dateServ.years;
+    //默认取值为今年到现在的月份的数据
+    let beginyear = years.currentYear, beginmonth = 1, endyear = years.currentYear, endmonth = this.dateServ.currentMonth;
     if (Object.keys(dateRange).length) {
       beginyear = dateRange.beginyear;
       beginmonth = dateRange.beginmonth;
