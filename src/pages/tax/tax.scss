@@ -6,11 +6,16 @@ page-tax {
     background-color: rgb(7, 33, 58) !important;
   }
   .segment-year {
-    width: 50%;
+    // width: 50%;
+    width: 15%;
     margin: 0;
-    margin-left: 25%;
+    // margin-left: 25%;
     ion-segment-button {
       font-size: 4rem !important;
+    }
+    ion-segment {
+      border-color: rgb(7, 33, 58) !important;
+      background-color: rgb(7, 33, 58) !important;
     }
   }
   .maincontenttopstyle {

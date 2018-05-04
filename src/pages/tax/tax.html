@@ -18,13 +18,13 @@
 
 <ion-content padding>
   <ion-card class="segment-year">
-    <ion-toolbar no-border-top>
-      <ion-segment [(ngModel)]="choosedYear">
+    <!-- <ion-toolbar no-border-top> -->
+      <ion-segment  color="danger" [(ngModel)]="choosedYear">
         <ion-segment-button value="{{year}}" *ngFor="let year of Years;" (click)="chooseYear()">
           {{year}}
         </ion-segment-button>
       </ion-segment>
-    </ion-toolbar>
+    <!-- </ion-toolbar> -->
   </ion-card>
 
   <ion-grid>

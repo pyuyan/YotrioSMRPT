@@ -1,7 +1,7 @@
 {
-    "version": "1.0.9",
-    "release_date": "2018年5月4日13:16:27",
-    "desc": "版本：1.0.9 更新内容：税务中心优化",
+    "version": "1.1.0",
+    "release_date": "2018年5月4日16:22:20",
+    "desc": "版本：1.1.0 更新内容：1. 税务中心重新排序 2. 样式调试",
     "app_name": "yotrioSMRPT",
     "app_url_android": "http://192.168.0.197:2222/android-armv7-debug.apk",
     "app_url_iOS": ""

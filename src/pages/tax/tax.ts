@@ -24,6 +24,13 @@ export class TaxPage extends Base {
   taxPieInstance: any
   taxBarInstance: any
 
+  //要求的排序 hardcode
+  pieDataSort: string[] = ['户外休闲家具', '旅游机票', '投资', '房地产', '其他'];
+  barDataSort: string[] = ['临海', '黄岩', '宁波', '山东', '上海', '北京', '合肥', '境外'];
+
+  //是否显示合计的条目bar
+  showTotalBar: boolean = true;
+
   //选中的年份
   choosedYear: any;
   //税收涉及的年份 今年 去年 前年
@@ -38,7 +45,7 @@ export class TaxPage extends Base {
 
   //按行业分组的饼图数据结构
   taxPieTitleColor: string[] = ['#FFFFFF', '#CCF600'];
-  taxPieSeriesColor: string[] = ['#f79646', '#4bacc6', '#8064a2', '#c0504d'];
+  taxPieSeriesColor: string[] = ['#c0504d', '#9bbb59', '#4bacc6', '#f79646'];
   taxPieData: any = {
     backgroundColor: '#07213a',
     padding: [0, 0, 0, 0],
@@ -51,13 +58,13 @@ export class TaxPage extends Base {
 
     legend: {
       data: [],
-      left: 5,
+      left: '0%',
       orient: 'vertical',
       top: 0,
       padding: 0,
       textStyle: {
         color: '#FFFFFF',
-        fontSize: 20
+        fontSize: 24
       }
     },
 
@@ -66,22 +73,29 @@ export class TaxPage extends Base {
   //按地区分组的坐标数据结构
   taxBarData: any = {
     backgroundColor: '#07213a',
-    color: ["#c0504d", "#9bbb59", "#4bacc6", "#f79646", "#59DF97"],
+    color: this.taxPieSeriesColor,//["#c0504d", "#9bbb59", "#4bacc6", "#f79646", "#59DF97"],
     tooltip: {
       trigger: 'axis',
       axisPointer: {            // 坐标轴指示器，坐标轴触发有效
         type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
       }
     },
+    // grid: {
+    //   left: '3%',
+    //   right: '0%',
+    //   bottom: '3%',
+    //   containLabel: true,
+    //   y2: 140
+    // },
     legend: {
       data: this.taxType,
-      // left: 5,
+      // left: '0%',
       // orient: 'vertical',
       top: 0,
       padding: 0,
       textStyle: {
         color: '#FFFFFF',
-        fontSize: 20
+        fontSize: 24
       }
     },
     toolbox: {
@@ -103,7 +117,7 @@ export class TaxPage extends Base {
         type: 'category',
         data: [], //e.g. ['临海'，'上海', '北京']
         axisLine: {
-          show: true,
+          show: false,
           lineStyle: {
             color: "#FFFFFF",
             fontSize: 18
@@ -124,9 +138,12 @@ export class TaxPage extends Base {
           show: true,
           lineStyle: {
             color: "#FFFFFF",
-            fontSize: 14
+            fontSize: 16
           }
         },
+        splitLine: {
+          show: false
+        }
       }
     ],
     series: []
@@ -198,11 +215,6 @@ export class TaxPage extends Base {
       this.updatePieData(taxData);
       this.updateBarData(taxData);
 
-      super.debug('taxPieData')
-      super.debug(JSON.stringify(this.taxPieData))
-      super.debug('taxBarData')
-      super.debug(JSON.stringify(this.taxBarData))
-
       ContextData.TaxDatas[ContextData.TableName].UpdateFlag = false;
     }
   }
@@ -211,13 +223,19 @@ export class TaxPage extends Base {
 
     const firstData = ['出口退税'];
 
-    this.taxDataGroupByIndustry = arrayHelper._group(data, 'Industry');
+    let newPieData = arrayHelper._group(data, 'Industry');
+
+    //按要求重新排序
+    this.pieDataSort.forEach(name => {
+      this.taxDataGroupByIndustry[name] = newPieData[name] || [];
+    });
+
     this.taxPieData.legend.data = firstData.concat(this.taxType);
 
     let pieDistance: number = 15;
     let IndustryNames = firstData.concat(Object.keys(this.taxDataGroupByIndustry));
     //出口退税总额
-    let ExpDrawbackTaxTotal = arrayHelper._sum(arrayHelper._column(data, 'ExpDrawbackTax'));
+    let ExpDrawbackTaxTotal = arrayHelper._sum(arrayHelper._column(data, 'ExpDrawbackTax'), 0);
     //定义数据
     let titleData: any[] = [], seriesData: any[] = [], i = 0;
 
@@ -276,19 +294,19 @@ export class TaxPage extends Base {
       }]
     });
 
+    //pie内数据
     for (let key in this.taxDataGroupByIndustry) {
       let distance = i * pieDistance;
       let _data = this.taxDataGroupByIndustry[key];
 
       //增值税
-      let VATax = arrayHelper._sum(arrayHelper._column(_data, 'VATax'));
+      let VATax = arrayHelper._sum(arrayHelper._column(_data, 'VATax'), 0);
       //企业所得税
-      let IncomeTax = arrayHelper._sum(arrayHelper._column(_data, 'IncomeTax'));
+      let IncomeTax = arrayHelper._sum(arrayHelper._column(_data, 'IncomeTax'), 0);
       //其他税
-      let OtherTax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'));
+      let OtherTax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 0);
       //总税费
-      let totalTax = arrayHelper._sum([VATax, IncomeTax, OtherTax]);
-      // super.debug('vatax:' + VATax + '  IncomeTax:' + IncomeTax + '  OtherTax:' + OtherTax + ' totalTax:' + totalTax);
+      let totalTax = arrayHelper._sum([VATax, IncomeTax, OtherTax], 0);
 
       titleData.push({
         text: totalTax,
@@ -320,23 +338,20 @@ export class TaxPage extends Base {
         itemStyle: {
           normal: {
             opacity: 1,
-            borderWidth: 3,
+            borderWidth: 2,
             borderColor: "#FFFFFF"
           }
         },
         data: [
           {
-            // value: mathHelper.mul(mathHelper.div(VATax, totalTax), 100),
             value: VATax,
             name: this.taxPieData.legend.data[1],
           },
           {
-            // value: mathHelper.mul(mathHelper.div(IncomeTax, totalTax), 100),
             value: IncomeTax,
             name: this.taxPieData.legend.data[2],
           },
           {
-            // value: mathHelper.mul(mathHelper.div(OtherTax, totalTax), 100),
             value: OtherTax,
             name: this.taxPieData.legend.data[3],
           },
@@ -353,7 +368,15 @@ export class TaxPage extends Base {
   }
 
   private updateBarData(data) {
-    this.taxDataGroupByArea = arrayHelper._group(data, 'Area');
+    // this.taxDataGroupByArea = arrayHelper._group(data, 'Area');
+
+    let newBarData = arrayHelper._group(data, 'Area');
+
+    //按要求重新排序
+    this.barDataSort.forEach(name => {
+      this.taxDataGroupByArea[name] = newBarData[name] || [];
+    });
+
 
     let areas = Object.keys(this.taxDataGroupByArea);
     let barSeriseData: any[] = [];
@@ -361,7 +384,6 @@ export class TaxPage extends Base {
     let IncomeTaxData: any[] = [];
     let OtherTaxData: any[] = [];
     let totalTaxData: any[] = [];
-
 
     for (let key in this.taxDataGroupByArea) {
       let _data = this.taxDataGroupByArea[key];
@@ -375,8 +397,7 @@ export class TaxPage extends Base {
       let othertax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 4);
       OtherTaxData.push(othertax);
       //总税费
-      let taxs: any[] = [vatax, incometax, othertax];
-      let total = arrayHelper._sum(taxs);
+      let total = arrayHelper._sum([vatax, incometax, othertax]);
       totalTaxData.push(total);
     }
 
@@ -386,12 +407,25 @@ export class TaxPage extends Base {
         name: t,
         type: 'bar',
         stack: '税务小计',
+        itemStyle: {
+          normal: {
+            opacity: 1,
+            borderWidth: 0.5,
+            borderColor: '#FFFFFF'
+          }
+        },
         data: tmpData
       };
       barSeriseData.push(tmpSeriseData);
       //处理小计部分
       let tmpSum = arrayHelper._sum(tmpData, 4);
-      this.taxBarSeriesAppend.push({ name: t, data: tmpData.concat([tmpSum]) });
+      //是否显示合计的bar
+      if (this.showTotalBar) {
+        tmpData.push(tmpSum);
+        this.taxBarSeriesAppend.push({ name: t, data: tmpData });
+      } else {
+        this.taxBarSeriesAppend.push({ name: t, data: tmpData.concat([tmpSum]) });
+      }
     });
 
     this.taxBarData.xAxis[0].data = areas;
