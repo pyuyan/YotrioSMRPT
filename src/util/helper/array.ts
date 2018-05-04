@@ -1,5 +1,3 @@
-import { mathHelper } from './math';
-
 /**
  * @description arrayHelper 工具类 有需要的再里面加
  * @author slyfalcon
@@ -62,11 +60,13 @@ export class arrayHelper {
      * @param decimal 精确度 默认保留3位
      */
     public static _sum(arr: Array<any>, decimal: number = 3) {
-        let sum = arr.reduce((acc, val) => {
-            acc = mathHelper.isNumeric(acc) ? acc : parseFloat(acc);
-            val = mathHelper.isNumeric(val) ? val : parseFloat(val);
-            return acc + val;
-        });
+        let sum: number = 0;
+        if (arr.length != 0) {
+            sum = arr.reduce((acc, val) => {
+                return Number(acc) + Number(val);
+            }, 0);
+        }
+
         return parseFloat(sum.toString()).toFixed(decimal);
     }
 }

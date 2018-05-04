@@ -52,9 +52,9 @@ export class mathHelper {
      * 判断是否为数字
      * @param number string|number
      */
-    public static isNumeric(number) {
-        return !isNaN(parseFloat(number)) && isFinite(number);
-    }
+    // public static isNumeric(number) {
+    //     return !isNaN(parseFloat(number)) && isFinite(number);
+    // }
 
     /**
      * 两数相除
@@ -64,13 +64,11 @@ export class mathHelper {
      * @returns string
      */
     public static div(numerator: any, denominator: any, decimal: number = 4) {
-        let nu: number = mathHelper.isNumeric(numerator) ? numerator : parseFloat(numerator);
-        let de: number = mathHelper.isNumeric(denominator) ? denominator : parseFloat(denominator);
-        if (de == 0) {
-            return 0;
+        let res: number = 0;
+        if (Number(denominator) != 0) {
+            res = Number(numerator) / Number(denominator);
         }
-
-        return parseFloat((nu / de).toString()).toFixed(decimal);
+        return parseFloat(res.toString()).toFixed(decimal);
     }
 
     /**
@@ -81,9 +79,6 @@ export class mathHelper {
      * @returns string
      */
     public static mul(num1: any, num2: any, decimal: number = 2) {
-        let nu_1: number = mathHelper.isNumeric(num1) ? num1 : parseFloat(num1);
-        let nu_2: number = mathHelper.isNumeric(num2) ? num2 : parseFloat(num2);
-
-        return parseFloat((nu_1 * nu_2).toString()).toFixed(decimal);
+        return parseFloat((Number(num1) * Number(num2)).toString()).toFixed(decimal);
     }
 }

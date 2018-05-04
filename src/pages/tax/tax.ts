@@ -176,29 +176,47 @@ export class TaxPage extends Base {
     //首次打开执行数据刷新
     setTimeout(() => {
       this.update(true);
-    }, 500);
+    }, 300);
   }
 
   /**
    * 更新本页面数据
    */
   update(needUpdate: boolean) {
-    //刷新依据 根据入口出注册的函数更新为主
-    let taxData: Array<any> = ContextData.TaxDatas[ContextData.TableName].DataValue;
-    let taxUpdateFlag: boolean = ContextData.TaxDatas[ContextData.TableName].UpdateFlag;
 
-    if (needUpdate || taxUpdateFlag) {
+    this.dataProvider.CallYearTaxAPI().subscribe(res => {
+      super.debug('update')
+      super.debug(res)
+      let taxData = res['TaxDatas']['TaxData'];
+      // if (taxData.length) {
+      //   ContextData.TaxDatas[ContextData.TableName].DataValue = taxData;
+      //   ContextData.TaxDatas[ContextData.TableName].UpdateFlag = true;
+      // }
+    
 
-      this.taxDataGroupByArea = {};
-      this.taxDataGroupByIndustry = {};
-      this.taxBarxAxisAppend = [];
-      this.taxBarSeriesAppend = [];
+    
+      //刷新依据 根据入口出注册的函数更新为主
+      // let taxData: Array<any> = ContextData.TaxDatas[ContextData.TableName].DataValue;
+      // let taxUpdateFlag: boolean = ContextData.TaxDatas[ContextData.TableName].UpdateFlag;
 
-      this.updatePieData(taxData);
-      this.updateBarData(taxData);
+      // if (needUpdate || taxUpdateFlag) {
 
-      ContextData.TaxDatas[ContextData.TableName].UpdateFlag = false;
-    }
+        this.taxDataGroupByArea = {};
+        this.taxDataGroupByIndustry = {};
+        this.taxBarxAxisAppend = [];
+        this.taxBarSeriesAppend = [];
+
+        this.updatePieData(taxData);
+        this.updateBarData(taxData);
+
+        super.debug('taxPieData')
+        super.debug(JSON.stringify(this.taxPieData))
+        super.debug('taxBarData')
+        super.debug(JSON.stringify(this.taxBarData))
+
+        // ContextData.TaxDatas[ContextData.TableName].UpdateFlag = false;
+      // }
+    });
   }
 
   private updatePieData(data) {
@@ -385,18 +403,14 @@ export class TaxPage extends Base {
       barSeriseData.push(tmpSeriseData);
       //处理小计部分
       let tmpSum = arrayHelper._sum(tmpData, 4);
-      tmpData.push(tmpSum);
-      this.taxBarSeriesAppend.push({ name: t, data: tmpData });
+      this.taxBarSeriesAppend.push({ name: t, data: tmpData.concat([tmpSum]) });
     });
 
     this.taxBarData.xAxis[0].data = areas;
     this.taxBarData.series = barSeriseData;
 
     //处理小计部分
-    // let tmpSum = arrayHelper._sum(totalTaxData, 4);
-    let tmpSum = totalTaxData.reduce((acc, val) => {
-      return parseFloat(acc) + parseFloat(val);
-    });
+    let tmpSum = arrayHelper._sum(totalTaxData, 4);
     totalTaxData.push(tmpSum);
     this.taxBarxAxisAppend = areas.concat(['合计']);
     this.taxBarSeriesAppend.push({ name: '合计', data: totalTaxData })
@@ -421,12 +435,16 @@ export class TaxPage extends Base {
         this.dateServ.setCurrentYear()
         break;
     }
-    this.dataProvider.syncYearTaxData().add(() => {
-      // this.update(true);
-      setTimeout(() => {
-        this.update(true);
-      }, 300);
-    });
+    // this.dataProvider.syncYearTaxData().add(() => {
+    // this.update(true);
+    // setTimeout(() => {
+    //   this.update(true);
+    // }, 300);
+    // });
+    this.update(true);
+    // setTimeout(() => {
+    //   this.update(true);
+    // }, 200);
   }
 
 }

@@ -87,7 +87,28 @@ export class DatasvrProvider {
    * @param endyear 结束年份 默认今年
    * @param endmonth 结束月份，默认当前月
    */
-  CallYearTaxAPI(beginyear: number, beginmonth: number, endyear: number, endmonth: number) {
+  CallYearTaxAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+
+    //声明为 Injectable() 的是全局单例，所以我们这里能取到 dateServ 在其他单页中设置的值，这样能动态取到不同时间段数据
+    if (beginyear == 0 || endyear == 0 || endmonth == 0 || beginmonth == 0) {
+      let dateRange = this.dateServ.getDateRange(DateScene.TAX);
+      debugHelper.log('dateRange')
+      debugHelper.log(dateRange)
+      let years = this.dateServ.years;
+      //默认取值为今年到现在的月份的数据
+      beginyear = years.currentYear;
+      beginmonth = 1;
+      endyear = years.currentYear;
+      endmonth = this.dateServ.currentMonth;
+
+      if (Object.keys(dateRange).length) {
+        beginyear = dateRange.beginyear;
+        beginmonth = dateRange.beginmonth;
+        endyear = dateRange.endyear;
+        endmonth = dateRange.endmonth;
+      }
+    }
+
     const endpoint: string = '/getYearTAX/do';
     let params: any = {
       beginyear: beginyear,
@@ -193,21 +214,7 @@ export class DatasvrProvider {
    */
   syncYearTaxData() {
 
-    //声明为 Injectable() 的是全局单例，所以我们这里能取到 dateServ 在其他单页中设置的值，这样能动态取到不同时间段数据
-    let dateRange = this.dateServ.getDateRange(DateScene.TAX);
-    debugHelper.log('dateRange')
-    debugHelper.log(dateRange)
-    let years = this.dateServ.years;
-    //默认取值为今年到现在的月份的数据
-    let beginyear = years.currentYear, beginmonth = 1, endyear = years.currentYear, endmonth = this.dateServ.currentMonth;
-    if (Object.keys(dateRange).length) {
-      beginyear = dateRange.beginyear;
-      beginmonth = dateRange.beginmonth;
-      endyear = dateRange.endyear;
-      endmonth = dateRange.endmonth;
-    }
-
-    return this.CallYearTaxAPI(beginyear, beginmonth, endyear, endmonth).subscribe(res => {
+    return this.CallYearTaxAPI().subscribe(res => {
       let tmp_taxData = res['TaxDatas']['TaxData'];
       if (tmp_taxData.length) {
         ContextData.TaxDatas[ContextData.TableName].DataValue = tmp_taxData;
