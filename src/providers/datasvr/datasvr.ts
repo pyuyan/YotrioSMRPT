@@ -1,3 +1,4 @@
+import { Params } from './../../app/params';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ContextData } from '../../app/context';
@@ -33,7 +34,8 @@ export class DatasvrProvider {
     //初始化上下文
     this.contextdata = ContextData.Create();
     //设置httpServ请求地址
-    this.httpServ.setUrl(this.GetESBAddress());
+    this.httpServ.setUrl(Params.ESBPortal);
+    
   }
 
   /**
@@ -109,7 +111,7 @@ export class DatasvrProvider {
       }
     }
 
-    const endpoint: string = '/getYearTAX/do';
+    const endpoint: string = 'getYearTAX/do';
     let params: any = {
       beginyear: beginyear,
       beginmonth: beginmonth,

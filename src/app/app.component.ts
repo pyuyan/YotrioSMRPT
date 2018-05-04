@@ -46,7 +46,7 @@ export class YotrioSMRPT {
     this.pages = [
       { title: '制造数据中心', component: HomePage },
       { title: '营销数据中心', component: SmreportPage },
-      { title: '税收数据中心', component: TaxPage },
+      { title: '税务数据中心', component: TaxPage },
       //{ title: '', component: SOCountPage }
     ];
 

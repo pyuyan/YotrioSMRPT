@@ -176,7 +176,7 @@ export class TaxPage extends Base {
     //首次打开执行数据刷新
     setTimeout(() => {
       this.update(true);
-    }, 300);
+    }, 500);
   }
 
   /**
@@ -184,39 +184,27 @@ export class TaxPage extends Base {
    */
   update(needUpdate: boolean) {
 
-    this.dataProvider.CallYearTaxAPI().subscribe(res => {
-      super.debug('update')
-      super.debug(res)
-      let taxData = res['TaxDatas']['TaxData'];
-      // if (taxData.length) {
-      //   ContextData.TaxDatas[ContextData.TableName].DataValue = taxData;
-      //   ContextData.TaxDatas[ContextData.TableName].UpdateFlag = true;
-      // }
-    
+    //刷新依据 根据入口出注册的函数更新为主
+    let taxData: Array<any> = ContextData.TaxDatas[ContextData.TableName].DataValue;
+    let taxUpdateFlag: boolean = ContextData.TaxDatas[ContextData.TableName].UpdateFlag;
 
-    
-      //刷新依据 根据入口出注册的函数更新为主
-      // let taxData: Array<any> = ContextData.TaxDatas[ContextData.TableName].DataValue;
-      // let taxUpdateFlag: boolean = ContextData.TaxDatas[ContextData.TableName].UpdateFlag;
+    if (needUpdate || taxUpdateFlag) {
 
-      // if (needUpdate || taxUpdateFlag) {
+      this.taxDataGroupByArea = {};
+      this.taxDataGroupByIndustry = {};
+      this.taxBarxAxisAppend = [];
+      this.taxBarSeriesAppend = [];
 
-        this.taxDataGroupByArea = {};
-        this.taxDataGroupByIndustry = {};
-        this.taxBarxAxisAppend = [];
-        this.taxBarSeriesAppend = [];
+      this.updatePieData(taxData);
+      this.updateBarData(taxData);
 
-        this.updatePieData(taxData);
-        this.updateBarData(taxData);
+      super.debug('taxPieData')
+      super.debug(JSON.stringify(this.taxPieData))
+      super.debug('taxBarData')
+      super.debug(JSON.stringify(this.taxBarData))
 
-        super.debug('taxPieData')
-        super.debug(JSON.stringify(this.taxPieData))
-        super.debug('taxBarData')
-        super.debug(JSON.stringify(this.taxBarData))
-
-        // ContextData.TaxDatas[ContextData.TableName].UpdateFlag = false;
-      // }
-    });
+      ContextData.TaxDatas[ContextData.TableName].UpdateFlag = false;
+    }
   }
 
   private updatePieData(data) {
@@ -435,16 +423,11 @@ export class TaxPage extends Base {
         this.dateServ.setCurrentYear()
         break;
     }
-    // this.dataProvider.syncYearTaxData().add(() => {
-    // this.update(true);
-    // setTimeout(() => {
-    //   this.update(true);
-    // }, 300);
-    // });
-    this.update(true);
-    // setTimeout(() => {
-    //   this.update(true);
-    // }, 200);
+    this.dataProvider.syncYearTaxData().add(() => {
+      setTimeout(() => {
+        this.update(true);
+      }, 200);
+    });
   }
 
 }
