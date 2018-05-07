@@ -400,9 +400,7 @@ export class SmreportPage extends Base {
 
     //数据更新函数
     updateFunction = function (table_values, charts, immediateflag) {
-        let tablename: string = 'TMP_SMTransferData';
-        if (ContextData.OriginalDatas[tablename].UpdateFlag['smreportpage'] || immediateflag) {
-
+        if (ContextData.OriginalDatas[ContextData.TableName].UpdateFlag['smreportpage'] || immediateflag) {
             let customerarray: Array<any> = new Array<any>();
             let topgroupvalues: Array<any> = new Array<any>();
             let areanames: Array<any> = new Array<any>();
@@ -417,7 +415,7 @@ export class SmreportPage extends Base {
                 keydeptmoneys.push(0);
                 keydeptgrosses.push(0);
             });
-            ContextData.OriginalDatas[tablename].DataValue.forEach(datarow => {
+            ContextData.OriginalDatas[ContextData.TableName].DataValue.forEach(datarow => {
                 let selfflag = datarow.SelfFlag; //内部外部
                 let areatype = datarow.AreaType; //区域分类
                 let customer = datarow.Customer; //客户
@@ -553,7 +551,7 @@ export class SmreportPage extends Base {
                 table_values.orderbymnyvalues.push(topgroupvalues[i]);
             }
 
-            ContextData.OriginalDatas[tablename].UpdateFlag['smreportpage'] = false;
+            ContextData.OriginalDatas[ContextData.TableName].UpdateFlag['smreportpage'] = false;
         }
     }
 

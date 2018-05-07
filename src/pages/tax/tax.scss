@@ -1,6 +1,50 @@
 page-tax {
   ion-navbar {
     height: 80px;
+    ion-title {
+      padding: 0;
+      p {
+        display: inline-block;
+      }
+      .title-title {
+        color: white;
+        font-size: 58px;
+        width: 80%;
+        display: inline-block;
+      }
+      .title-select {
+        display: inline-block;
+        width: 14%;
+        ion-label {
+          margin: 0;
+          margin-top: 8%;
+          font-size: 28px;
+        }
+        ion-select {
+          font-size: 28px;
+          ion-option {
+            font-size: 28px;
+          }
+        }
+      }
+    }
+    ion-buttons {
+      button {
+        p {
+          color: white;
+          font-size: 25px;
+        }
+        ion-input {
+          color: white;
+          font-size: 25px;
+        }
+      }
+    }
+    button {
+      ion-icon {
+        font-size: 50px;
+      }
+    }
   }
   ion-content {
     background-color: rgb(7, 33, 58) !important;
@@ -8,8 +52,7 @@ page-tax {
   .segment-year {
     // width: 50%;
     width: 15%;
-    margin: 0;
-    // margin-left: 25%;
+    margin: 0; // margin-left: 25%;
     ion-segment-button {
       font-size: 4rem !important;
     }
@@ -62,5 +105,32 @@ page-tax {
     padding: 0% 0% 0% 0%;
     margin: 0% 0% 0% 0px;
     width: 100%;
+    ion-grid {
+      padding: 0% 0% 0% 0%;
+      overflow: hide;
+      color: #FFFFFF;
+      font-size: 20px;
+    }
+    .profit-header {
+      overflow: hide;
+      height: 75px;
+      border-width: 1px;
+      border-style: none none solid none;
+      ion-col {
+        overflow: auto;
+        font-size: 22px;
+      }
+    }
+    .profit-content {
+      overflow: hide;
+      height: 60px;
+      border-width: 1px;
+      border-style: none none solid none;
+      ion-col {
+        font-size: 24px;
+        border-width: 1px;
+        border-style: none solid none solid;
+      }
+    }
   }
 }

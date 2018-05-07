@@ -25,7 +25,7 @@ export class TaxPage extends Base {
   taxBarInstance: any
 
   //要求的排序 hardcode
-  pieDataSort: string[] = ['户外休闲家具', '旅游机票', '投资', '房地产', '其他'];
+  pieDataSort: string[] = ['户外家居', '北京联拓', '永强投资', '房地产', '其他'];
   barDataSort: string[] = ['临海', '黄岩', '宁波', '山东', '上海', '北京', '合肥', '境外'];
 
   //是否显示合计的条目bar
@@ -443,7 +443,7 @@ export class TaxPage extends Base {
   /**
    * 改变年份刷新数据
    */
-  chooseYear() {
+  chooseYear(val: any) {
     //e.g. this.Years = [2018, 2017, 2016] [今年，去年，前年]
     let yearIndex = this.Years.indexOf(parseInt(this.choosedYear));
     switch (yearIndex) {
