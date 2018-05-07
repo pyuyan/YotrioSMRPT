@@ -60,8 +60,8 @@ export class YotrioSMRPT {
           datasvrprovider.GetKeyDepts().then(result => {
 
           });
-          //获取今年时间 截取末两位数字 e.g. 2018 为：18
-          const currentYear = (new Date).getFullYear().toString().slice(-2);
+          //获取今年时间 截取末两位数字 e.g. 2018 为：18 note：实际为 今年+1 表示实际接单数据
+          const currentYear = (Number((new Date).getFullYear().toString().slice(-2)) + 1).toString();
           datasvrprovider.SyncLastSMReportData(currentYear).then(result => {
             console.log(ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag);
           });
