@@ -4,7 +4,7 @@
       <ion-icon style="font-size: 50px;" name="menu"></ion-icon>
     </button>
     <ion-title style="padding:0% 0% 0% 0%;">
-      <p align="center" style="color:white;font-size:58px;">永强集团税务信息中心</p>
+      <p align="center" style="color:white;font-size:58px;">永强集团税务数据中心</p>
     </ion-title>
     <ion-buttons end>
       <button ion-button>
@@ -19,11 +19,11 @@
 <ion-content padding>
   <ion-card class="segment-year">
     <!-- <ion-toolbar no-border-top> -->
-      <ion-segment  color="danger" [(ngModel)]="choosedYear">
-        <ion-segment-button value="{{year}}" *ngFor="let year of Years;" (click)="chooseYear()">
-          {{year}}
-        </ion-segment-button>
-      </ion-segment>
+    <ion-segment color="danger" [(ngModel)]="choosedYear">
+      <ion-segment-button value="{{year}}" *ngFor="let year of Years;" (click)="chooseYear()">
+        {{year}}
+      </ion-segment-button>
+    </ion-segment>
     <!-- </ion-toolbar> -->
   </ion-card>
 

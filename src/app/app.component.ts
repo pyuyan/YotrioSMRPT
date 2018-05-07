@@ -8,6 +8,8 @@ import { LoginPage } from '../pages/login/login';
 import { ContextData } from './context';
 import { SmreportPage } from '../pages/smreport/smreport';
 import { TaxPage } from '../pages/tax/tax';
+import { InventoryPage } from '../pages/inventory/inventory';
+import { ManagementPage } from '../pages/management/management';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
 import { Params } from './params';
 
@@ -47,6 +49,8 @@ export class YotrioSMRPT {
       { title: '制造数据中心', component: HomePage },
       { title: '营销数据中心', component: SmreportPage },
       { title: '税务数据中心', component: TaxPage },
+      // { title: '库存数据中心', component: InventoryPage }, 
+      // { title: '经营数据中心', component: ManagementPage }, 
       //{ title: '', component: SOCountPage }
     ];
 
@@ -56,7 +60,9 @@ export class YotrioSMRPT {
           datasvrprovider.GetKeyDepts().then(result => {
 
           });
-          datasvrprovider.SyncLastSMReportData('19').then(result => {
+          //获取今年时间 截取末两位数字 e.g. 2018 为：18
+          const currentYear = (new Date).getFullYear().toString().slice(-2);
+          datasvrprovider.SyncLastSMReportData(currentYear).then(result => {
             console.log(ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag);
           });
           //年度税务数据

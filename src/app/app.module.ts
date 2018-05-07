@@ -34,6 +34,8 @@ import { SmreportPageModule } from '../pages/smreport/smreport.module';
 import { SecloginmodelPageModule } from '../pages/secloginmodel/secloginmodel.module';
 import { SmreportmodalPageModule } from '../pages/smreportmodal/smreportmodal.module';
 import { TaxPageModule } from '../pages/tax/tax.module';
+import { InventoryPageModule } from '../pages/inventory/inventory.module';
+import { ManagementPageModule } from '../pages/management/management.module';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { TaxPageModule } from '../pages/tax/tax.module';
     SmreportPageModule,
     SecloginmodelPageModule,
     SmreportmodalPageModule,
-    TaxPageModule
+    TaxPageModule,
+    InventoryPageModule,
+    ManagementPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

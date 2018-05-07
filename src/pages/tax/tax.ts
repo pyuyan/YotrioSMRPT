@@ -388,16 +388,16 @@ export class TaxPage extends Base {
     for (let key in this.taxDataGroupByArea) {
       let _data = this.taxDataGroupByArea[key];
       //增值税
-      let vatax = arrayHelper._sum(arrayHelper._column(_data, 'VATax'), 4);
+      let vatax = arrayHelper._sum(arrayHelper._column(_data, 'VATax'), 0);
       VATaxData.push(vatax);
       //企业所得税
-      let incometax = arrayHelper._sum(arrayHelper._column(_data, 'IncomeTax'), 4);
+      let incometax = arrayHelper._sum(arrayHelper._column(_data, 'IncomeTax'), 0);
       IncomeTaxData.push(incometax);
       //其他税
-      let othertax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 4);
+      let othertax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 0);
       OtherTaxData.push(othertax);
       //总税费
-      let total = arrayHelper._sum([vatax, incometax, othertax]);
+      let total = arrayHelper._sum([vatax, incometax, othertax], 0);
       totalTaxData.push(total);
     }
 
@@ -418,7 +418,7 @@ export class TaxPage extends Base {
       };
       barSeriseData.push(tmpSeriseData);
       //处理小计部分
-      let tmpSum = arrayHelper._sum(tmpData, 4);
+      let tmpSum = arrayHelper._sum(tmpData, 0);
       //是否显示合计的bar
       if (this.showTotalBar) {
         tmpData.push(tmpSum);
@@ -432,7 +432,7 @@ export class TaxPage extends Base {
     this.taxBarData.series = barSeriseData;
 
     //处理小计部分
-    let tmpSum = arrayHelper._sum(totalTaxData, 4);
+    let tmpSum = arrayHelper._sum(totalTaxData, 0);
     totalTaxData.push(tmpSum);
     this.taxBarxAxisAppend = areas.concat(['合计']);
     this.taxBarSeriesAppend.push({ name: '合计', data: totalTaxData })
