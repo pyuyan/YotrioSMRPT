@@ -1,3 +1,5 @@
+import { debugHelper } from './../../util/helper/debug';
+import { arrayHelper } from './../../util/helper/array';
 import { dataHelper } from './../../util/helper/data';
 import { CacheService } from './../../service/cache';
 
@@ -415,6 +417,8 @@ export class SmreportPage extends Base {
                 keydeptmoneys.push(0);
                 keydeptgrosses.push(0);
             });
+            //统计国内累计接单金额
+            let inlandSum = 0;
             ContextData.OriginalDatas[ContextData.TableName].DataValue.forEach(datarow => {
                 let selfflag = datarow.SelfFlag; //内部外部
                 let areatype = datarow.AreaType; //区域分类
@@ -442,9 +446,18 @@ export class SmreportPage extends Base {
                         areagrosses[areaidx] += tmp_gross;
                     }
 
-                    if (customer != '国内市场部客户') {
+                    //计算国内市场部，主要是为了debug
+                    if (keydept == '国内市场部') {
+                        inlandSum += tmp_salemny;
+                    }
+
+                    if (customer != '国内市场部客户' && keydept) {
+                        //2018年5月11日16:07:15 这里截取到 "组" 做匹配，有些组名变动，e.g. TEST组 -> TEST组(失效)
+                        let v_keydept = keydept.substr(0, keydept.indexOf("组") + 1);
                         //业务组接单数据收集
-                        let deptidx = keydeptdata.DeptNames.indexOf(keydept);
+                        // let deptidx = keydeptdata.DeptNames.indexOf(keydept);
+                        let deptidx = keydeptdata.DeptNames.indexOf(v_keydept);
+
                         if (deptidx >= 0) {
                             keydeptmoneys[deptidx] += tmp_salemny;
                             keydeptgrosses[deptidx] += tmp_gross;
@@ -524,6 +537,11 @@ export class SmreportPage extends Base {
                 );
             }
             charts[1].ChartObj.setOption(charts[1].ValueOptions);
+
+            let pieValues: any = arrayHelper._column(charts[1].ValueOptions.series[0].data, 'value');
+            debugHelper.log('按地区累计接单金额：' + arrayHelper._sum(pieValues, 0))
+            debugHelper.log('按业务组累计接单金额：' + arrayHelper._sum(charts[0].ValueOptions.series[1].data, 0))
+            debugHelper.log('国内市场部累计接单金额：' + arrayHelper._sum([inlandSum], 0))
 
             //前10毛利率数据刷新
             topgroupvalues.forEach(groupvalue => {

@@ -9,21 +9,23 @@ export class debugHelper {
      * @param type 类型
      */
     public static show(message: any, type: string = 'log') {
-        switch (type) {
-            case 'log':
-                Params.DEBUGMODE && console.log(message);
-                break;
-            case 'error':
-            case 'err':
-            case 'failed':
-                Params.DEBUGMODE && console.error(message);
-                break;
-            case 'group':
-                Params.DEBUGMODE && console.group(message);
-                break;
-            default:
-                Params.DEBUGMODE && console.log(message);
-                break;
+        if (Params.DEBUGMODE) {
+            switch (type) {
+                case 'log':
+                    console.log(message);
+                    break;
+                case 'error':
+                case 'err':
+                case 'failed':
+                    console.error(message);
+                    break;
+                case 'group':
+                    console.group(message);
+                    break;
+                default:
+                    console.log(message);
+                    break;
+            }
         }
     }
 

@@ -304,9 +304,15 @@ export class TaxPage extends Base {
       //企业所得税
       let IncomeTax = arrayHelper._sum(arrayHelper._column(_data, 'IncomeTax'), 0);
       //其他税
+      // let OtherTax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 0);
+      //其他税费
       let OtherTax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 0);
+      //其他经费
+      let OtherFee = arrayHelper._sum(arrayHelper._column(_data, 'OtherFee'), 0);
+      //其他税费 = 其他税费 + 其他经费
+      let OtherTotal = arrayHelper._sum([OtherTax, OtherFee], 0);
       //总税费
-      let totalTax = arrayHelper._sum([VATax, IncomeTax, OtherTax], 0);
+      let totalTax = arrayHelper._sum([VATax, IncomeTax, OtherTotal], 0);
 
       titleData.push({
         text: totalTax,
@@ -352,7 +358,7 @@ export class TaxPage extends Base {
             name: this.taxPieData.legend.data[2],
           },
           {
-            value: OtherTax,
+            value: OtherTotal,
             name: this.taxPieData.legend.data[3],
           },
         ]
@@ -394,10 +400,17 @@ export class TaxPage extends Base {
       let incometax = arrayHelper._sum(arrayHelper._column(_data, 'IncomeTax'), 0);
       IncomeTaxData.push(incometax);
       //其他税
-      let othertax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 0);
-      OtherTaxData.push(othertax);
+      // let othertax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 0);
+      //其他税费
+      let OtherTax = arrayHelper._sum(arrayHelper._column(_data, 'OtherTax'), 0);
+      //其他经费
+      let OtherFee = arrayHelper._sum(arrayHelper._column(_data, 'OtherFee'), 0);
+      //其他税费 = 其他税费 + 其他经费
+      let OtherTotal = arrayHelper._sum([OtherTax, OtherFee], 0);
+
+      OtherTaxData.push(OtherTotal);
       //总税费
-      let total = arrayHelper._sum([vatax, incometax, othertax], 0);
+      let total = arrayHelper._sum([vatax, incometax, OtherTotal], 0);
       totalTaxData.push(total);
     }
 

@@ -6,9 +6,8 @@
     <ion-title>
       <p align="right" class="title-title">永强集团税务数据中心</p>
       <p align="center" class="title-select">
-        <ion-label>年度</ion-label>
         <ion-select [(ngModel)]="choosedYear" (ionChange)="chooseYear($event)" interface="popover">
-          <ion-option value="{{year}}" *ngFor="let year of Years;">{{year}}</ion-option>
+          <ion-option value="{{year}}" *ngFor="let year of Years">{{year}}年</ion-option>
         </ion-select>
       </p>
     </ion-title>
