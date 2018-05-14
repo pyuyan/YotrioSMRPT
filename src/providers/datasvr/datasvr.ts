@@ -35,7 +35,7 @@ export class DatasvrProvider {
     this.contextdata = ContextData.Create();
     //设置httpServ请求地址
     this.httpServ.setUrl(Params.ESBPortal);
-    
+
   }
 
   /**
@@ -90,35 +90,23 @@ export class DatasvrProvider {
    * @param endmonth 结束月份，默认当前月
    */
   CallYearTaxAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
-
-    //声明为 Injectable() 的是全局单例，所以我们这里能取到 dateServ 在其他单页中设置的值，这样能动态取到不同时间段数据
-    if (beginyear == 0 || endyear == 0 || endmonth == 0 || beginmonth == 0) {
-      let dateRange = this.dateServ.getDateRange(DateScene.TAX);
-      debugHelper.log('dateRange')
-      debugHelper.log(dateRange)
-      let years = this.dateServ.years;
-      //默认取值为今年到现在的月份的数据
-      beginyear = years.currentYear;
-      beginmonth = 1;
-      endyear = years.currentYear;
-      endmonth = this.dateServ.currentMonth;
-
-      if (Object.keys(dateRange).length) {
-        beginyear = dateRange.beginyear;
-        beginmonth = dateRange.beginmonth;
-        endyear = dateRange.endyear;
-        endmonth = dateRange.endmonth;
-      }
-    }
-
     const endpoint: string = 'getYearTAX/do';
-    let params: any = {
-      beginyear: beginyear,
-      beginmonth: beginmonth,
-      endyear: endyear,
-      endmonth: endmonth,
-    };
-    return this.httpServ.get(endpoint, params);
+    let params: any = this.dateServ.setScene(DateScene.TAX).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    return this.httpServ.setUrl(Params.ESBPortal).get(endpoint, params);
+  }
+
+  /**
+   * 调用库存数据API
+   * @param beginyear 开始年份 默认今年
+   * @param beginmonth 开始月份 默认今年第一个月
+   * @param endyear 结束年份 默认今年
+   * @param endmonth 结束月份，默认当前月
+   */
+  CallYearInventoryAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+    const endpoint: string = 'getYearInventory/do';
+    let params: any = this.dateServ.setScene(DateScene.INVENTORY).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    //TODO 这里目前是放在测试环境 97，正式环境切到 197 2018年5月14日17:02:29
+    return this.httpServ.setUrl('http://192.168.0.97:8280').get(endpoint, params);
   }
 
   /**
@@ -225,5 +213,17 @@ export class DatasvrProvider {
     });
   }
 
+  /**
+   * 同步库存数据到本地
+   */
+  syncYearInventoryData() {
+    return this.CallYearInventoryAPI().subscribe(res => {
+      let tmp_inventoryData = res['InventoryDatas']['InventoryData'];
+      if (tmp_inventoryData.length) {
+        ContextData.InventoryDatas[ContextData.TableName].DataValue = tmp_inventoryData;
+        ContextData.InventoryDatas[ContextData.TableName].UpdateFlag = true;
+      }
+    });
+  }
 
 }

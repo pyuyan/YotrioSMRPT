@@ -45,6 +45,24 @@ export class ContextData {
       DataValue: []
     },
   }
+  /**
+   * 库存本地数据
+   */
+  static InventoryDatas: any = {
+    TMP_SMTransferData: {
+      UpdateFlag: false,
+      DataValue: []
+    },
+  }
+  /**
+   * 经营状况本地数据
+   */
+  static ManagementDatas: any = {
+    TMP_SMTransferData: {
+      UpdateFlag: false,
+      DataValue: []
+    },
+  }
 
   /**
    * 设置新时间戳

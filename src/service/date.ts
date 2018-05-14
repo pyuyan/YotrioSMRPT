@@ -7,6 +7,8 @@ export enum DateScene {
     HOME = 'HomePage',
     SMREPORT = 'SMrepoSrtPage',
     TAX = 'TaxPage',
+    INVENTORY = 'Inventory',
+    MANAGEMENT = 'Management',
 }
 
 /**
@@ -32,7 +34,7 @@ export class DateService {
     /**
      * 日期使用场景
      */
-    public scene: string = '';
+    public scene: any;
     /**
      * 日期每个场景下的值集合
      */
@@ -94,5 +96,33 @@ export class DateService {
         this.setDateRange(this.years.blastYear, 1, this.years.blastYear, 12);
     }
 
+    /**
+     * 获取过滤后的日期区间
+     */
+    public getFilteredDateRange(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
 
+        if (beginyear <= 0 || endyear <= 0 || endmonth <= 0 || beginmonth <= 0) {
+            let years = this.years;
+            //默认取值为今年到现在的月份的数据
+            beginyear = years.currentYear;
+            beginmonth = 1;
+            endyear = years.currentYear;
+            endmonth = this.currentMonth;
+
+            let dateRange = this.getDateRange(this.scene);
+            if (Object.keys(dateRange).length) {
+                beginyear = dateRange.beginyear;
+                beginmonth = dateRange.beginmonth;
+                endyear = dateRange.endyear;
+                endmonth = dateRange.endmonth;
+            }
+        }
+
+        return {
+            beginyear: beginyear,
+            beginmonth: beginmonth,
+            endyear: endyear,
+            endmonth: endmonth,
+        };
+    }
 }

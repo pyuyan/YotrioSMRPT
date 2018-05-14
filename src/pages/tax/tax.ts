@@ -182,7 +182,9 @@ export class TaxPage extends Base {
     event.subscribe(Params.taxAterYearChanged, (year) => {
       super.debug("event 年份：" + year)
       this.choosedYear = year;
-      this.chooseYear();
+      setTimeout(() => {
+        this.chooseYear();
+      }, 10);
     });
   }
 
@@ -486,7 +488,7 @@ export class TaxPage extends Base {
     this.dataProvider.syncYearTaxData().add(() => {
       setTimeout(() => {
         this.update(true);
-      }, 200);
+      }, 100);
     });
   }
 
