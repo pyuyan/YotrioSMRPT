@@ -538,8 +538,7 @@ export class SmreportPage extends Base {
             }
             charts[1].ChartObj.setOption(charts[1].ValueOptions);
 
-            let pieValues: any = arrayHelper._column(charts[1].ValueOptions.series[0].data, 'value');
-            debugHelper.log('按地区累计接单金额：' + arrayHelper._sum(pieValues, 0))
+            debugHelper.log('按地区累计接单金额：' + arrayHelper._sum(arrayHelper._column(charts[1].ValueOptions.series[0].data, 'value'), 0))
             debugHelper.log('按业务组累计接单金额：' + arrayHelper._sum(charts[0].ValueOptions.series[1].data, 0))
             debugHelper.log('国内市场部累计接单金额：' + arrayHelper._sum([inlandSum], 0))
 

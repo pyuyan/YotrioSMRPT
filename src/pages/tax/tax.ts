@@ -1,5 +1,8 @@
+import { Params } from './../../app/params';
+import { TaxpopoverPage } from './../taxpopover/taxpopover';
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams } from 'ionic-angular';
+import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams, PopoverController, Events } from 'ionic-angular';
+
 import { NgxEchartsService, NgxEchartsModule } from 'ngx-echarts';  //备注：NgxEchartsModule 不能少
 
 import { ContextData } from '../../app/context';
@@ -155,6 +158,8 @@ export class TaxPage extends Base {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public popoverCtrl: PopoverController,
+    public event: Events,
     public dateServ: DateService,
     public dataProvider: DatasvrProvider,
     private echartServ: NgxEchartsService,
@@ -170,7 +175,15 @@ export class TaxPage extends Base {
       years.lastYear,
       years.blastYear
     ];
+
     this.choosedYear = years.currentYear;
+
+    //监听年份改变事件 2018年5月14日
+    event.subscribe(Params.taxAterYearChanged, (year) => {
+      super.debug("event 年份：" + year)
+      this.choosedYear = year;
+      this.chooseYear();
+    });
   }
 
   ionViewDidLoad() {
@@ -456,7 +469,7 @@ export class TaxPage extends Base {
   /**
    * 改变年份刷新数据
    */
-  chooseYear(val: any) {
+  chooseYear(val: any = '') {
     //e.g. this.Years = [2018, 2017, 2016] [今年，去年，前年]
     let yearIndex = this.Years.indexOf(parseInt(this.choosedYear));
     switch (yearIndex) {
@@ -477,4 +490,16 @@ export class TaxPage extends Base {
     });
   }
 
+  /**
+   * 使用自定义组件popover
+   */
+  presentPopover(event) {
+    let popover = this.popoverCtrl.create(TaxpopoverPage, {
+      title: '选择年份',
+      data: this.Years,
+    });
+    popover.present({
+      ev: event
+    });
+  }
 }

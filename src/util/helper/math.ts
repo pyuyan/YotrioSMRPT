@@ -21,12 +21,12 @@ export class mathHelper {
      * @param {string|object|number} version [要格式化的版本号]
      */
     public static versionFormat(version: any) {
-        let v = version.toString();
-        v = v.split('.');
-        let num_place = ["", "0", "00", "000", "0000"], r = num_place.reverse();
+        let v = version.toString().split('.');
+        // let num_place = ["", "0", "00", "000", "0000"], r = num_place.reverse();
+        let num_replace: string[] = ["0000", "000", "00", "0", ""];
         for (let i = 0; i < v.length; i++) {
             let len = v[i].length;
-            v[i] = r[len] + v[i];
+            v[i] = num_replace[len] + v[i];
         }
         return v.join('');
     }
@@ -39,13 +39,7 @@ export class mathHelper {
 	 */
     public static versionCompare(target_ver, current_ver): boolean {
         let new_ver = mathHelper.versionFormat(target_ver), old_ver = mathHelper.versionFormat(current_ver);
-        if (new_ver == old_ver) {
-            return false;
-        } else if (new_ver > old_ver) {
-            return true;
-        } else {
-            return false;
-        }
+        return new_ver > old_ver;
     }
 
     /**

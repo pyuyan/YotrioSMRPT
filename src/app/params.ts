@@ -33,4 +33,14 @@ export class Params {
      */
     public static readonly AppUpdateCheckUrl: string = Params.AppUpdateBaseUrl + 'app-version.json';
 
+    /**
+     * ****************************************
+     * 以下配置为 各个 event 的 topic
+     * ****************************************
+     */
+
+    /**
+     * tax 税务中心 改变年份的 topic
+     */
+    public static readonly taxAterYearChanged: string = 'tax:after:yearChanged';
 }

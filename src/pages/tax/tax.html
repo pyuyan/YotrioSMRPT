@@ -5,10 +5,13 @@
     </button>
     <ion-title>
       <p align="right" class="title-title">永强集团税务数据中心</p>
-      <p align="center" class="title-select">
-        <ion-select [(ngModel)]="choosedYear" (ionChange)="chooseYear($event)" interface="popover">
+      <p align="center" class="title-select" (click)="presentPopover($event)">
+        {{choosedYear}}年
+        <ion-icon name="arrow-dropdown"></ion-icon>
+
+        <!-- <ion-select [(ngModel)]="choosedYear" (ionChange)="chooseYear($event)" interface="popover">
           <ion-option value="{{year}}" *ngFor="let year of Years">{{year}}年</ion-option>
-        </ion-select>
+        </ion-select> -->
       </p>
     </ion-title>
 
