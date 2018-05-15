@@ -27,8 +27,8 @@ export class TaxPage extends Base {
   taxPieInstance: any
   taxBarInstance: any
 
-  //要求的排序 hardcode
-  pieDataSort: string[] = ['户外家居', '北京联拓', '永强投资', '房地产', '其他'];
+  //要求的排序 hardcode note 这里数据源经常变动
+  pieDataSort: string[] = [/*'户外家居'*/'户外休闲家具', /*'北京联拓'*/'旅游机票', /*'永强投资'*/'投资', '房地产', '其他'];
   barDataSort: string[] = ['临海', '黄岩', '宁波', '山东', '上海', '北京', '合肥', '境外'];
 
   //是否显示合计的条目bar
@@ -220,6 +220,8 @@ export class TaxPage extends Base {
     let taxData: Array<any> = ContextData.TaxDatas[ContextData.TableName].DataValue;
     let taxUpdateFlag: boolean = ContextData.TaxDatas[ContextData.TableName].UpdateFlag;
 
+    super.debug(arrayHelper._unique(arrayHelper._column(taxData,'Industry')))
+
     if (needUpdate || taxUpdateFlag) {
 
       this.taxDataGroupByArea = {};
@@ -247,7 +249,7 @@ export class TaxPage extends Base {
 
     this.taxPieData.legend.data = firstData.concat(this.taxType);
 
-    let pieDistance: number = 15;
+    let pieDistance: number = 15.5;
     let IndustryNames = firstData.concat(Object.keys(this.taxDataGroupByIndustry));
     //出口退税总额
     let ExpDrawbackTaxTotal = arrayHelper._sum(arrayHelper._column(data, 'ExpDrawbackTax'), 0);
@@ -465,6 +467,7 @@ export class TaxPage extends Base {
     this.taxBarxAxisAppend = areas.concat(['合计']);
     this.taxBarSeriesAppend.push({ name: '合计', data: totalTaxData })
 
+    super.debug(this.taxBarData)
     this.taxBarInstance.setOption(this.taxBarData);
   }
 

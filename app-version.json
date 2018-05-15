@@ -1,7 +1,7 @@
 {
-    "version": "1.1.13",
-    "release_date": "2018年5月14日11:14:15",
-    "desc": "版本：1.1.13 更新内容：1. 税务数据中心使用发布订阅事件机制 2. 样式调整",
+    "version": "1.1.14",
+    "release_date": "2018年5月15日17:10:17",
+    "desc": "版本：1.1.14 更新内容：1. 税务数据中心数据产业名调整  2. 增加库存数据中心",
     "app_name": "yotrioSMRPT",
     "app_url_android": "http://192.168.0.197:2222/android-armv7-debug.apk",
     "app_url_iOS": ""

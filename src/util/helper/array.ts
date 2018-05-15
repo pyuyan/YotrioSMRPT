@@ -59,7 +59,7 @@ export class arrayHelper {
      * @param arr 一位数字，字符串 数组
      * @param decimal 精确度 默认保留3位
      */
-    public static _sum(arr: Array<any>, decimal: number = 3) {
+    public static _sum(arr: Array<any>, decimal: number = 3): string {
         let sum: number = 0;
         if (arr.length != 0) {
             sum = arr.reduce((acc, val) => {

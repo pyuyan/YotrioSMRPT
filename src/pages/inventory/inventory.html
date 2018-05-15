@@ -1,20 +1,52 @@
 <ion-header>
   <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
     <button ion-button menuToggle>
-      <ion-icon style="font-size: 50px;" name="menu"></ion-icon>
+      <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title style="padding:0% 0% 0% 0%;">
-      <p align="center" style="color:white;font-size:58px;">永强集团库存数据中心</p>
+    <ion-title>
+      <p align="right" class="title-title">永强集团库存数据中心</p>
+
+      <!-- <p align="center" class="title-select" (click)="presentPopover($event)">
+        {{choosedYear}}年
+        <ion-icon name="arrow-dropdown"></ion-icon>
+      </p> -->
     </ion-title>
+
     <ion-buttons end>
       <button ion-button>
-        <!-- <p align="center" style="color:white;font-size:25px;">单位(万件)&nbsp;&nbsp;</p> -->
-        <ion-input style="color:white;font-size:25px;" [(ngModel)]="timevalue" #clockcontrol></ion-input>
+        <p align="center">单位(万元)&nbsp;&nbsp;</p>
+        <ion-input [(ngModel)]="timevalue" #clockcontrol></ion-input>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-11>
+        <ion-card class="maincontenttopstyle">
+          <ion-card-content>
+            <div echarts #inventoryPie [options]="inventoryPieData" class="piediv"></div>
+          </ion-card-content>
+        </ion-card>
 
+        <ion-card class="maincontentstyle">
+          <div echarts #inventoryBar [options]="inventoryBarData" class="bardiv"></div>
+          <div class="profitgridstyle">
+            <ion-grid align-items-start>
+              <ion-row class="profit-header">
+                <ion-col>存放地点</ion-col>
+                <ion-col text-center *ngFor="let header of inventoryBarxAxisAppend">{{header}}</ion-col>
+              </ion-row>
+              <ion-row class="profit-content" *ngFor="let rowdata of inventoryBarSeriesAppend;index as i;">
+                <ion-col text-left align-self-center>{{rowdata.name}}</ion-col>
+                <ion-col text-right align-self-center *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

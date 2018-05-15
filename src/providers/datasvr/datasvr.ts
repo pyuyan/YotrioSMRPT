@@ -92,7 +92,7 @@ export class DatasvrProvider {
   CallYearTaxAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = 'getYearTAX/do';
     let params: any = this.dateServ.setScene(DateScene.TAX).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
-    return this.httpServ.setUrl(Params.ESBPortal).get(endpoint, params);
+    return this.httpServ.get(endpoint, params);
   }
 
   /**
@@ -105,8 +105,7 @@ export class DatasvrProvider {
   CallYearInventoryAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = 'getYearInventory/do';
     let params: any = this.dateServ.setScene(DateScene.INVENTORY).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
-    //TODO 这里目前是放在测试环境 97，正式环境切到 197 2018年5月14日17:02:29
-    return this.httpServ.setUrl('http://192.168.0.97:8280').get(endpoint, params);
+    return this.httpServ.get(endpoint, params);
   }
 
   /**

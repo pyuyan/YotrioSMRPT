@@ -57,7 +57,7 @@ export class mathHelper {
      * @param decimal 精度
      * @returns string
      */
-    public static div(numerator: any, denominator: any, decimal: number = 4) {
+    public static div(numerator: any, denominator: any, decimal: number = 4): string {
         let res: number = 0;
         if (Number(denominator) != 0) {
             res = Number(numerator) / Number(denominator);
@@ -72,7 +72,18 @@ export class mathHelper {
      * @param decimal 精度
      * @returns string
      */
-    public static mul(num1: any, num2: any, decimal: number = 2) {
+    public static mul(num1: any, num2: any, decimal: number = 2): string {
         return parseFloat((Number(num1) * Number(num2)).toString()).toFixed(decimal);
+    }
+
+    /**
+     * 两数相加
+     * @param num1 
+     * @param num2 
+     * @param decimal 精度
+     * @returns string
+     */
+    public static sum(num1: any, num2: any, decimal: number = 2): string {
+        return parseFloat((Number(num1) + Number(num2)).toString()).toFixed(decimal);
     }
 }
