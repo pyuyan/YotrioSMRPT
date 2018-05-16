@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, PopoverController, Events } from 'ionic-angular';
-import { Params } from '../../app/params';
+import { IonicPage, NavController, NavParams, Events, ViewController } from 'ionic-angular';
+import { Params } from './../../app/params';
 
 @IonicPage()
 @Component({
-  selector: 'page-taxpopover',
-  templateUrl: 'taxpopover.html',
+  selector: 'page-popmonth',
+  templateUrl: 'popmonth.html',
 })
-export class TaxpopoverPage {
-
+export class PopmonthPage {
   //popover标题
   _title: string;
   //popover列表数据
@@ -28,10 +27,8 @@ export class TaxpopoverPage {
   ionViewDidLoad() { }
 
   close(val: any) {
-    //发布年份改变事件
-    this.event.publish(Params.taxAterYearChanged, val);
+    //发布月份改变事件
+    this.event.publish(Params.commonAterMonthChanged, val);
     this.viewCtrl.dismiss();
   }
-
-
 }

@@ -36,7 +36,8 @@ import { SmreportmodalPageModule } from '../pages/smreportmodal/smreportmodal.mo
 import { TaxPageModule } from '../pages/tax/tax.module';
 import { InventoryPageModule } from '../pages/inventory/inventory.module';
 import { ManagementPageModule } from '../pages/management/management.module';
-import { TaxpopoverPageModule } from '../pages/taxpopover/taxpopover.module';
+// import { TaxpopoverPageModule } from '../pages/taxpopover/taxpopover.module';  //这里不是全局要用到，放在要用到的module中
+import { PopmonthPageModule } from './../pages/popmonth/popmonth.module';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { TaxpopoverPageModule } from '../pages/taxpopover/taxpopover.module';
     TaxPageModule,
     InventoryPageModule,
     ManagementPageModule,
-    TaxpopoverPageModule
+    // TaxpopoverPageModule,
+    PopmonthPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

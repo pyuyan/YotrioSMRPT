@@ -40,7 +40,13 @@ export class Params {
      */
 
     /**
+     * 公用topic 改变月份的 topic
+     */
+    public static readonly commonAterMonthChanged: string = 'common:after:monthChanged';
+
+    /**
      * tax 税务中心 改变年份的 topic
      */
     public static readonly taxAterYearChanged: string = 'tax:after:yearChanged';
+    
 }

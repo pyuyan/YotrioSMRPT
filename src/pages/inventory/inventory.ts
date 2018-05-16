@@ -1,5 +1,6 @@
+import { Params } from './../../app/params';
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams } from 'ionic-angular';
+import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams, PopoverController, Events } from 'ionic-angular';
 import { NgxEchartsService, NgxEchartsModule } from 'ngx-echarts';  //备注：NgxEchartsModule 不能少
 
 import { ContextData } from '../../app/context';
@@ -8,6 +9,8 @@ import { arrayHelper } from './../../util/helper/array';
 import { dateHelper } from './../../util/helper/date';
 import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
+import { PopmonthPage } from './../popmonth/popmonth';
+
 /**
  * @desc 库存信息页面
  */
@@ -26,7 +29,9 @@ export class InventoryPage extends Base {
   //选中的年份 默认为今年
   choosedMonth: any;
   //涉及的月份
-  months: any[];
+  months: any[] = [];
+  //今年
+  currentYear: any;
 
   //库存数据 按时间分类
   inventoryDataGroupByTime: any = {};
@@ -157,6 +162,8 @@ export class InventoryPage extends Base {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public popoverCtrl: PopoverController,
+    public event: Events,
     public dateServ: DateService,
     public dataProvider: DatasvrProvider,
     private echartServ: NgxEchartsService,
@@ -164,7 +171,22 @@ export class InventoryPage extends Base {
     super();
     //设置时间场景
     this.dateServ.setScene(DateScene.INVENTORY);
+    this.currentYear = this.dateServ.years.currentYear;
+    //这里实际是延期一个月，就是这个月的数据是下个月财务部门上传；目前处理是 统计到今年到这个月为止的数据
+    this.choosedMonth = this.dateServ.currentMonth;
 
+    for (let m = 1; m <= this.dateServ.currentMonth; m++) {
+      this.months.push(m);
+    }
+
+    //监听年份改变事件 2018年5月16日
+    event.subscribe(Params.commonAterMonthChanged, (month) => {
+      super.debug("common event 月份：" + month);
+      this.choosedMonth = month;
+      setTimeout(() => {
+        this.chooseMonth();
+      }, 10);
+    });
   }
 
   ionViewDidLoad() {
@@ -356,5 +378,34 @@ export class InventoryPage extends Base {
     this.inventoryBarSeriesAppend.push({ name: '合计', data: totalData })
 
     this.inventoryBarInstance.setOption(this.inventoryBarData);
+  }
+
+  /**
+   * 改变月刷新数据
+   */
+  chooseMonth(val: any = '') {
+
+    super.debug(this.choosedMonth);
+    //如果选择是本月，就统计今年1月到本月的数据，因为数据是延迟一个月，本月是没有数据的
+    if (this.choosedMonth == this.dateServ.currentMonth) {
+      this.dateServ.setDateRange(this.currentYear, 1, this.currentYear, this.choosedMonth);
+    } else {
+      this.dateServ.setDateRange(this.currentYear, this.choosedMonth, this.currentYear, this.choosedMonth);
+    }
+    this.dataProvider.syncYearInventoryData().add(() => {
+      setTimeout(() => {
+        this.update(true);
+      }, 100);
+    });
+  }
+
+  presentPopover(event) {
+    let popover = this.popoverCtrl.create(PopmonthPage, {
+      title: '选择月份',
+      data: this.months,
+    });
+    popover.present({
+      ev: event
+    });
   }
 }
