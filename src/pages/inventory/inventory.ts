@@ -110,13 +110,13 @@ export class InventoryPage extends Base {
       orient: 'vertical',
       x: 'right',
       y: 'center',
-      feature: {
-        mark: { show: true },
-        dataView: { show: true, readOnly: false },
-        magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
-        restore: { show: true },
-        saveAsImage: { show: true }
-      }
+      // feature: {
+      //   mark: { show: true },
+      //   dataView: { show: true, readOnly: false },
+      //   magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+      //   restore: { show: true },
+      //   saveAsImage: { show: true }
+      // }
     },
     calculable: true,
     xAxis: [
@@ -150,6 +150,9 @@ export class InventoryPage extends Base {
         },
         splitLine: {
           show: false
+        },
+        axisLabel: {
+          fontSize: 16
         }
       }
     ],

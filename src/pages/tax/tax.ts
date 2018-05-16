@@ -106,13 +106,13 @@ export class TaxPage extends Base {
       orient: 'vertical',
       x: 'right',
       y: 'center',
-      feature: {
-        mark: { show: true },
-        dataView: { show: true, readOnly: false },
-        magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
-        restore: { show: true },
-        saveAsImage: { show: true }
-      }
+      // feature: {
+      //   mark: { show: true },
+      //   dataView: { show: true, readOnly: false },
+      //   magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+      //   restore: { show: true },
+      //   saveAsImage: { show: true }
+      // }
     },
     calculable: true,
     xAxis: [
@@ -132,6 +132,9 @@ export class TaxPage extends Base {
           rotate: -30,
           fontSize: 16
         },
+        splitLine: {
+          show: false
+        },
       }
     ],
     yAxis: [
@@ -146,6 +149,9 @@ export class TaxPage extends Base {
         },
         splitLine: {
           show: false
+        },
+        axisLabel: {
+          fontSize: 16
         }
       }
     ],
@@ -220,7 +226,7 @@ export class TaxPage extends Base {
     let taxData: Array<any> = ContextData.TaxDatas[ContextData.TableName].DataValue;
     let taxUpdateFlag: boolean = ContextData.TaxDatas[ContextData.TableName].UpdateFlag;
 
-    super.debug(arrayHelper._unique(arrayHelper._column(taxData,'Industry')))
+    super.debug(arrayHelper._unique(arrayHelper._column(taxData, 'Industry')))
 
     if (needUpdate || taxUpdateFlag) {
 

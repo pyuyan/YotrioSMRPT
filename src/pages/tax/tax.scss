@@ -30,13 +30,11 @@ page-tax {
           ion-option {
             font-size: 34px;
           }
-        } 
-        // ion-item {
-        //   color: $color-white !important;
-        // }
+        }
       }
     }
     ion-buttons {
+      margin-top: 22px;
       button {
         p {
           color: $color-white;
