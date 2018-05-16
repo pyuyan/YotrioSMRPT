@@ -7,7 +7,7 @@ export class Params {
     /**
      * 是否是调试模式
      */
-    public static readonly DEBUGMODE: boolean = false;
+    public static readonly DEBUGMODE: boolean = true;
     /**
      * 默认密码
      */
@@ -27,11 +27,13 @@ export class Params {
     /**
      * app更新检查的基准地址
      */
-    public static readonly AppUpdateBaseUrl: string = 'http://192.168.0.197:2222/';
+    // public static readonly AppUpdateBaseUrl: string = 'http://192.168.0.197:2222/';
+    public static readonly AppUpdateBaseUrl: string = 'http://192.168.0.97:6800/';
+
     /**
      * app更新检查的地址
      */
-    public static readonly AppUpdateCheckUrl: string = Params.AppUpdateBaseUrl + 'app-version.json';
+    public static readonly AppUpdateCheckUrl: string = Params.AppUpdateBaseUrl + 'APK/app-version.json';
 
     /**
      * ****************************************
@@ -48,5 +50,5 @@ export class Params {
      * tax 税务中心 改变年份的 topic
      */
     public static readonly taxAterYearChanged: string = 'tax:after:yearChanged';
-    
+
 }

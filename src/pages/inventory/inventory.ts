@@ -175,20 +175,21 @@ export class InventoryPage extends Base {
     //设置时间场景
     this.dateServ.setScene(DateScene.INVENTORY);
     this.currentYear = this.dateServ.years.currentYear;
-    //这里实际是延期一个月，就是这个月的数据是下个月财务部门上传；目前处理是 统计到今年到这个月为止的数据
+    //这里实际是延期一个月，就是这个月的数据是下个月财务部门上传；目前处理是 默认统计到今年到这个月为止的数据
     this.choosedMonth = this.dateServ.currentMonth;
 
     for (let m = 1; m <= this.dateServ.currentMonth; m++) {
       this.months.push(m);
     }
 
-    //监听年份改变事件 2018年5月16日
+    //监听月份改变事件 2018年5月16日
     event.subscribe(Params.commonAterMonthChanged, (month) => {
       super.debug("common event 月份：" + month);
       this.choosedMonth = month;
-      setTimeout(() => {
-        this.chooseMonth();
-      }, 10);
+      this.chooseMonth();
+      // setTimeout(() => {
+      //   this.chooseMonth();
+      // }, 10);
     });
   }
 
