@@ -9,6 +9,17 @@ export enum DateScene {
     TAX = 'TaxPage',
     INVENTORY = 'Inventory',
     MANAGEMENT = 'Management',
+    INVSTOCK = 'InvestStock',
+    INVRIGHT = 'InvestRight'
+}
+
+export interface dateRange {
+    beginyear: number;
+    beginmonth: number;
+    beginday?: number;
+    endyear: number;
+    endmonth: number;
+    endday?: number;
 }
 
 /**
@@ -76,6 +87,36 @@ export class DateService {
     }
 
     /**
+     * 设置当月的时间范围 必须先调用 setScene 设置场景值
+     */
+    public setCurrentMonth() {
+        //考虑 12月到明年1月 的临界情况
+        let endYear = this.years.currentYear, endMonth = this.currentMonth;
+
+        if (this.currentMonth == 12) {
+            endYear = Number(endYear) + 1;
+            endMonth = 1;
+        }
+
+        return this.setDateRange(this.years.currentYear, this.currentMonth, endYear, endMonth);
+    }
+
+    /**
+     * 设置上个月月的时间范围 必须先调用 setScene 设置场景值
+     */
+    public setLastMonth() {
+        let beginYear = this.years.currentYear, beginMonth = 0;
+
+        if (this.currentMonth == 1) {
+            beginYear = Number(beginYear) - 1;
+            beginMonth = 12;
+        } else {
+            beginMonth = Number(this.currentMonth) - 1;
+        }
+        return this.setDateRange(beginYear, beginMonth, this.years.currentYear, this.currentMonth);
+    }
+
+    /**
      * 设置今年开始到现在月份的时间范围 必须先调用 setScene 设置场景值
      */
     public setCurrentYear() {
@@ -99,7 +140,7 @@ export class DateService {
     /**
      * 获取过滤后的日期区间
      */
-    public getFilteredDateRange(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+    public getFilteredDateRange(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0): dateRange {
 
         if (beginyear <= 0 || endyear <= 0 || endmonth <= 0 || beginmonth <= 0) {
             let years = this.years;
@@ -124,5 +165,21 @@ export class DateService {
             endyear: endyear,
             endmonth: endmonth,
         };
+    }
+
+    /**
+     * 
+     * @param range 
+     * @note 由于是按月统计，目前是 20180300-20180400 代表是3月范围
+     */
+    public concatDateRange(range: dateRange) {
+        let beginMonth = range.beginmonth.toString();
+        let endMonth = range.endmonth.toString();
+        beginMonth = beginMonth.length == 1 ? '0' + beginMonth : beginMonth;
+        endMonth = endMonth.length == 1 ? '0' + endMonth : endMonth;
+        return {
+            periodbegin: range.beginyear.toString() + beginMonth + '00',
+            periodend: range.endyear.toString() + endMonth + '00'
+        }
     }
 }

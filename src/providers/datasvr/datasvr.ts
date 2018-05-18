@@ -109,6 +109,33 @@ export class DatasvrProvider {
   }
 
   /**
+   * @desc 获取股票投资信息
+   * @param periodbegin 开始时间 yyyymmdd e.g. 20180101
+   * @param periodend 结束时间 yyyymmdd e.g. 201902028
+   */
+  CallInvStockAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+    const endpoint: string = 'getStockInvest/do';
+    //获取上个月的数据
+    // let dateRange: any = this.dateServ.setScene(DateScene.INVSTOCK).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    let dateRange: any = this.dateServ.setScene(DateScene.INVSTOCK).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    let params: any = this.dateServ.concatDateRange(dateRange);
+    return this.httpServ.get(endpoint, params);
+  }
+  /**
+   * @desc 获取股权投资信息
+   * @param periodbegin 开始时间 yyyymmdd e.g. 20180101
+   * @param periodend 结束时间 yyyymmdd e.g. 201902028
+   */
+  CallInvRightAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+    const endpoint: string = 'getStockRightInvest/do';
+    //获取上个月的数据
+    // let dateRange: any = this.dateServ.setScene(DateScene.INVRIGHT).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    let dateRange: any = this.dateServ.setScene(DateScene.INVRIGHT).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    let params: any = this.dateServ.concatDateRange(dateRange);
+    return this.httpServ.get(endpoint, params);
+  }
+
+  /**
    * 获取关键业务部门档案信息
    */
   GetKeyDepts(): Promise<Boolean> {
@@ -221,6 +248,26 @@ export class DatasvrProvider {
       if (tmp_inventoryData.length) {
         ContextData.InventoryDatas[ContextData.TableName].DataValue = tmp_inventoryData;
         ContextData.InventoryDatas[ContextData.TableName].UpdateFlag = true;
+      }
+    });
+  }
+
+  syncInvStockData() {
+    return this.CallInvStockAPI().subscribe(res => {
+      let tmpData = res['StockInvests']['StockInvest'];
+      if (tmpData.length) {
+        ContextData.InvestsStock[ContextData.TableName].DataValue = tmpData;
+        ContextData.InvestsStock[ContextData.TableName].UpdateFlag = true;
+      }
+    });
+  }
+
+  syncInvRightData() {
+    return this.CallInvRightAPI().subscribe(res => {
+      let tmpData = res['StockRightInvests']['StockRightInvest'];
+      if (tmpData.length) {
+        ContextData.InvestsRight[ContextData.TableName].DataValue = tmpData;
+        ContextData.InvestsRight[ContextData.TableName].UpdateFlag = true;
       }
     });
   }

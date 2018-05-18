@@ -7,7 +7,7 @@ export class Params {
     /**
      * 是否是调试模式
      */
-    public static readonly DEBUGMODE: boolean = true;
+    public static readonly DEBUGMODE: boolean = false;
     /**
      * 默认密码
      */
