@@ -4,6 +4,7 @@ import { HomePage } from './home';
 import { PipesModule } from '../../pipes/pipes.module';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { MfgcountmodelPage } from './mfgcountmodel';
+import { SecloginmodelPageModule } from '../secloginmodel/secloginmodel.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { MfgcountmodelPage } from './mfgcountmodel';
   imports: [
     IonicPageModule.forChild(HomePage),
     PipesModule,
-    NgxEchartsModule
+    NgxEchartsModule,
+    SecloginmodelPageModule
   ],
   exports:[
     HomePage,

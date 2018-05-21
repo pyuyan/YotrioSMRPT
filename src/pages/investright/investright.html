@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <p align="right" class="title-title">永强集团股权投资数据</p>
+
+      <!-- <p align="center" class="title-select" (click)="presentPopover($event)">
+        {{currentYear}}年 {{choosedMonth}}月
+        <ion-icon name="arrow-dropdown"></ion-icon>
+      </p> -->
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button>
+        <p align="center">单位(万元)&nbsp;&nbsp;</p>
+        <ion-input [(ngModel)]="timevalue" #clockcontrol></ion-input>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    
+  </ion-grid>
+</ion-content>

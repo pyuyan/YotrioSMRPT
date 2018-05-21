@@ -10,6 +10,8 @@ import { SmreportPage } from '../pages/smreport/smreport';
 import { TaxPage } from '../pages/tax/tax';
 import { InventoryPage } from '../pages/inventory/inventory';
 import { ManagementPage } from '../pages/management/management';
+import { InveststockPage } from './../pages/investstock/investstock';
+import { InvestrightPage } from './../pages/investright/investright';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
 import { Params } from './params';
 
@@ -51,6 +53,8 @@ export class YotrioSMRPT {
       { title: '税务数据中心', component: TaxPage },
       { title: '库存数据中心', component: InventoryPage },
       // { title: '经营数据中心', component: ManagementPage }, 
+      { title: '股票投资数据', component: InveststockPage },
+      { title: '股权投资数据', component: InvestrightPage },
       //{ title: '', component: SOCountPage }
     ];
 

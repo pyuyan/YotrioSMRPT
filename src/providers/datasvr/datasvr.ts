@@ -252,6 +252,9 @@ export class DatasvrProvider {
     });
   }
 
+  /**
+   * 同步股票投资数据到本地
+   */
   syncInvStockData() {
     return this.CallInvStockAPI().subscribe(res => {
       let tmpData = res['StockInvests']['StockInvest'];
@@ -262,6 +265,9 @@ export class DatasvrProvider {
     });
   }
 
+  /**
+   * 同步股权投资数据到本地
+   */
   syncInvRightData() {
     return this.CallInvRightAPI().subscribe(res => {
       let tmpData = res['StockRightInvests']['StockRightInvest'];

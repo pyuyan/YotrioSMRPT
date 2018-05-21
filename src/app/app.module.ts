@@ -25,20 +25,17 @@ import { FileOpener } from '@ionic-native/file-opener';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 
 import { HttpClientModule } from '@angular/common/http';
-import { SmreportPage } from '../pages/smreport/smreport';
 import { PipesModule } from '../pipes/pipes.module';
 import { PercentPipe } from '@angular/common';
 import { ThousandsPipe } from '../pipes/thousands/thousands';
 import { HomePageModule } from '../pages/home/home.module';
 import { SmreportPageModule } from '../pages/smreport/smreport.module';
-import { SecloginmodelPageModule } from '../pages/secloginmodel/secloginmodel.module';
-import { SmreportmodalPageModule } from '../pages/smreportmodal/smreportmodal.module';
 import { TaxPageModule } from '../pages/tax/tax.module';
 import { InventoryPageModule } from '../pages/inventory/inventory.module';
 import { ManagementPageModule } from '../pages/management/management.module';
-// import { TaxpopoverPageModule } from '../pages/taxpopover/taxpopover.module';  //这里不是全局要用到，放在要用到的module中
 import { PopmonthPageModule } from './../pages/popmonth/popmonth.module';
-
+import { InveststockPageModule } from './../pages/investstock/investstock.module';
+import { InvestrightPageModule } from './../pages/investright/investright.module';
 
 @NgModule({
   declarations: [
@@ -53,13 +50,12 @@ import { PopmonthPageModule } from './../pages/popmonth/popmonth.module';
     IonicStorageModule.forRoot(),
     HomePageModule,
     SmreportPageModule,
-    SecloginmodelPageModule,
-    SmreportmodalPageModule,
     TaxPageModule,
     InventoryPageModule,
     ManagementPageModule,
-    // TaxpopoverPageModule,
-    PopmonthPageModule
+    PopmonthPageModule,
+    InveststockPageModule,
+    InvestrightPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
