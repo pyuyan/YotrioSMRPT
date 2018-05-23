@@ -23,6 +23,60 @@
 
 <ion-content padding>
   <ion-grid>
-    
+    <ion-row>
+      <!--左侧-->
+      <ion-col col-9>
+        <!--累计显示-->
+        <ion-card class="top-card">
+          <ion-row>
+            <ion-col *ngFor="let item of totalData">
+              <ion-card>
+                <ion-card-content>
+                  <ion-card-title align="center" [ngStyle]="{'color': item.fontcolor}">{{item.title}}</ion-card-title>
+                  <p align="center" [ngStyle]="{'color': item.fontcolor}">{{item.num}}</p>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+        <!--./累计显示-->
+
+        <!--股权投资详情显示-->
+        <ion-card class="sheet-card">
+          <ion-grid align-items-end>
+            <ion-row class="sheet-row-header">
+              <ion-col text-center align-self-center *ngFor="let header of headers">{{header}}</ion-col>
+            </ion-row>
+
+            <!--TODO:这里scroll高度应该是动态计算的-->
+            <ion-scroll scrollX="false" scrollY="true" style="height: 800px">
+              <ion-row class="sheet-row-content" *ngFor="let rowdata of investRightData;index as i;">
+                <ion-col text-center align-self-center style="border-style: none solid none solid;">
+                  <span style="font-size:23px;color:rgba(97, 177, 202, 0.9);">{{rowdata.OrgName}}</span>
+                </ion-col>
+
+                <ion-col text-center align-self-center>{{rowdata.InvMoney}}</ion-col>
+
+                <ion-col text-center align-self-center>{{rowdata.InvDate}}</ion-col>
+
+                <ion-col text-center align-self-center>{{rowdata.InvHoldingRate}}&nbsp;%</ion-col>
+
+                <ion-col text-center align-self-center>
+                  <span [ngStyle]="{'color': rowdata.InvIncoming > 0 ? 'rgba(255,68,22,0.9)' : rowdata.InvIncoming == 0 ? 'white' : 'rgba(85,214,8,0.8)' }">{{rowdata.InvIncoming}}</span>
+                </ion-col>
+
+                <ion-col text-center align-self-center>{{rowdata.InvBalance}}</ion-col>
+              </ion-row>
+            </ion-scroll>
+          </ion-grid>
+        </ion-card>
+        <!--./股权投资详情显示-->
+      </ion-col>
+      <!--./左侧-->
+
+      <!--右侧-->
+      <ion-col></ion-col>
+      <!--./右侧-->
+    </ion-row>
   </ion-grid>
 </ion-content>

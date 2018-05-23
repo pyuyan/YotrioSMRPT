@@ -90,15 +90,15 @@ export class DateService {
      * 设置当月的时间范围 必须先调用 setScene 设置场景值
      */
     public setCurrentMonth() {
-        //考虑 12月到明年1月 的临界情况
-        let endYear = this.years.currentYear, endMonth = this.currentMonth;
+        let currentYear = this.years.currentYear;
+        // let endYear = this.years.currentYear, endMonth = this.currentMonth;
 
-        if (this.currentMonth == 12) {
-            endYear = Number(endYear) + 1;
-            endMonth = 1;
-        }
+        // if (this.currentMonth == 12) {
+        //     endYear = Number(endYear) + 1;
+        //     endMonth = 1;
+        // }
 
-        return this.setDateRange(this.years.currentYear, this.currentMonth, endYear, endMonth);
+        return this.setDateRange(currentYear, this.currentMonth, currentYear, this.currentMonth);
     }
 
     /**
@@ -113,28 +113,28 @@ export class DateService {
         } else {
             beginMonth = Number(this.currentMonth) - 1;
         }
-        return this.setDateRange(beginYear, beginMonth, this.years.currentYear, this.currentMonth);
+        return this.setDateRange(beginYear, beginMonth, beginYear, beginMonth);
     }
 
     /**
      * 设置今年开始到现在月份的时间范围 必须先调用 setScene 设置场景值
      */
     public setCurrentYear() {
-        this.setDateRange();
+        return this.setDateRange();
     }
 
     /**
      * 设置去年开始时间范围 必须先调用 setScene 设置场景值
      */
     public setLastYear() {
-        this.setDateRange(this.years.lastYear, 1, this.years.lastYear, 12);
+        return this.setDateRange(this.years.lastYear, 1, this.years.lastYear, 12);
     }
 
     /**
      * 设置前年开始时间范围 必须先调用 setScene 设置场景值
      */
     public setBeforeLastYear() {
-        this.setDateRange(this.years.blastYear, 1, this.years.blastYear, 12);
+        return this.setDateRange(this.years.blastYear, 1, this.years.blastYear, 12);
     }
 
     /**
@@ -177,9 +177,11 @@ export class DateService {
         let endMonth = range.endmonth.toString();
         beginMonth = beginMonth.length == 1 ? '0' + beginMonth : beginMonth;
         endMonth = endMonth.length == 1 ? '0' + endMonth : endMonth;
+        let beginDay = range.beginday ? range.beginday : '00',
+            endDay = range.endday ? range.endday : '00';
         return {
-            periodbegin: range.beginyear.toString() + beginMonth + '00',
-            periodend: range.endyear.toString() + endMonth + '00'
+            periodbegin: range.beginyear.toString() + beginMonth + beginDay,
+            periodend: range.endyear.toString() + endMonth + endDay
         }
     }
 }

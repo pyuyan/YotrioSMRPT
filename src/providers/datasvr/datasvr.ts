@@ -110,28 +110,28 @@ export class DatasvrProvider {
 
   /**
    * @desc 获取股票投资信息
-   * @param periodbegin 开始时间 yyyymmdd e.g. 20180101
-   * @param periodend 结束时间 yyyymmdd e.g. 201902028
+   * @param beginyear 开始年份 默认今年
+   * @param beginmonth 开始月份 默认今年第一个月
+   * @param endyear 结束年份 默认今年
+   * @param endmonth 结束月份，默认当前月
    */
   CallInvStockAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = 'getStockInvest/do';
     //获取上个月的数据
-    // let dateRange: any = this.dateServ.setScene(DateScene.INVSTOCK).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
-    let dateRange: any = this.dateServ.setScene(DateScene.INVSTOCK).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
-    let params: any = this.dateServ.concatDateRange(dateRange);
+    let params: any = this.dateServ.setScene(DateScene.INVSTOCK).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     return this.httpServ.get(endpoint, params);
   }
   /**
    * @desc 获取股权投资信息
-   * @param periodbegin 开始时间 yyyymmdd e.g. 20180101
-   * @param periodend 结束时间 yyyymmdd e.g. 201902028
+   * @param beginyear 开始年份 默认今年
+   * @param beginmonth 开始月份 默认今年第一个月
+   * @param endyear 结束年份 默认今年
+   * @param endmonth 结束月份，默认当前月
    */
   CallInvRightAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = 'getStockRightInvest/do';
     //获取上个月的数据
-    // let dateRange: any = this.dateServ.setScene(DateScene.INVRIGHT).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
-    let dateRange: any = this.dateServ.setScene(DateScene.INVRIGHT).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
-    let params: any = this.dateServ.concatDateRange(dateRange);
+    let params: any = this.dateServ.setScene(DateScene.INVRIGHT).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     return this.httpServ.get(endpoint, params);
   }
 
