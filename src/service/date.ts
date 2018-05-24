@@ -83,7 +83,7 @@ export class DateService {
     }
 
     public getDateRange(scene: DateScene) {
-        return this.dateRangeSet[scene] || {};
+        return this.dateRangeSet[scene] || false;
     }
 
     /**
@@ -146,7 +146,7 @@ export class DateService {
             let years = this.years;
             //默认取值为今年到现在的月份的数据
             beginyear = years.currentYear;
-            beginmonth = 1;
+            beginmonth = beginmonth;
             endyear = years.currentYear;
             endmonth = this.currentMonth;
 

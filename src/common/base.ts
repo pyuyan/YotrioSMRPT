@@ -3,6 +3,7 @@ import { ViewChild, ElementRef } from '@angular/core';
 
 import { mathHelper } from './../util/helper/math';
 import { debugHelper } from './../util/helper/debug';
+import { arrayHelper } from './../util/helper/array';
 
 /**
  * 共用抽象类
@@ -88,6 +89,27 @@ export abstract class Base {
         });
         alert.present();
         return alert;
+    }
+
+    /**
+     * 获取一维数组top 数据
+     * @param arr 
+     * @param col 
+     * @param top 
+     * @param flow 
+     */
+    protected getTopData(arr: any[], col: string, top: number = 5, flow: string = 'desc'): Array<any> {
+        return arrayHelper._top(arr, col, top, flow);
+    }
+
+    /**
+     * 一维数组排序
+     * @param arr 
+     * @param col 
+     * @param flow 
+     */
+    protected orderBy(arr: Array<any>, col: string, flow: string = 'desc') {
+        return arrayHelper._sortNum(arr, col, flow);
     }
 
     /**

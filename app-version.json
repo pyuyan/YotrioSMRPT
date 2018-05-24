@@ -1,7 +1,7 @@
 {
-    "version": "1.1.16",
-    "release_date": "2018年5月16日17:19:46",
-    "desc": "版本：1.1.16 更新内容：1. 改变自动更新地址",
+    "version": "1.1.17",
+    "release_date": "2018年5月24日17:20:45",
+    "desc": "版本：1.1.17 更新内容：1. 增加股权数据中心显示",
     "app_name": "yotrioSMRPT",
     "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
     "app_url_iOS": ""

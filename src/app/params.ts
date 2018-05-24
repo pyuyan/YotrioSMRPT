@@ -45,6 +45,10 @@ export class Params {
      * 公用topic 改变月份的 topic
      */
     public static readonly commonAterMonthChanged: string = 'common:after:monthChanged';
+    /**
+     * 公用topic 改变时间区间的 topic
+     */
+    public static readonly commonAterPeriodChanged: string = 'common:after:periodChanged';
 
     /**
      * tax 税务中心 改变年份的 topic

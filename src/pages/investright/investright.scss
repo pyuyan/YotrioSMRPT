@@ -69,78 +69,6 @@ page-investright {
       background-color: $color-bg !important;
     }
   }
-  .maincontenttopstyle {
-    color: $color-white;
-    background-color: $color-bg;
-    ion-card-header {
-      color: $color-white;
-      background-color: $color-bg;
-    }
-    ion-card-content {
-      padding: 0;
-    }
-    box-shadow: 0px 1px 3px rgba(7, 33, 58, 0.2);
-    padding:0% 0% 0% 5%;
-  }
-  .piediv {
-    color: $color-white;
-    background: $color-bg;
-    padding: 0%;
-    width: 100%;
-    height: 400px;
-  }
-  .maincontentstyle {
-    color: $color-white;
-    background-color: $color-bg;
-    ion-card-header {
-      color: $color-white;
-      background-color: $color-bg;
-    }
-    box-shadow: 0px 1px 3px rgba(7, 33, 58, 0.2);
-    padding:0% 0% 0% 5%;
-  }
-  .bardiv {
-    color: $color-white;
-    background: $color-bg;
-    padding: 0%;
-    margin: 0%;
-    width: 100%;
-    height: 350px;
-  }
-  .profitgridstyle {
-    color: $color-white;
-    background: $color-bg;
-    padding: 0% 0% 0% 0%;
-    margin: 0% 0% 0% 0px;
-    width: 100%;
-    ion-grid {
-      padding: 0% 0% 0% 0%;
-      overflow: hide;
-      color: $color-white;
-      font-size: 20px;
-    }
-    .profit-header {
-      overflow: hide;
-      height: 60px;
-      border-width: 1px;
-      border-style: none none solid none;
-      ion-col {
-        overflow: auto;
-        font-size: 22px;
-      }
-    }
-    .profit-content {
-      overflow: hide;
-      height: 60px;
-      border-width: 1px;
-      border-style: none none solid none;
-      ion-col {
-        font-size: 24px;
-        border-width: 1px;
-        border-style: none solid none solid;
-      }
-    }
-  }
   .top-card {
     background: transparent;
     background-color: $top-card-color-bg;
@@ -182,7 +110,20 @@ page-investright {
       }
     }
   }
-  .show-red {}
-  .show-green {}
-  .show-yellow {}
+  .top-horizontalbar-card {
+    background-color: $sheet-card-color-bg;
+  }
+  .mid-pie-card {
+    background-color: $sheet-card-color-bg;
+  }
+  .bottom-bar-card {
+    background-color: $sheet-card-color-bg;
+  }
+  .right-echarts-div {
+    // color: $color-white;
+    // background: $color-bg;
+    padding: 0%;
+    width: 100%;
+    height: 325px;
+  }
 }

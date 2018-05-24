@@ -117,8 +117,15 @@ export class DatasvrProvider {
    */
   CallInvStockAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = 'getStockInvest/do';
-    //获取上个月的数据
-    let params: any = this.dateServ.setScene(DateScene.INVSTOCK).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    const dateScene = DateScene.INVSTOCK;
+    let params: any = {};
+    this.dateServ.setScene(dateScene);
+    if (this.dateServ.getDateRange(dateScene)) {
+      params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    } else {
+      //获取上个月的数据
+      params = this.dateServ.setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    }
     return this.httpServ.get(endpoint, params);
   }
   /**
@@ -130,8 +137,15 @@ export class DatasvrProvider {
    */
   CallInvRightAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = 'getStockRightInvest/do';
-    //获取上个月的数据
-    let params: any = this.dateServ.setScene(DateScene.INVRIGHT).setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    const dateScene = DateScene.INVRIGHT;
+    let params: any = {};
+    this.dateServ.setScene(dateScene);
+    if (this.dateServ.getDateRange(dateScene)) {
+      params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    } else {
+      //获取上个月的数据
+      params = this.dateServ.setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    }
     return this.httpServ.get(endpoint, params);
   }
 

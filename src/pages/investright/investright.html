@@ -6,10 +6,11 @@
     <ion-title>
       <p align="right" class="title-title">永强集团股权投资数据</p>
 
-      <!-- <p align="center" class="title-select" (click)="presentPopover($event)">
-        {{currentYear}}年 {{choosedMonth}}月
+      <p align="center" class="title-select" (click)="presentPopover($event)">
+        <!-- {{currentYear}}年 {{choosedMonth}}月 -->
+        {{choosedPeriod}}
         <ion-icon name="arrow-dropdown"></ion-icon>
-      </p> -->
+      </p>
     </ion-title>
 
     <ion-buttons end>
@@ -75,7 +76,29 @@
       <!--./左侧-->
 
       <!--右侧-->
-      <ion-col></ion-col>
+      <ion-col col-3>
+        <!--最上水平条形图-->
+        <ion-card class="top-horizontalbar-card">
+          <ion-card-content>
+            <div echarts #topBar [options]="topBarData" class="right-echarts-div"></div>
+          </ion-card-content>
+        </ion-card>
+        <!--./最上水平条形图-->
+        <!--中间环形图-->
+        <ion-card class="mid-pie-card">
+          <ion-card-content>
+            <div echarts #midPie [options]="midPieData" class="right-echarts-div"></div>
+          </ion-card-content>
+        </ion-card>
+        <!--中间环形图-->
+        <!--最下柱状图-->
+        <ion-card class="bottom-bar-card">
+          <ion-card-content>
+            <div echarts #bottomBar [options]="bottomBarData" class="right-echarts-div"></div>
+          </ion-card-content>
+        </ion-card>
+        <!--最下柱状图-->
+      </ion-col>
       <!--./右侧-->
     </ion-row>
   </ion-grid>

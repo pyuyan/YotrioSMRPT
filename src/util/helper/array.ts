@@ -90,4 +90,27 @@ export class arrayHelper {
         });
         return arr;
     }
+
+    /**
+     * @desc 一维数组按照指定键排序后 获取前xx数据 note:这里指定键的键值必须为 string || number
+     * @param {[Object]} arr 一位对象数组
+     * @param {[number]} top 前几个
+     * @param {[string]} column 对应的键
+     * @param {[string]} type  递增：asc 递减：desc
+     * e.g. 
+     * input: sdf = [{test:'123'},{test:'120'},{test:'111'}]
+     * _top(sdf, 'test', 2, 'asc')
+     * output: sdf = [{test:'111'},{test:'120'}]
+     */
+    public static _top(arr: Array<any>, column: string, top: number = 5, type: string = 'desc') {
+        let newArray = arrayHelper._sortNum(arr, column, type);
+        if (top <= 0 || top > newArray.length) {
+            return [];
+        }
+        let res: any[] = [];
+        for (let index = 0; index < top; index++) {
+            res.push(newArray[index]);
+        }
+        return res;
+    }
 }
