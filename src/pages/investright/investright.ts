@@ -325,6 +325,11 @@ export class InvestrightPage extends Base {
     }, 500);
   }
 
+  ionViewDidLeave() {
+    //共用主题可能会引起冲突
+    this.event.unsubscribe(this._periodTopic);
+  }
+
   update(needUpdate: boolean) {
     //刷新依据 根据入口出注册的函数更新为主
     let investsRightData: Array<any> = ContextData.InvestsRight[ContextData.TableName].DataValue;
@@ -341,7 +346,9 @@ export class InvestrightPage extends Base {
       //图表数据更新
       this.updateTopBarData().updateMidPieData().updateBottomBarData();
       //数据按照收益排序
-      this.investRightData = this.orderBy(this.investRightData, 'InvIncoming');
+      // this.investRightData = this.orderBy(this.investRightData, 'InvIncoming');
+      //按照投资时间增序
+      this.investRightData = this.orderByInvDate(this.investRightData);
 
       ContextData.InvestsRight[ContextData.TableName].UpdateFlag = false;
     }
@@ -400,16 +407,22 @@ export class InvestrightPage extends Base {
 
   private cleanData() {
     if (!this.investRightData || this.investRightData.length == 0) return;
+    let tmpInvestData: any[] = [];
     this.investRightData.forEach(el => {
-      el.OrgName = el.OrgName.replace('股份有限公司', '');
-      if (el.OrgName.indexOf('有限公司') > 0) {
-        el.OrgName = el.OrgName.replace('有限公司', '');
+      //排除接口的空数据
+      if (el.OrgName !== '' && el.InvDate !== '' && el.UpdateTime !== '') {
+        el.OrgName = el.OrgName.replace('股份有限公司', '');
+        if (el.OrgName.indexOf('有限公司') > 0) {
+          el.OrgName = el.OrgName.replace('有限公司', '');
+        }
+        el.InvMoney = Math.round(el.InvMoney);
+        el.InvIncoming = Math.round(el.InvIncoming);
+        el.InvBalance = Math.round(el.InvBalance);
+        el.InvHoldingRate = Number.parseFloat(el.InvHoldingRate).toFixed(2);
+        tmpInvestData.push(el);
       }
-      el.InvMoney = Math.round(el.InvMoney);
-      el.InvIncoming = Math.round(el.InvIncoming);
-      el.InvBalance = Math.round(el.InvBalance);
-      el.InvHoldingRate = Number.parseFloat(el.InvHoldingRate).toFixed(2);
     });
+    this.investRightData = tmpInvestData;
     return this;
   }
 
@@ -440,6 +453,13 @@ export class InvestrightPage extends Base {
     }
 
     this.period = tmpYears.concat(tmpMonth);
+  }
+
+  private orderByInvDate(data) {
+    data.sort((a, b) => {
+      return Number(a['InvDate'].replace('年', '').replace('月', '').trim()) > Number(b['InvDate'].replace('年', '').replace('月', '').trim()) ? 1 : -1;
+    });
+    return data;
   }
 
   /**

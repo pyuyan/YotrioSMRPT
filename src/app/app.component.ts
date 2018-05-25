@@ -53,7 +53,7 @@ export class YotrioSMRPT {
       { title: '税务数据中心', component: TaxPage },
       { title: '库存数据中心', component: InventoryPage },
       // { title: '经营数据中心', component: ManagementPage }, 
-      // { title: '股票投资数据', component: InveststockPage },
+      { title: '股票投资数据', component: InveststockPage },
       { title: '股权投资数据', component: InvestrightPage },
       //{ title: '', component: SOCountPage }
     ];

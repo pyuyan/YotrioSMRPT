@@ -1,6 +1,8 @@
 page-investstock {
   // 背景色
   $color-bg: rgb(7, 33, 58);
+  $top-card-color-bg: rgba(255, 255, 255, 0.1);
+  $sheet-card-color-bg: rgba(18, 42, 63, 0.6);
   $color-white: #FFFFFF; //ionic 的颜色
   $radio-md-color-on: rgb(141, 20, 20);
   ion-navbar {
@@ -67,76 +69,64 @@ page-investstock {
       background-color: $color-bg !important;
     }
   }
-  .maincontenttopstyle {
-    color: $color-white;
-    background-color: $color-bg;
-    ion-card-header {
-      color: $color-white;
-      background-color: $color-bg;
+  .top-card {
+    background: transparent;
+    background-color: $top-card-color-bg;
+    ion-card {
+      background-color: $top-card-color-bg;
+      ion-card-content {
+        ion-card-title,
+        p {
+          font-weight: 900;
+          font-size: 38px;
+        }
+      }
     }
-    ion-card-content {
-      padding: 0;
-    }
-    box-shadow: 0px 1px 3px rgba(7, 33, 58, 0.2);
-    padding:0% 0% 0% 5%;
   }
-  .piediv {
-    color: $color-white;
-    background: $color-bg;
-    padding: 0%;
-    width: 100%;
-    height: 400px;
-  }
-  .maincontentstyle {
-    color: $color-white;
-    background-color: $color-bg;
-    ion-card-header {
-      color: $color-white;
-      background-color: $color-bg;
-    }
-    box-shadow: 0px 1px 3px rgba(7, 33, 58, 0.2);
-    padding:0% 0% 0% 5%;
-  }
-  .bardiv {
-    color: $color-white;
-    background: $color-bg;
-    padding: 0%;
-    margin: 0%;
-    width: 100%;
-    height: 350px;
-  }
-  .profitgridstyle {
-    color: $color-white;
-    background: $color-bg;
-    padding: 0% 0% 0% 0%;
-    margin: 0% 0% 0% 0px;
-    width: 100%;
+  .sheet-card {
+    background-color: $sheet-card-color-bg;
+    margin-top: 30px;
     ion-grid {
-      padding: 0% 0% 0% 0%;
-      overflow: hide;
+      overflow: auto;
       color: $color-white;
-      font-size: 20px;
-    }
-    .profit-header {
-      overflow: hide;
-      height: 60px;
-      border-width: 1px;
-      border-style: none none solid none;
-      ion-col {
-        overflow: auto;
-        font-size: 22px;
-      }
-    }
-    .profit-content {
-      overflow: hide;
-      height: 60px;
-      border-width: 1px;
-      border-style: none none solid none;
-      ion-col {
-        font-size: 24px;
+      .sheet-row-header {
+        font-size: 30px;
+        overflow: hide;
+        height: 55px;
         border-width: 1px;
-        border-style: none solid none solid;
+        border-style: none none solid none;
+        background-color: rgba(46, 146, 222, 0.9);
+      }
+      .sheet-row-content {
+        overflow: hide;
+        height: 60px;
+        border-width: 1px;
+        border-style: none none solid none;
+        ion-col {
+          font-size: 25px;
+          border-width: 1px;
+          border-style: none solid none none;
+        }
       }
     }
+  }
+  .top-horizontalbar-card {
+    background-color: $sheet-card-color-bg;
+  }
+  .mid-pie-card {
+    background-color: $sheet-card-color-bg;
+  }
+  .bottom-bar-card {
+    background-color: $sheet-card-color-bg;
+  }
+  .bottom-cur-card {
+    background-color: $sheet-card-color-bg;
+  }
+  .right-echarts-div {
+    // color: $color-white;
+    // background: $color-bg;
+    padding: 0%;
+    width: 100%;
+    height: 325px;
   }
 }

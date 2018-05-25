@@ -1,8 +1,8 @@
 {
-    "version": "1.1.17",
-    "release_date": "2018年5月24日17:20:45",
-    "desc": "版本：1.1.17 更新内容：1. 增加股权数据中心显示",
-    "app_name": "yotrioSMRPT",
-    "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
-    "app_url_iOS": ""
+  "version": "1.1.18",
+  "release_date": "2018年5月25日16:45:48",
+  "desc": "版本：1.1.18 更新内容：1. 增加股票数据中心显示 2. 股权数据中心按照投资时间增序排",
+  "app_name": "yotrioSMRPT",
+  "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
+  "app_url_iOS": ""
 }
