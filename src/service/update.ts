@@ -9,7 +9,7 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 
 import { mathHelper } from "./../util/helper/math";
 
-import { Params } from "./../app/params";
+import { updateParams } from "./../params/update";
 
 
 @Injectable()
@@ -61,7 +61,7 @@ export class UpdateService {
         return this.platform.is('android');
     }
 
-    checkUpdate(updateCheckUrl: string = Params.AppUpdateCheckUrl) {
+    checkUpdate(updateCheckUrl: string = updateParams.AppUpdateCheckUrl) {
         if (!this.platformCouldUpdate()) return;
         this.http.get(updateCheckUrl, { headers: this.headers }).toPromise()
             .then(res => {

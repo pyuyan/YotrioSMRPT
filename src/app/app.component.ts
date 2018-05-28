@@ -13,7 +13,8 @@ import { ManagementPage } from '../pages/management/management';
 import { InveststockPage } from './../pages/investstock/investstock';
 import { InvestrightPage } from './../pages/investright/investright';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
-import { Params } from './params';
+
+import { urlParams } from "./../params/url";
 
 @Component({
   templateUrl: 'app.html'
@@ -37,7 +38,7 @@ export class YotrioSMRPT {
 
     this.contextdata = ContextData.Create();
 
-    this.contextdata.SetESBPortal(Params.ESBPortal);
+    this.contextdata.SetESBPortal(urlParams.ESBPortal);
     //初始化上下文
     if (ContextData.inited === false) {
       ContextData.InitContextData();

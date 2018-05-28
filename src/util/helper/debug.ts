@@ -1,4 +1,3 @@
-import { Params } from './../../app/params';
 
 export class debugHelper {
     constructor() { }
@@ -9,23 +8,21 @@ export class debugHelper {
      * @param type 类型
      */
     public static show(message: any, type: string = 'log') {
-        if (Params.DEBUGMODE) {
-            switch (type) {
-                case 'log':
-                    console.log(message);
-                    break;
-                case 'error':
-                case 'err':
-                case 'failed':
-                    console.error(message);
-                    break;
-                case 'group':
-                    console.group(message);
-                    break;
-                default:
-                    console.log(message);
-                    break;
-            }
+        switch (type) {
+            case 'log':
+                console.log(message);
+                break;
+            case 'error':
+            case 'err':
+            case 'failed':
+                console.error(message);
+                break;
+            case 'group':
+                console.group(message);
+                break;
+            default:
+                console.log(message);
+                break;
         }
     }
 

@@ -2,7 +2,6 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController, Events } from 'ionic-angular';
 
 import { NgxEchartsService, NgxEchartsModule } from 'ngx-echarts';  //备注：NgxEchartsModule 不能少
-import { Params } from './../../app/params';
 import { ContextData } from '../../app/context';
 import { Base } from "./../../common/base";
 import { arrayHelper } from './../../util/helper/array';
@@ -321,7 +320,7 @@ export class InvestrightPage extends Base {
   }
 
   ionViewDidLeave() {
-    // this.event.unsubscribe(this._periodTopic);
+    this.event.unsubscribe(this._periodTopic);
   }
 
   update(needUpdate: boolean) {
@@ -417,7 +416,7 @@ export class InvestrightPage extends Base {
       }
     });
     this.investRightData = tmpInvestData;
-    return this;
+    // return this;
   }
 
   private processDateRange() {

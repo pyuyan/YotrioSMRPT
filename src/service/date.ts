@@ -137,6 +137,10 @@ export class DateService {
         return this.setDateRange(this.years.blastYear, 1, this.years.blastYear, 12);
     }
 
+    public clean(scene: DateScene) {
+        this.dateRangeSet[scene] = {};
+    }
+
     /**
      * 获取过滤后的日期区间
      */

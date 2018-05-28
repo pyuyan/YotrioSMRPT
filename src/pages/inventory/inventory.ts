@@ -1,4 +1,3 @@
-import { Params } from './../../app/params';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams, PopoverController, Events } from 'ionic-angular';
 import { NgxEchartsService, NgxEchartsModule } from 'ngx-echarts';  //备注：NgxEchartsModule 不能少

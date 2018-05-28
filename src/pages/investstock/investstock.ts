@@ -2,7 +2,6 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController, Events } from 'ionic-angular';
 
 import { NgxEchartsService, NgxEchartsModule } from 'ngx-echarts';  //备注：NgxEchartsModule 不能少
-import { Params } from './../../app/params';
 import { ContextData } from '../../app/context';
 import { Base } from "./../../common/base";
 import { arrayHelper } from './../../util/helper/array';
@@ -413,7 +412,8 @@ export class InveststockPage extends Base {
   }
 
   ionViewDidLeave() {
-    // this.event.unsubscribe(this._periodTopic);
+    this.event.unsubscribe(this._periodTopic);
+    this.dateServ.clean(DateScene.INVSTOCK);
   }
 
   update(forceUpdate: boolean) {
@@ -490,7 +490,7 @@ export class InveststockPage extends Base {
     return this;
   }
 
-  private calcTotalData(): void {
+  private calcTotalData() {
     let num: any, el: any;
     Object.keys(this.totalMap).forEach(key => {
       el = this.totalMap[key];
@@ -516,10 +516,10 @@ export class InveststockPage extends Base {
 
   private cleanData() {
     if (!this.invesStockData || this.invesStockData.length == 0) return;
-    let tmpInvestData: any[] = [];
+    // let tmpInvestData: any[] = [];
     this.invesStockData.forEach(el => {
       //排除接口的空数据
-      if (el.StockValueInit !== '') {
+      if (el.StockValueInit !== '' && !!el.StockProfit !== true) {
         el.StockValueInit = Number.parseFloat((el.StockValueInit / 10000).toString()).toFixed(1);
         el.StockValueCurrent = Number.parseFloat((el.StockValueCurrent / 10000).toString()).toFixed(1);
         el.StockNum = Math.round(el.StockNum);
@@ -527,11 +527,9 @@ export class InveststockPage extends Base {
           Number(el.StockValueCurrent),
           -Number(el.StockValueInit)
         ], 1);
-        tmpInvestData.push(el);
+        // tmpInvestData.push(el);
       }
     });
-    this.invesStockData = tmpInvestData;
-    return this;
   }
 
   private processDateRange() {

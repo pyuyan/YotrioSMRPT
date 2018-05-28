@@ -3,7 +3,8 @@ import { arrayHelper } from './../../util/helper/array';
 import { dataHelper } from './../../util/helper/data';
 import { CacheService } from './../../service/cache';
 
-import { Params } from './../../app/params';
+import { passwordParams } from "./../../params/password";
+import { debugParams } from "./../../params/debug";
 import { Base } from './../../common/base';
 
 import { Component } from '@angular/core';
@@ -659,7 +660,7 @@ export class SmreportPage extends Base {
                     text: '确定',
                     handler: (data) => {
                         let errMsg: any = null;
-                        if (data.password === Params.DefaultPWD || Params.DEBUGMODE) {
+                        if (data.password === passwordParams.defaultPWD || debugParams.activeDebug) {
 
                             if (type === DetailType.RATE) {
                                 this._showRateDetail();

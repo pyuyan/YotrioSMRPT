@@ -1,4 +1,4 @@
-import { Params } from './../../app/params';
+import { urlParams } from "./../../params/url";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ContextData } from '../../app/context';
@@ -34,7 +34,7 @@ export class DatasvrProvider {
     //初始化上下文
     this.contextdata = ContextData.Create();
     //设置httpServ请求地址
-    this.httpServ.setUrl(Params.ESBPortal);
+    this.httpServ.setUrl(urlParams.ESBPortal);
 
   }
 
@@ -57,7 +57,7 @@ export class DatasvrProvider {
   */
   CallKeyDeptAPI(): Observable<Object> {
     let currUrl = '';
-    currUrl = this.GetESBAddress() + '/getKeyDept/do';
+    currUrl = this.GetESBAddress() + urlParams.common.endpoint.keyDepartment;
     console.log('Send getKeyDept Request to ' + currUrl);
     return this.http.get(currUrl, { headers: this.headers });
   }
@@ -67,7 +67,7 @@ export class DatasvrProvider {
    */
   CallTimeMarkAPI(tablename: string): Observable<Object> {
     let currUrl = '';
-    currUrl = this.GetESBAddress() + '/getTimeMark/do?tablename=' + tablename;
+    currUrl = this.GetESBAddress() + urlParams.common.endpoint.timeMark + '?tablename=' + tablename;
     console.log('Send getTimeMark Request to ' + currUrl);
     return this.http.get(currUrl, { headers: this.headers });
   }
@@ -77,7 +77,7 @@ export class DatasvrProvider {
    */
   CallSMReprotDataAPI(year: string): Observable<Object> {
     let currUrl = '';
-    currUrl = this.GetESBAddress() + '/getSaleTransferData/do?year=' + year;
+    currUrl = this.GetESBAddress() + urlParams.common.endpoint.SaleTransferData + '?year=' + year;
     console.log('Send getSaleTransferData Request to ' + currUrl);
     return this.http.get(currUrl, { headers: this.headers });
   }
@@ -90,7 +90,7 @@ export class DatasvrProvider {
    * @param endmonth 结束月份，默认当前月
    */
   CallYearTaxAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
-    const endpoint: string = 'getYearTAX/do';
+    const endpoint: string = urlParams.common.endpoint.yearTax;
     let params: any = this.dateServ.setScene(DateScene.TAX).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     return this.httpServ.get(endpoint, params);
   }
@@ -103,7 +103,7 @@ export class DatasvrProvider {
    * @param endmonth 结束月份，默认当前月
    */
   CallYearInventoryAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
-    const endpoint: string = 'getYearInventory/do';
+    const endpoint: string = urlParams.common.endpoint.yearInventory;
     let params: any = this.dateServ.setScene(DateScene.INVENTORY).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     return this.httpServ.get(endpoint, params);
   }
@@ -116,7 +116,7 @@ export class DatasvrProvider {
    * @param endmonth 结束月份，默认当前月
    */
   CallInvStockAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
-    const endpoint: string = 'getStockInvest/do';
+    const endpoint: string = urlParams.common.endpoint.stockInvest;
     const dateScene = DateScene.INVSTOCK;
     let params: any = {};
     this.dateServ.setScene(dateScene);
@@ -136,7 +136,7 @@ export class DatasvrProvider {
    * @param endmonth 结束月份，默认当前月
    */
   CallInvRightAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
-    const endpoint: string = 'getStockRightInvest/do';
+    const endpoint: string = urlParams.common.endpoint.rightInvest;
     const dateScene = DateScene.INVRIGHT;
     let params: any = {};
     this.dateServ.setScene(dateScene);

@@ -1,7 +1,8 @@
 import { arrayHelper } from './../../util/helper/array';
 import { CacheService } from './../../service/cache';
 import { dataHelper } from './../../util/helper/data';
-import { Params } from './../../app/params';
+import { debugParams } from "./../../params/debug";
+import { passwordParams } from "./../../params/password";
 import { Base } from './../../common/base';
 
 import { Component } from '@angular/core';
@@ -91,7 +92,7 @@ export class HomePage extends Base {
                 {
                     text: '确定',
                     handler: (data) => {
-                        if (data.password === Params.DefaultPWD || Params.DEBUGMODE) {
+                        if (data.password === passwordParams.defaultPWD || debugParams.activeDebug) {
                             //进度条控件
                             let loader = super.showLoading(this.loadingCtrl, "正在读取明细数据...");
 
@@ -804,7 +805,7 @@ export class HomePage extends Base {
                 {
                     text: '确定',
                     handler: (data) => {
-                        if (data.password === Params.DefaultPWD || Params.DEBUGMODE) {
+                        if (data.password === passwordParams.defaultPWD || debugParams.activeDebug) {
                             this._showGroupDetail(mdpt);
                         } else {
                             super.showAlert(this.alterCtrl, '密码错误', '密码错误，请重新输入');

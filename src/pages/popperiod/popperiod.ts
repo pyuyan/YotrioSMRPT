@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events, ViewController } from 'ionic-angular';
-import { Params } from './../../app/params';
 
 /**
  * 包含年以及月份的混合选择

@@ -5,6 +5,8 @@ import { mathHelper } from './../util/helper/math';
 import { debugHelper } from './../util/helper/debug';
 import { arrayHelper } from './../util/helper/array';
 
+import { debugParams } from "./../params/debug";
+
 /**
  * 共用抽象类
  */
@@ -118,6 +120,6 @@ export abstract class Base {
      * @param type 类型
      */
     protected debug(message: any, type: string = 'log') {
-        debugHelper.show(message, type);
+        debugParams.activeDebug && debugHelper.show(message, type);
     }
 }

@@ -1,7 +1,7 @@
 {
-  "version": "1.1.19",
-  "release_date": "2018年5月28日09:58:35",
-  "desc": "版本：1.1.19 更新内容：1. 事件单独配置 2. 精简部分多余代码 ",
+  "version": "1.1.20",
+  "release_date": "2018年5月28日15:17:23",
+  "desc": "版本：1.1.20 更新内容：1. 所有配置相关，单独文件中配置 2. 修复股票投资中心一个由于引用引起的修改原始数据导致切换页面股票持有金额显示错误的bug",
   "app_name": "yotrioSMRPT",
   "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
   "app_url_iOS": ""
