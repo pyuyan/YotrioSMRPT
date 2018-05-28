@@ -33,7 +33,6 @@ import { SmreportPageModule } from '../pages/smreport/smreport.module';
 import { TaxPageModule } from '../pages/tax/tax.module';
 import { InventoryPageModule } from '../pages/inventory/inventory.module';
 import { ManagementPageModule } from '../pages/management/management.module';
-import { PopmonthPageModule } from './../pages/popmonth/popmonth.module';
 import { InveststockPageModule } from './../pages/investstock/investstock.module';
 import { InvestrightPageModule } from './../pages/investright/investright.module';
 
@@ -53,7 +52,6 @@ import { InvestrightPageModule } from './../pages/investright/investright.module
     TaxPageModule,
     InventoryPageModule,
     ManagementPageModule,
-    PopmonthPageModule,
     InveststockPageModule,
     InvestrightPageModule
   ],

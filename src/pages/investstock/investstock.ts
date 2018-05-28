@@ -10,6 +10,7 @@ import { mathHelper } from './../../util/helper/math';
 import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
 import { PopperiodPage } from './../popperiod/popperiod';
+import { eventParams } from "../../params/event";
 
 export interface totalData {
   title: string;
@@ -24,7 +25,7 @@ export interface totalData {
 })
 export class InveststockPage extends Base {
   //用于发布主题
-  private readonly _periodTopic = Params.commonAterPeriodChanged;
+  private readonly _periodTopic = eventParams.investStock.after.periodChanged;
 
   @ViewChild('topBar') topBarEle: ElementRef;
   @ViewChild('midPie') midPieEle: ElementRef;
@@ -375,16 +376,11 @@ export class InveststockPage extends Base {
     public dataProvider: DatasvrProvider,
   ) {
     super();
-    //设置时间场景
-    this.dateServ.setScene(DateScene.INVSTOCK);
-    this.processDateRange();
 
-    //监听月份改变事件 2018年5月16日
-    event.subscribe(this._periodTopic, (period) => {
-      super.debug("时间：" + period);
-      this.choosedPeriod = period;
-      this.choosePeriod();
-    });
+    //设置时间场景
+    this.processDateRange();
+    //触发事件
+    this.fireEvent();
   }
 
   ionViewDidLoad() {
@@ -417,16 +413,15 @@ export class InveststockPage extends Base {
   }
 
   ionViewDidLeave() {
-    //共用主题可能会引起冲突
-    this.event.unsubscribe(this._periodTopic);
+    // this.event.unsubscribe(this._periodTopic);
   }
 
-  update(needUpdate: boolean) {
+  update(forceUpdate: boolean) {
     //刷新依据 根据入口出注册的函数更新为主
     let investsStockData: Array<any> = ContextData.InvestsStock[ContextData.TableName].DataValue;
     let updateFlag: boolean = ContextData.InvestsStock[ContextData.TableName].UpdateFlag;
 
-    if (needUpdate || updateFlag) {
+    if (forceUpdate || updateFlag) {
       this.totalData = [];
       this.invesStockData = [];
       this.invesStockData = investsStockData;
@@ -541,6 +536,7 @@ export class InveststockPage extends Base {
 
   private processDateRange() {
     //设置时间场景
+    this.dateServ.setScene(DateScene.INVSTOCK);
     let years = this.dateServ.years;
     this.currentYear = years.currentYear;
 
@@ -597,4 +593,12 @@ export class InveststockPage extends Base {
     });
   }
 
+  fireEvent() {
+    //监听月份改变事件 2018年5月16日
+    this.event.subscribe(this._periodTopic, (period) => {
+      super.debug("时间：" + period);
+      this.choosedPeriod = period;
+      this.choosePeriod();
+    });
+  }
 }

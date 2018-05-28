@@ -1,5 +1,4 @@
-import { Params } from './../../app/params';
-import { TaxpopoverPage } from './../taxpopover/taxpopover';
+import { PopperiodPage } from './../popperiod/popperiod';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams, PopoverController, Events } from 'ionic-angular';
 
@@ -11,6 +10,8 @@ import { arrayHelper } from './../../util/helper/array';
 import { mathHelper } from './../../util/helper/math';
 import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
+import { eventParams } from "../../params/event";
+
 /**
  * @desc 税收报表信息页面 2018年4月28日09:09:45
  */
@@ -20,6 +21,9 @@ import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
   templateUrl: 'tax.html',
 })
 export class TaxPage extends Base {
+
+  //用于发布主题
+  private readonly _topic = eventParams.tax.after.yearChanged;
 
   @ViewChild('taxPie') taxPieEle: ElementRef;
   @ViewChild('taxBar') taxBarEle: ElementRef;
@@ -35,9 +39,9 @@ export class TaxPage extends Base {
   showTotalBar: boolean = true;
 
   //选中的年份
-  choosedYear: any;
+  choosedYear: string;
   //税收涉及的年份 今年 去年 前年
-  Years: number[];
+  Years: string[];
 
   //税收数据按 地区分类
   taxDataGroupByArea: any = {};
@@ -173,25 +177,9 @@ export class TaxPage extends Base {
     super();
 
     //设置时间场景
-    this.dateServ.setScene(DateScene.TAX);
-
-    const years = this.dateServ.years;
-    this.Years = [
-      years.currentYear,
-      years.lastYear,
-      years.blastYear
-    ];
-
-    this.choosedYear = years.currentYear;
-
-    //监听年份改变事件 2018年5月14日
-    event.subscribe(Params.taxAterYearChanged, (year) => {
-      super.debug("event 年份：" + year)
-      this.choosedYear = year;
-      setTimeout(() => {
-        this.chooseYear();
-      }, 10);
-    });
+    this.processDateRange();
+    //触发事件
+    this.fireEvent();
   }
 
   ionViewDidLoad() {
@@ -481,8 +469,8 @@ export class TaxPage extends Base {
    * 改变年份刷新数据
    */
   chooseYear(val: any = '') {
-    //e.g. this.Years = [2018, 2017, 2016] [今年，去年，前年]
-    let yearIndex = this.Years.indexOf(parseInt(this.choosedYear));
+    //e.g. this.Years = [2018 年, 2017 年, 2016 年] [今年，去年，前年]
+    let yearIndex = this.Years.indexOf(this.choosedYear);
     switch (yearIndex) {
       case 1:
         this.dateServ.setLastYear();
@@ -505,12 +493,39 @@ export class TaxPage extends Base {
    * 使用自定义组件popover
    */
   presentPopover(event) {
-    let popover = this.popoverCtrl.create(TaxpopoverPage, {
+    let popover = this.popoverCtrl.create(PopperiodPage, {
       title: '选择年份',
       data: this.Years,
+      topic: this._topic,
     });
     popover.present({
       ev: event
+    });
+  }
+
+  processDateRange() {
+    //设置时间场景
+    this.dateServ.setScene(DateScene.TAX);
+
+    const years = this.dateServ.years;
+    //ugly
+    this.Years = [
+      years.currentYear + ' 年',
+      years.lastYear + ' 年',
+      years.blastYear + ' 年',
+    ];
+
+    this.choosedYear = this.Years[0];
+  }
+
+  fireEvent() {
+    //监听年份改变事件 2018年5月14日
+    this.event.subscribe(this._topic, (year) => {
+      super.debug("event 年份：" + year)
+      this.choosedYear = year;
+      setTimeout(() => {
+        this.chooseYear();
+      }, 10);
     });
   }
 }

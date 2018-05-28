@@ -10,6 +10,7 @@ import { mathHelper } from './../../util/helper/math';
 import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
 import { PopperiodPage } from './../popperiod/popperiod';
+import { eventParams } from "../../params/event";
 
 export interface totalData {
   title: string;
@@ -25,7 +26,7 @@ export interface totalData {
 export class InvestrightPage extends Base {
 
   //用于发布主题
-  private readonly _periodTopic = Params.commonAterPeriodChanged;
+  private readonly _periodTopic = eventParams.investRight.after.periodChanged;
 
   @ViewChild('topBar') topBarEle: ElementRef;
   @ViewChild('midPie') midPieEle: ElementRef;
@@ -288,15 +289,9 @@ export class InvestrightPage extends Base {
   ) {
     super();
     //设置时间场景
-    this.dateServ.setScene(DateScene.INVRIGHT);
     this.processDateRange();
-
-    //监听月份改变事件 2018年5月16日
-    event.subscribe(this._periodTopic, (period) => {
-      super.debug("时间：" + period);
-      this.choosedPeriod = period;
-      this.choosePeriod();
-    });
+    //触发事件
+    this.fireEvent();
   }
 
   ionViewDidLoad() {
@@ -326,8 +321,7 @@ export class InvestrightPage extends Base {
   }
 
   ionViewDidLeave() {
-    //共用主题可能会引起冲突
-    this.event.unsubscribe(this._periodTopic);
+    // this.event.unsubscribe(this._periodTopic);
   }
 
   update(needUpdate: boolean) {
@@ -428,6 +422,7 @@ export class InvestrightPage extends Base {
 
   private processDateRange() {
     //设置时间场景
+    this.dateServ.setScene(DateScene.INVRIGHT);
     let years = this.dateServ.years;
     this.currentYear = years.currentYear;
 
@@ -488,6 +483,15 @@ export class InvestrightPage extends Base {
     });
     popover.present({
       ev: event
+    });
+  }
+
+  fireEvent() {
+    //监听月份改变事件 2018年5月16日
+    this.event.subscribe(this._periodTopic, (period) => {
+      super.debug("时间：" + period);
+      this.choosedPeriod = period;
+      this.choosePeriod();
     });
   }
 }

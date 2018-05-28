@@ -9,7 +9,8 @@ import { arrayHelper } from './../../util/helper/array';
 import { dateHelper } from './../../util/helper/date';
 import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
-import { PopmonthPage } from './../popmonth/popmonth';
+import { eventParams } from "../../params/event";
+import { PopperiodPage } from '../popperiod/popperiod';
 
 /**
  * @desc 库存信息页面
@@ -21,15 +22,18 @@ import { PopmonthPage } from './../popmonth/popmonth';
 })
 export class InventoryPage extends Base {
 
+  //用于发布主题
+  private readonly _topic = eventParams.inventory.after.monthChanged;
+
   @ViewChild('inventoryPie') inventoryPieEle: ElementRef;
   @ViewChild('inventoryBar') inventoryBarEle: ElementRef;
   inventoryPieInstance: any
   inventoryBarInstance: any
 
   //选中的年份 默认为今年
-  choosedMonth: any;
+  choosedMonth: string;
   //涉及的月份
-  months: any[] = [];
+  months: string[] = [];
   //今年
   currentYear: any;
 
@@ -172,25 +176,11 @@ export class InventoryPage extends Base {
     private echartServ: NgxEchartsService,
   ) {
     super();
+
     //设置时间场景
-    this.dateServ.setScene(DateScene.INVENTORY);
-    this.currentYear = this.dateServ.years.currentYear;
-    //这里实际是延期一个月，就是这个月的数据是下个月财务部门上传；目前处理是 默认统计到今年到这个月为止的数据
-    this.choosedMonth = this.dateServ.currentMonth;
-
-    for (let m = 1; m <= this.dateServ.currentMonth; m++) {
-      this.months.push(m);
-    }
-
-    //监听月份改变事件 2018年5月16日
-    event.subscribe(Params.commonAterMonthChanged, (month) => {
-      super.debug("common event 月份：" + month);
-      this.choosedMonth = month;
-      this.chooseMonth();
-      // setTimeout(() => {
-      //   this.chooseMonth();
-      // }, 10);
-    });
+    this.processDateRange();
+    //触发事件
+    this.fireEvent();
   }
 
   ionViewDidLoad() {
@@ -391,10 +381,11 @@ export class InventoryPage extends Base {
 
     super.debug(this.choosedMonth);
     //如果选择是本月，就统计今年1月到本月的数据，因为数据是延迟一个月，本月是没有数据的
-    if (this.choosedMonth == this.dateServ.currentMonth) {
-      this.dateServ.setDateRange(this.currentYear, 1, this.currentYear, this.choosedMonth);
+    let tmpChoosedMon = Number(this.choosedMonth.replace('月', '').trim());
+    if (tmpChoosedMon == this.dateServ.currentMonth) {
+      this.dateServ.setDateRange(this.currentYear, 1, this.currentYear, tmpChoosedMon);
     } else {
-      this.dateServ.setDateRange(this.currentYear, this.choosedMonth, this.currentYear, this.choosedMonth);
+      this.dateServ.setDateRange(this.currentYear, tmpChoosedMon, this.currentYear, tmpChoosedMon);
     }
     this.dataProvider.syncYearInventoryData().add(() => {
       setTimeout(() => {
@@ -404,12 +395,37 @@ export class InventoryPage extends Base {
   }
 
   presentPopover(event) {
-    let popover = this.popoverCtrl.create(PopmonthPage, {
+    let popover = this.popoverCtrl.create(PopperiodPage, {
       title: '选择月份',
       data: this.months,
+      topic: this._topic,
     });
     popover.present({
       ev: event
+    });
+  }
+
+  processDateRange() {
+    //设置时间场景
+    this.dateServ.setScene(DateScene.INVENTORY);
+    this.currentYear = this.dateServ.years.currentYear;
+    //这里实际是延期一个月，就是这个月的数据是下个月财务部门上传；目前处理是 默认统计到今年到这个月为止的数据
+    this.choosedMonth = this.dateServ.currentMonth + ' 月';
+
+    for (let m = 1; m <= this.dateServ.currentMonth; m++) {
+      this.months.push(m + ' 月');
+    }
+  }
+
+  fireEvent() {
+    //监听月份改变事件 2018年5月16日
+    this.event.subscribe(this._topic, (month) => {
+      super.debug("common event 月份：" + month);
+      this.choosedMonth = month;
+      this.chooseMonth();
+      // setTimeout(() => {
+      //   this.chooseMonth();
+      // }, 10);
     });
   }
 }
