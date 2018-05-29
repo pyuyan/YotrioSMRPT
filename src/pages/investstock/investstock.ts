@@ -413,7 +413,7 @@ export class InveststockPage extends Base {
 
   ionViewDidLeave() {
     this.event.unsubscribe(this._periodTopic);
-    this.dateServ.clean(DateScene.INVSTOCK);
+    // this.dateServ.clean(DateScene.INVSTOCK);
   }
 
   update(forceUpdate: boolean) {
@@ -437,6 +437,9 @@ export class InveststockPage extends Base {
 
     super.debug('invesStockData');
     super.debug(this.invesStockData);
+
+    //页面切换后，显示真实选择的时间
+    this.choosedPeriod = this.invesStockData[0].UpdateTime.split("-").splice(0, 2).join('年') + '月';
   }
 
   private updateMidPieData() {

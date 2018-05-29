@@ -348,6 +348,9 @@ export class InvestrightPage extends Base {
 
     super.debug('investRightData');
     super.debug(this.investRightData);
+
+    //页面切换后，显示真实选择的时间
+    this.choosedPeriod = this.investRightData[0].UpdateTime.split("-").splice(0, 2).join('年') + '月';
   }
 
   private updateMidPieData() {

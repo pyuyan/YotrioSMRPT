@@ -228,6 +228,9 @@ export class TaxPage extends Base {
 
       ContextData.TaxDatas[ContextData.TableName].UpdateFlag = false;
     }
+
+    //页面切换后，显示真实选择的时间
+    this.choosedYear = taxData[0].BEGINPERIOD.substr(0, 4) + '年';
   }
 
   private updatePieData(data) {

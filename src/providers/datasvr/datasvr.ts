@@ -104,7 +104,17 @@ export class DatasvrProvider {
    */
   CallYearInventoryAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = urlParams.common.endpoint.yearInventory;
-    let params: any = this.dateServ.setScene(DateScene.INVENTORY).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    const dateScene = DateScene.INVENTORY;
+    let params: any = {};
+
+    this.dateServ.setScene(dateScene);
+    if (this.dateServ.getDateRange(dateScene)) {
+      params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    } else {
+      //获取上个月的数据
+      params = this.dateServ.setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    }
+
     return this.httpServ.get(endpoint, params);
   }
 

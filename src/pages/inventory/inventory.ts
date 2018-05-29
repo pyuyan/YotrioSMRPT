@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams, PopoverController, Events } from 'ionic-angular';
+import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams, PopoverController, Events, Content } from 'ionic-angular';
 import { NgxEchartsService, NgxEchartsModule } from 'ngx-echarts';  //备注：NgxEchartsModule 不能少
 
 import { ContextData } from '../../app/context';
@@ -228,6 +228,9 @@ export class InventoryPage extends Base {
 
       ContextData.InventoryDatas[ContextData.TableName].UpdateFlag = false;
     }
+
+    //页面切换后，显示真实选择的时间
+    this.choosedMonth = inventoryData[0].period_begin.substr(-2).replace('0', '') + '月';
   }
 
   private updatePieData(data) {
@@ -408,10 +411,20 @@ export class InventoryPage extends Base {
     //设置时间场景
     this.dateServ.setScene(DateScene.INVENTORY);
     this.currentYear = this.dateServ.years.currentYear;
-    //这里实际是延期一个月，就是这个月的数据是下个月财务部门上传；目前处理是 默认统计到今年到这个月为止的数据
-    this.choosedMonth = this.dateServ.currentMonth + ' 月';
 
-    for (let m = 1; m <= this.dateServ.currentMonth; m++) {
+    //TODO 这里在1月会有问题
+    let month = this.dateServ.currentMonth - 1;
+
+    // if (month == 0) {
+    //   this.choosedPeriod = years.lastYear + '   年度';
+    // } else {
+    //   this.choosedPeriod = this.currentYear + '年' + month + '月';
+    // }
+
+    //这里实际是延期一个月，就是这个月的数据是下个月财务部门上传；
+    this.choosedMonth = month + ' 月';
+
+    for (let m = 1; m <= month; m++) {
       this.months.push(m + ' 月');
     }
   }
