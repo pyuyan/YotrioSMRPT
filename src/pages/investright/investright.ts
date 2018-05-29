@@ -44,7 +44,19 @@ export class InvestrightPage extends Base {
   //第一个card的小计数据
   totalData: totalData[] = [];
 
-  headers: string[] = ['被投资单位', '投资金额', '投资时间', '持股比例', '投资收益', '投资余额'];
+  // headers: string[] = ['被投资单位', '投资金额', '投资时间', '持股比例', '投资收益', '投资余额'];
+  headers: any[] = [
+    { col: '', name: '被投资单位' },
+    { col: 'InvMoney', name: '投资金额' },
+    { col: 'InvDate', name: '投资时间' },
+    { col: 'InvHoldingRate', name: '持股比例' },
+    { col: 'InvIncoming', name: '投资收益' },
+    { col: 'InvBalance', name: '投资余额' },
+  ];
+
+  //用于排序的字段
+  orderByCol: string;
+  orderByFlow: string = '';  //asc 升序 desc 降序
 
   //股权投资接口数据
   investRightData: any[] = [];
@@ -340,8 +352,8 @@ export class InvestrightPage extends Base {
       this.updateTopBarData().updateMidPieData().updateBottomBarData();
       //数据按照收益排序
       // this.investRightData = this.orderBy(this.investRightData, 'InvIncoming');
-      //按照投资时间增序
-      this.investRightData = this.orderByInvDate(this.investRightData);
+      //按照投资时间增序 note：已经可以自由排序
+      // this.investRightData = this.orderByInvDate(this.investRightData);
 
       ContextData.InvestsRight[ContextData.TableName].UpdateFlag = false;
     }
@@ -351,6 +363,10 @@ export class InvestrightPage extends Base {
 
     //页面切换后，显示真实选择的时间
     this.choosedPeriod = this.investRightData[0].UpdateTime.split("-").splice(0, 2).join('年') + '月';
+
+    //刷新数据后重置排序
+    this.orderByCol = '';
+    this.orderByFlow = '';
   }
 
   private updateMidPieData() {
@@ -495,5 +511,27 @@ export class InvestrightPage extends Base {
       this.choosedPeriod = period;
       this.choosePeriod();
     });
+  }
+
+  //根据传值排序
+  _orderBy(column: string, flow: string = '') {
+    flow = this.orderByFlow == '' ? 'desc' : (this.orderByFlow == 'asc' ? 'desc' : 'asc');
+    if (column != '') {
+      this.orderByCol = column;
+      this.orderByFlow = flow;
+      if (column == 'InvDate') {
+        this.investRightData.sort((a, b) => {
+          let aInveDate = a['InvDate'].replace('年', '').replace('月', '').trim(); 
+          let bInveDate = b['InvDate'].replace('年', '').replace('月', '').trim(); 
+          if (flow === 'desc') {
+            return Number.parseFloat(aInveDate) > Number.parseFloat(bInveDate) ? -1 : 1;
+          } else {
+            return Number.parseFloat(aInveDate) > Number.parseFloat(bInveDate) ? 1 : -1;
+          }
+        });
+      } else {
+        this.investRightData = super.orderBy(this.investRightData, column, flow);
+      }
+    }
   }
 }

@@ -46,7 +46,19 @@ export class InveststockPage extends Base {
   //第一个card的小计数据
   totalData: totalData[] = [];
 
-  headers: string[] = ['股票名称', '股票代码', '持股成本', '持股股数/(股数)', '收盘价', '持股市值', '持股盈亏'];
+  // headers: string[] = ['股票名称', '股票代码', '持股成本', '持股股数', '收盘价', '持股市值', '持股盈亏'];
+  headers: any[] = [
+    { col: '', name: '股票名称' },
+    { col: '', name: '股票代码' },
+    { col: 'StockValueInit', name: '持股成本' },
+    { col: 'StockNum', name: '持股股数' },
+    { col: 'ClosePrice', name: '收盘价' },
+    { col: 'StockValueCurrent', name: '持股市值' },
+    { col: 'StockProfit', name: '持股盈亏' },
+  ];
+  //用于排序的字段
+  orderByCol: string;
+  orderByFlow: string = '';  //asc 升序 desc 降序
 
   //股票投资接口数据
   invesStockData: any[] = [];
@@ -440,6 +452,10 @@ export class InveststockPage extends Base {
 
     //页面切换后，显示真实选择的时间
     this.choosedPeriod = this.invesStockData[0].UpdateTime.split("-").splice(0, 2).join('年') + '月';
+
+    //刷新数据后重置排序
+    this.orderByCol = '';
+    this.orderByFlow = '';
   }
 
   private updateMidPieData() {
@@ -601,5 +617,15 @@ export class InveststockPage extends Base {
       this.choosedPeriod = period;
       this.choosePeriod();
     });
+  }
+
+  //根据传值排序
+  _orderBy(column: string, flow: string = '') {
+    flow = this.orderByFlow == '' ? 'desc' : (this.orderByFlow == 'asc' ? 'desc' : 'asc');
+    if (column != '') {
+      this.orderByCol = column;
+      this.orderByFlow = flow;
+      this.invesStockData = super.orderBy(this.invesStockData, column, flow);
+    }
   }
 }

@@ -46,7 +46,11 @@
         <ion-card class="sheet-card">
           <ion-grid align-items-end>
             <ion-row class="sheet-row-header">
-              <ion-col text-center align-self-center *ngFor="let header of headers">{{header}}</ion-col>
+              <ion-col text-center align-self-center *ngFor="let header of headers" (click)="_orderBy(header.col)">
+                {{header.name}}
+                <ion-icon *ngIf="orderByCol == header.col && orderByFlow == 'desc' " name="arrow-round-down" [ngStyle]="{'font-size': '1.0em'}"></ion-icon>
+                <ion-icon *ngIf="orderByCol == header.col && orderByFlow == 'asc' " name="arrow-round-up" [ngStyle]="{'font-size': '1.0em'}"></ion-icon>
+              </ion-col>
             </ion-row>
 
             <!--TODO:这里scroll高度应该是动态计算的-->
