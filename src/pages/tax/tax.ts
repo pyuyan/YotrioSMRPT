@@ -200,9 +200,12 @@ export class TaxPage extends Base {
     this.taxBarInstance.setOption(this.taxBarData);
 
     //首次打开执行数据刷新
-    setTimeout(() => {
-      this.update(true);
-    }, 500);
+    if (super.couldUpdate()) {
+      setTimeout(() => {
+        this.update(true);
+      }, 500);
+    }
+
   }
 
   /**
@@ -472,6 +475,10 @@ export class TaxPage extends Base {
    * 改变年份刷新数据
    */
   chooseYear(val: any = '') {
+
+    //防止重复刷新
+    super.addUpdateCount();
+
     //e.g. this.Years = [2018 年, 2017 年, 2016 年] [今年，去年，前年]
     let yearIndex = this.Years.indexOf(this.choosedYear);
     switch (yearIndex) {

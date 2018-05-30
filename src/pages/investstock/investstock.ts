@@ -418,9 +418,12 @@ export class InveststockPage extends Base {
     this.bottomCurInstance.setOption(this.bottomCurData);
 
     //首次打开执行数据刷新
-    setTimeout(() => {
-      this.update(true);
-    }, 500);
+    if (super.couldUpdate()) {
+      setTimeout(() => {
+        this.update(true);
+      }, 500);
+    }
+
   }
 
   ionViewDidLeave() {
@@ -585,6 +588,10 @@ export class InveststockPage extends Base {
    * 改变时间刷新数据
    */
   choosePeriod(val: any = '') {
+
+    //防止重复刷新
+    super.addUpdateCount();
+
     if (this.choosedPeriod.indexOf('年度') > -1) {
       let year = Number(this.choosedPeriod.replace('年度', '').trim());
       this.dateServ.setDateRange(year, 12, year, 12);

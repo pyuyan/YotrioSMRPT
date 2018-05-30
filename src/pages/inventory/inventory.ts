@@ -10,6 +10,7 @@ import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
 import { eventParams } from "../../params/event";
 import { PopperiodPage } from '../popperiod/popperiod';
+import { InventorymodalPage } from '../inventorymodal/inventorymodal';
 
 /**
  * @desc 库存信息页面
@@ -23,6 +24,8 @@ export class InventoryPage extends Base {
 
   //用于发布主题
   private readonly _topic = eventParams.inventory.after.monthChanged;
+  //接口数据
+  private inventoryData: any[] = [];
 
   @ViewChild('inventoryPie') inventoryPieEle: ElementRef;
   @ViewChild('inventoryBar') inventoryBarEle: ElementRef;
@@ -169,6 +172,7 @@ export class InventoryPage extends Base {
     public navCtrl: NavController,
     public navParams: NavParams,
     public popoverCtrl: PopoverController,
+    public modalCtrl: ModalController,
     public event: Events,
     public dateServ: DateService,
     public dataProvider: DatasvrProvider,
@@ -196,12 +200,20 @@ export class InventoryPage extends Base {
     this.inventoryPieInstance = this.echartServ.echarts.init(this.inventoryPieEle.nativeElement.querySelector('div'));
     this.inventoryPieInstance.setOption(this.inventoryPieData);
 
+    //增加点击事件 2018年5月30日
+    this.inventoryPieInstance.on('click', (params => {
+      this.presentModal(params);
+    }));
+
     this.inventoryBarInstance = this.echartServ.echarts.init(this.inventoryBarEle.nativeElement.querySelector('div'));
     this.inventoryBarInstance.setOption(this.inventoryBarData);
 
-    setTimeout(() => {
-      this.update(true);
-    }, 500);
+    if (super.couldUpdate()) {
+      setTimeout(() => {
+        this.update(true);
+      }, 500);
+    }
+
   }
 
   /**
@@ -214,7 +226,7 @@ export class InventoryPage extends Base {
     let inventoryUpdateFlag: boolean = ContextData.InventoryDatas[ContextData.TableName].UpdateFlag;
 
     if (needUpdate || inventoryUpdateFlag) {
-
+      this.inventoryData = [];
       this.inventoryDataGroupByTime = {};
       this.inventoryDataGroupByModal = {};
       this.inventoryBarxAxisAppend = [];
@@ -227,6 +239,7 @@ export class InventoryPage extends Base {
       this.updateBarData(newPieData);
 
       ContextData.InventoryDatas[ContextData.TableName].UpdateFlag = false;
+      this.inventoryData = inventoryData;
     }
 
     //页面切换后，显示真实选择的时间
@@ -382,6 +395,9 @@ export class InventoryPage extends Base {
   chooseMonth(val: any = '') {
 
     super.debug(this.choosedMonth);
+    //防止重复刷新
+    super.addUpdateCount();
+
     //如果选择是本月，就统计今年1月到本月的数据，因为数据是延迟一个月，本月是没有数据的
     let tmpChoosedMon = Number(this.choosedMonth.replace('月', '').trim());
     if (tmpChoosedMon == this.dateServ.currentMonth) {
@@ -405,6 +421,42 @@ export class InventoryPage extends Base {
     popover.present({
       ev: event
     });
+  }
+
+  presentModal(event: any) {
+
+    const yearMap: any[] = [
+      { col: 'lt_one_year', name: '1年以内' },
+      { col: 'lt_two_year', name: '1-2年' },
+      { col: 'lt_three_year', name: '2-3年' },
+      { col: 'gt_three_year', name: '3年以上' },
+    ];
+    super.debug(event)
+    let _data = arrayHelper._group(this.inventoryData, 'modal');
+    super.debug(_data)
+    let series = yearMap[event.seriesIndex];
+    let tmpData: any[] = [];
+    _data[event.name].forEach(el => {
+      el.value = el[series.col]
+      tmpData.push(el);
+    });
+
+    let expanded: boolean = true;
+    let showIcon: boolean = false;
+    let contracted: boolean = !expanded;
+    const modal = this.modalCtrl.create(InventorymodalPage, {
+      date: this.currentYear + '年' + this.choosedMonth,
+      title: event.name,
+      value: series.name,
+      data: tmpData,
+      serise: event.name
+    });
+    modal.onDidDismiss(data => {
+      expanded = false;
+      contracted = !expanded;
+      setTimeout(() => showIcon = true, 200);
+    });
+    modal.present();
   }
 
   processDateRange() {

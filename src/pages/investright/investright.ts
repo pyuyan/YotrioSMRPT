@@ -36,6 +36,7 @@ export class InvestrightPage extends Base {
   bottomBarInstance: any;
 
   totalMap: any = {
+    // StockIncome: { title: '年度累计投资金额', color: '#c0504d' },
     InvMoney: { title: '累计投资金额', color: '#f79646' },
     InvIncoming: { title: '累计投资收益', color: '#9bbb59' },
     InvBalance: { title: '累计投资余额', color: '#24b3da' }
@@ -326,9 +327,12 @@ export class InvestrightPage extends Base {
     this.bottomBarInstance.setOption(this.bottomBarData);
 
     //首次打开执行数据刷新
-    setTimeout(() => {
-      this.update(true);
-    }, 500);
+    if (super.couldUpdate()) {
+      setTimeout(() => {
+        this.update(true);
+      }, 500);
+    }
+
   }
 
   ionViewDidLeave() {
@@ -405,6 +409,20 @@ export class InvestrightPage extends Base {
   }
 
   private calcTotalData(): void {
+
+    const year = this.choosedPeriod.substr(0, 4);
+    let yearData: any[] = [];
+    this.investRightData.forEach(el => {
+      if (el.InvDate.substr(0, 4) == year) {
+        yearData.push(el);
+      }
+    });
+    this.totalData.push({
+      title: '年度累计投资金额',
+      num: arrayHelper._sum(arrayHelper._column(yearData, 'InvMoney'), 0),
+      fontcolor: '#c0504d'
+    });
+
     Object.keys(this.totalMap).forEach(key => {
       let el = this.totalMap[key];
       this.totalData.push({
@@ -479,6 +497,10 @@ export class InvestrightPage extends Base {
    * 改变时间刷新数据
    */
   choosePeriod(val: any = '') {
+
+    //防止重复刷新
+    super.addUpdateCount();
+
     if (this.choosedPeriod.indexOf('年度') > -1) {
       let year = Number(this.choosedPeriod.replace('年度', '').trim());
       this.dateServ.setDateRange(year, 12, year, 12);
@@ -521,17 +543,33 @@ export class InvestrightPage extends Base {
       this.orderByFlow = flow;
       if (column == 'InvDate') {
         this.investRightData.sort((a, b) => {
-          let aInveDate = a['InvDate'].replace('年', '').replace('月', '').trim(); 
-          let bInveDate = b['InvDate'].replace('年', '').replace('月', '').trim(); 
           if (flow === 'desc') {
-            return Number.parseFloat(aInveDate) > Number.parseFloat(bInveDate) ? -1 : 1;
+            return this.processForInvDate(a) > this.processForInvDate(b) ? -1 : 1;
           } else {
-            return Number.parseFloat(aInveDate) > Number.parseFloat(bInveDate) ? 1 : -1;
+            return this.processForInvDate(a) > this.processForInvDate(b) ? 1 : -1;
           }
         });
       } else {
         this.investRightData = super.orderBy(this.investRightData, column, flow);
       }
     }
+  }
+
+  /**
+   * @name 时间+投资权重处理
+   * @desc 年:第一权重 月:第二权重 投资金额: 第三权重 PS：这里只能保证千亿以内的投资可以结合时间一起排序
+   * @param el 股权投资数据集节点
+   */
+  private processForInvDate(el) {
+    const mulNum = 100000000;
+    let _date = el.InvDate.split('年'); //权重1
+    let month = Number(_date[1].replace('月', '').trim());
+    month = month >= 10 ? month * mulNum / 100 : month * mulNum / 10; //权重2
+
+    return Number(arrayHelper._sum([
+      Number(_date[0]) * mulNum,
+      month,
+      (Number(el.InvMoney) / 1000000).toFixed(6), //权重3
+    ], 6));
   }
 }

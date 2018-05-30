@@ -48,66 +48,67 @@ export class SmreportPage extends Base {
             0,  // 下
             0, // 左
         ],
-        title: [{
-            text: '累计接单金额',
-            textAlign: 'center',
-            x: '20%',
-            y: '0%',
-            textStyle: {
-                fontSize: 30,
-                color: '#FFFFFF'
-            }
-        },
-        {
-            text: '累计毛利金额',
-            textAlign: 'center',
-            x: '50%',
-            y: '0%',
-            textStyle: {
-                fontSize: 30,
-                color: '#FFFFFF'
-            }
-        },
-        {
-            text: '毛利率',
-            textAlign: 'center',
-            x: '80%',
-            y: '0%',
-            textStyle: {
-                fontSize: 30,
-                color: '#FFFFFF'
-            }
-        },
-        {
-            text: 0,
-            textStyle: {
-                fontSize: 38,
-                color: '#CCF600'
+        title: [
+            {
+                text: '累计接单金额',
+                textAlign: 'center',
+                x: '20%',
+                y: '0%',
+                textStyle: {
+                    fontSize: 30,
+                    color: '#FFFFFF'
+                }
             },
-            textAlign: 'center',
-            x: '20%',
-            y: '10%'
-        },
-        {
-            text: 0,
-            textStyle: {
-                fontSize: 38,
-                color: '#CCF600'
+            {
+                text: '累计毛利金额',
+                textAlign: 'center',
+                x: '50%',
+                y: '0%',
+                textStyle: {
+                    fontSize: 30,
+                    color: '#FFFFFF'
+                }
             },
-            textAlign: 'center',
-            x: '50%',
-            y: '10%'
-        },
-        {
-            text: 0,
-            textStyle: {
-                fontSize: 38,
-                color: '#CCF600'
+            {
+                text: '毛利率',
+                textAlign: 'center',
+                x: '80%',
+                y: '0%',
+                textStyle: {
+                    fontSize: 30,
+                    color: '#FFFFFF'
+                }
             },
-            textAlign: 'center',
-            x: '80%',
-            y: '10%'
-        }
+            {
+                text: 0,
+                textStyle: {
+                    fontSize: 38,
+                    color: '#CCF600'
+                },
+                textAlign: 'center',
+                x: '20%',
+                y: '10%'
+            },
+            {
+                text: 0,
+                textStyle: {
+                    fontSize: 38,
+                    color: '#CCF600'
+                },
+                textAlign: 'center',
+                x: '50%',
+                y: '10%'
+            },
+            {
+                text: 0,
+                textStyle: {
+                    fontSize: 38,
+                    color: '#CCF600'
+                },
+                textAlign: 'center',
+                x: '80%',
+                y: '10%'
+            }
         ],
 
         tooltip: {

@@ -12,6 +12,9 @@ import { debugParams } from "./../params/debug";
  */
 export abstract class Base {
 
+    //用于记录同一个页面的刷新请求数
+    private updateCount: number = 0;
+
     /**
      * 用于时间显示
      */
@@ -19,7 +22,9 @@ export abstract class Base {
 
     @ViewChild('clockcontrol') clockctrl: any
 
-    constructor() { }
+    constructor() {
+        this.updateCount = 0;
+    }
 
     /**
      * 显示当前时间
@@ -112,6 +117,35 @@ export abstract class Base {
      */
     protected orderBy(arr: Array<any>, col: string, flow: string = 'desc') {
         return arrayHelper._sortNum(arr, col, flow);
+    }
+
+    /**
+     * @name 更新计数累加
+     */
+    protected addUpdateCount() {
+        this.updateCount++;
+        this.debug(this.getCurrentClassName() + ' 页面更新次数：' + this.updateCount);
+    }
+
+    /**
+     * @name 获取页面更新次数
+     */
+    protected getUpdateCount() {
+        return this.updateCount;
+    }
+
+    /**
+     * @name 是否能更新
+     */
+    protected couldUpdate(): boolean {
+        return this.updateCount == 0;
+    }
+
+    /**
+     * @name 获取当前实例的类名
+     */
+    protected getCurrentClassName() {
+        return this.constructor.name;
     }
 
     /**

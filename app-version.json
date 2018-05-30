@@ -1,7 +1,7 @@
 {
-  "version": "1.1.22",
-  "release_date": "2018年5月29日16:38:22",
-  "desc": "版本：1.1.22 更新内容：1. 股权股票数据中心可以自由排序",
+  "version": "1.1.23",
+  "release_date": "2018年5月30日17:22:55",
+  "desc": "版本：1.1.23 更新内容：1. 股权中心按照时间，投资金额排序，增加当天投资累计金额 2. 库存中心增加穿透 3. 修复一个选择日期后重复请求的bug",
   "app_name": "yotrioSMRPT",
   "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
   "app_url_iOS": ""
