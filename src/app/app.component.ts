@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
@@ -15,6 +15,7 @@ import { InvestrightPage } from './../pages/investright/investright';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
 
 import { urlParams } from "./../params/url";
+import { ReportPage } from '../pages/report/report';
 
 @Component({
   templateUrl: 'app.html'
@@ -34,6 +35,7 @@ export class YotrioSMRPT {
     public splashScreen: SplashScreen,
     public screenOrientation: ScreenOrientation,
     private datasvr: DatasvrProvider,
+    private event: Events,
   ) {
 
     this.contextdata = ContextData.Create();
@@ -53,9 +55,10 @@ export class YotrioSMRPT {
       { title: '营销数据中心', component: SmreportPage },
       { title: '税务数据中心', component: TaxPage },
       { title: '库存数据中心', component: InventoryPage },
-      // { title: '经营数据中心', component: ManagementPage }, 
+      // { title: '经营数据中心', component: ManagementPage },
       { title: '股票投资数据', component: InveststockPage },
       { title: '股权投资数据', component: InvestrightPage },
+      // { title: '投资简报数据', component: ReportPage },
       //{ title: '', component: SOCountPage }
     ];
 

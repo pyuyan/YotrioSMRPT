@@ -14,6 +14,7 @@ import { UpdateService } from '../service/update';
 import { CacheService } from '../service/cache';
 import { HttpService } from '../service/http';
 import { DateService } from '../service/date';
+import { FTPService } from '../service/ftp';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
@@ -23,6 +24,10 @@ import { AppVersion } from '@ionic-native/app-version';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { DocumentViewer } from '@ionic-native/document-viewer';
+import { FTP } from "@ionic-native/ftp";
+
+
 
 import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from '../pipes/pipes.module';
@@ -35,6 +40,7 @@ import { InventoryPageModule } from '../pages/inventory/inventory.module';
 import { ManagementPageModule } from '../pages/management/management.module';
 import { InveststockPageModule } from './../pages/investstock/investstock.module';
 import { InvestrightPageModule } from './../pages/investright/investright.module';
+import { ReportPageModule } from './../pages/report/report.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +59,8 @@ import { InvestrightPageModule } from './../pages/investright/investright.module
     InventoryPageModule,
     ManagementPageModule,
     InveststockPageModule,
-    InvestrightPageModule
+    InvestrightPageModule,
+    ReportPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -63,12 +70,12 @@ import { InvestrightPageModule } from './../pages/investright/investright.module
   providers: [
     StatusBar,
     SplashScreen,
-    AppVersion, File, FileOpener, FileTransfer, FileTransferObject,
+    AppVersion, File, FileOpener, FileTransfer, FileTransferObject, DocumentViewer, FTP,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ScreenOrientation,
     LoginsvrProvider,
     DatasvrProvider,
-    UpdateService, CacheService, HttpService, DateService
+    UpdateService, CacheService, HttpService, DateService, FTPService
   ],
 })
 export class AppModule { }

@@ -18,6 +18,7 @@ export class urlParams {
             yearInventory: 'getYearInventory/do',
             stockInvest: 'getStockInvest/do',
             rightInvest: 'getStockRightInvest/do',
+            businessProfit: 'getBusinessProfit/do'
         },
         url: {},
     };

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { timeParams } from '../params/time';
 
 /**
  * 定义日期的使用场景枚举
@@ -102,16 +103,27 @@ export class DateService {
     }
 
     /**
-     * 设置上个月月的时间范围 必须先调用 setScene 设置场景值
+     * 设置上个月的时间范围 必须先调用 setScene 设置场景值
      */
     public setLastMonth() {
+        return this.setRealMonthPeriod(1);
+    }
+
+    /**
+     * 设置上上个月的时间范围 必须先调用 setScene 设置场景值
+     */
+    public setBeforeLastMonth() {
+        return this.setRealMonthPeriod(2);
+    }
+
+    private setRealMonthPeriod(inter: number) {
         let beginYear = this.years.currentYear, beginMonth = 0;
 
         if (this.currentMonth == 1) {
             beginYear = Number(beginYear) - 1;
-            beginMonth = 12;
+            beginMonth = 12 - inter + 1;
         } else {
-            beginMonth = Number(this.currentMonth) - 1;
+            beginMonth = Number(this.currentMonth) - inter;
         }
         return this.setDateRange(beginYear, beginMonth, beginYear, beginMonth);
     }
@@ -187,5 +199,33 @@ export class DateService {
             periodbegin: range.beginyear.toString() + beginMonth + beginDay,
             periodend: range.endyear.toString() + endMonth + endDay
         }
+    }
+
+    /**
+     * @desc 确保不受每月上传数据时间影响，始终有数据
+     */
+    public setMonthPeriod() {
+        let today = this.dateObj.getDate();
+        let uploadDate: number = 0;
+        switch (this.scene) {
+            case DateScene.INVENTORY:
+                uploadDate = timeParams.inventory['uploadDate'];
+                break;
+            case DateScene.INVSTOCK:
+                uploadDate = timeParams.investstock['uploadDate'];
+                break;
+            case DateScene.INVRIGHT:
+                uploadDate = timeParams.investright['uploadDate'];
+                break;
+            default:
+                break;
+        }
+
+        if (today < uploadDate) {
+            this.setBeforeLastMonth();
+        } else {
+            this.setLastMonth();
+        }
+        return this;
     }
 }

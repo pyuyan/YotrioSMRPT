@@ -9,6 +9,7 @@ import { DateScene, DateService } from '../../service/date';
 import { debugHelper } from './../../util/helper/debug';
 
 import { DatePipe } from '@angular/common';
+import { timeParams } from './../../params/time';
 
 /*
 连接ESB系统获取数据
@@ -112,7 +113,7 @@ export class DatasvrProvider {
       params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     } else {
       //获取上个月的数据
-      params = this.dateServ.setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+      params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     }
 
     return this.httpServ.get(endpoint, params);
@@ -134,7 +135,7 @@ export class DatasvrProvider {
       params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     } else {
       //获取上个月的数据
-      params = this.dateServ.setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+      params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     }
     return this.httpServ.get(endpoint, params);
   }
@@ -154,7 +155,7 @@ export class DatasvrProvider {
       params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     } else {
       //获取上个月的数据
-      params = this.dateServ.setLastMonth().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+      params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     }
     return this.httpServ.get(endpoint, params);
   }
@@ -256,7 +257,7 @@ export class DatasvrProvider {
 
     return this.CallYearTaxAPI().subscribe(res => {
       let tmp_taxData = res['TaxDatas']['TaxData'];
-      if (tmp_taxData.length) {
+      if (Array.isArray(tmp_taxData)) {
         ContextData.TaxDatas[ContextData.TableName].DataValue = tmp_taxData;
         ContextData.TaxDatas[ContextData.TableName].UpdateFlag = true;
       }
@@ -269,7 +270,7 @@ export class DatasvrProvider {
   syncYearInventoryData() {
     return this.CallYearInventoryAPI().subscribe(res => {
       let tmp_inventoryData = res['InventoryDatas']['InventoryData'];
-      if (tmp_inventoryData.length) {
+      if (Array.isArray(tmp_inventoryData)) {
         ContextData.InventoryDatas[ContextData.TableName].DataValue = tmp_inventoryData;
         ContextData.InventoryDatas[ContextData.TableName].UpdateFlag = true;
       }
@@ -282,7 +283,7 @@ export class DatasvrProvider {
   syncInvStockData() {
     return this.CallInvStockAPI().subscribe(res => {
       let tmpData = res['StockInvests']['StockInvest'];
-      if (tmpData.length) {
+      if (Array.isArray(tmpData)) {
         ContextData.InvestsStock[ContextData.TableName].DataValue = tmpData;
         ContextData.InvestsStock[ContextData.TableName].UpdateFlag = true;
       }
@@ -295,7 +296,7 @@ export class DatasvrProvider {
   syncInvRightData() {
     return this.CallInvRightAPI().subscribe(res => {
       let tmpData = res['StockRightInvests']['StockRightInvest'];
-      if (tmpData.length) {
+      if (Array.isArray(tmpData)) {
         ContextData.InvestsRight[ContextData.TableName].DataValue = tmpData;
         ContextData.InvestsRight[ContextData.TableName].UpdateFlag = true;
       }
