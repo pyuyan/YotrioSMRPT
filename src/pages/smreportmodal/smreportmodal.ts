@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { NgxPaginationModule } from "ngx-pagination";
 
 /**
  * Generated class for the SmreportmodalPage page.
@@ -14,11 +15,17 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
   templateUrl: 'smreportmodal.html',
 })
 export class SmreportmodalPage {
-  
-  public dataset:any[] = [];
+
+  pagesize = 10;
+  p: number = 1;
+  collection: any[] = [];
+
+
+  public dataset: any[] = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) {
     this.dataset = this.navParams.get('data') || [];
+    this.collection = this.dataset;
   }
 
   ionViewDidLoad() {
@@ -28,8 +35,8 @@ export class SmreportmodalPage {
   /**
    * 关闭当前的modal
    */
-  dismiss(){
-  	this.viewCtrl.dismiss();
+  dismiss() {
+    this.viewCtrl.dismiss();
   }
 
 }

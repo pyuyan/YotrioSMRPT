@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { SmreportmodalPage } from './smreportmodal';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -8,6 +9,7 @@ import { SmreportmodalPage } from './smreportmodal';
   ],
   imports: [
     IonicPageModule.forChild(SmreportmodalPage),
+    NgxPaginationModule
   ],
 })
-export class SmreportmodalPageModule {}
+export class SmreportmodalPageModule { }

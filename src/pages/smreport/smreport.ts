@@ -599,6 +599,15 @@ export class SmreportPage extends Base {
             )
         }
 
+        //增加点击事件 2018年6月11日11:29:00
+        this.smpieInstance.on('click', (params => {
+
+            super.debug(this.getCurrentClassName() + 'pie 点击事件');
+            super.debug(params);
+
+            this.showDetail('Rate');
+        }));
+
         //首次打开执行数据刷新
         if (this.tablevalues.orderbymnyvalues.length == 0) {
             setTimeout(this.updateFunction, 500, this.tablevalues, this.chartObjList, true);

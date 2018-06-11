@@ -11,6 +11,11 @@
   <ion-content padding="">
     <div>
       <ion-card class="maincontentstyle">
+        <ion-row>
+          <ion-col col-8 offset-4 style="font-size: 22px;padding-top: 0px;padding-bottom: 0px;">
+            <pagination-controls (pageChange)="p = $event" previousLabel="上一页" nextLabel="下一页" maxSize="10"></pagination-controls>
+          </ion-col>
+        </ion-row>
         <ion-row style="padding:0%;width:100%">
           <ion-col>
             <div class="maingridstyle">
@@ -45,7 +50,7 @@
                   </ion-col>
                 </ion-row>
                 <ion-row style="font-size:19px;background-color:white;color:black;border-style: none none dotted none;border-width:1px;border-color: rgb(7,33,58);"
-                  *ngFor="let row of dataset;index as n;">
+                  *ngFor="let row of dataset|paginate: { itemsPerPage: pagesize, currentPage: p };index as n;">
                   <ion-col col-1="" text-left="">
                     {{row.BusinessDate}}
                   </ion-col>

@@ -35,8 +35,13 @@
                   <ion-col text-left col-1>接单产值</ion-col>
                   <ion-col text-left col-1>接单毛利率</ion-col>
                 </ion-row>
+                <ion-row>
+                  <ion-col col-8 offset-3 style="font-size: 20px;">
+                    <pagination-controls (pageChange)="p = $event" previousLabel="上一页" nextLabel="下一页" maxSize="10"></pagination-controls>
+                  </ion-col>
+                </ion-row>
                 <ion-row style="font-size:19px;background-color:white;color:black;border-style: none none dotted none;border-width:1px;border-color: rgb(7,33,58);"
-                  *ngFor="let row of dataset[group].DetailDatas[deptname];index as n;">
+                  *ngFor="let row of dataset[group].DetailDatas[deptname] | paginate: { itemsPerPage: pagesize, currentPage: p };index as n;">
                   <!-- <ion-col text-left col-1>{{n+1}}</ion-col> -->
                   <ion-col text-left col-1>{{row.BusinessDate}}</ion-col>
                   <ion-col text-left col-2>{{row.MFGCode}}</ion-col>
