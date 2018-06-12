@@ -48,4 +48,12 @@ export class eventParams {
             periodChanged: 'investRight:after:periodChanged',
         },
     };
+
+    //所有management 经营业绩的topic
+    public static readonly management: any = {
+        before: {},
+        after: {
+            periodChanged: 'management:after:periodChanged',
+        },
+    };
 }

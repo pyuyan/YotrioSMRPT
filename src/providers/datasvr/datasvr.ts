@@ -1,3 +1,4 @@
+import { debugParams } from './../../params/debug';
 import { urlParams } from "./../../params/url";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -161,6 +162,27 @@ export class DatasvrProvider {
   }
 
   /**
+   * @desc 获取经营业绩数据
+   * @param beginyear 开始年份 默认今年
+   * @param beginmonth 开始月份 默认今年第一个月
+   * @param endyear 结束年份 默认今年
+   * @param endmonth 结束月份，默认当前月
+   */
+  CallBizProfitAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
+    const endpoint: string = urlParams.common.endpoint.businessProfit;
+    const dateScene = DateScene.MANAGEMENT;
+    let params: any = {};
+    this.dateServ.setScene(dateScene);
+    if (this.dateServ.getDateRange(dateScene)) {
+      params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    } else {
+      //获取上个月的数据
+      params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    }
+    return this.httpServ.get(endpoint, params);
+  }
+
+  /**
    * 获取关键业务部门档案信息
    */
   GetKeyDepts(): Promise<Boolean> {
@@ -299,6 +321,25 @@ export class DatasvrProvider {
       if (Array.isArray(tmpData)) {
         ContextData.InvestsRight[ContextData.TableName].DataValue = tmpData;
         ContextData.InvestsRight[ContextData.TableName].UpdateFlag = true;
+      }
+    });
+  }
+
+  /**
+   * 同步经营业绩数据到本地
+   */
+  syncBizProfitData() {
+    let api: any;
+    if (debugParams.activeDebug) {
+      api = this.CallBizProfitAPI(2017, 12, 2017, 12);
+    } else {
+      api = this.CallBizProfitAPI();
+    }
+    return api.subscribe(res => {
+      let tmpData = res['BusinessProfits']['bp'];
+      if (Array.isArray(tmpData)) {
+        ContextData.ManagementDatas[ContextData.TableName].DataValue = tmpData;
+        ContextData.ManagementDatas[ContextData.TableName].UpdateFlag = true;
       }
     });
   }

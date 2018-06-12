@@ -55,7 +55,7 @@ export class YotrioSMRPT {
       { title: '营销数据中心', component: SmreportPage },
       { title: '税务数据中心', component: TaxPage },
       { title: '库存数据中心', component: InventoryPage },
-      // { title: '经营数据中心', component: ManagementPage },
+      { title: '经营数据中心', component: ManagementPage },
       { title: '股票投资数据', component: InveststockPage },
       { title: '股权投资数据', component: InvestrightPage },
       // { title: '投资简报数据', component: ReportPage },
@@ -81,6 +81,8 @@ export class YotrioSMRPT {
           datasvrprovider.syncInvStockData();
           //股权投资数据
           datasvrprovider.syncInvRightData();
+          //经营业绩数据
+          datasvrprovider.syncBizProfitData();
 
         }
       });

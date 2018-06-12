@@ -203,6 +203,7 @@ export class DateService {
 
     /**
      * @desc 确保不受每月上传数据时间影响，始终有数据
+     * @note 不好的实践，不符合开闭原则。。。有时间优化一下
      */
     public setMonthPeriod() {
         let today = this.dateObj.getDate();
@@ -216,6 +217,9 @@ export class DateService {
                 break;
             case DateScene.INVRIGHT:
                 uploadDate = timeParams.investright['uploadDate'];
+                break;
+            case DateScene.MANAGEMENT:
+                uploadDate = timeParams.management['uploadDate'];
                 break;
             default:
                 break;

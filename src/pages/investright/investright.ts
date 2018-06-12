@@ -10,12 +10,8 @@ import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
 import { PopperiodPage } from './../popperiod/popperiod';
 import { eventParams } from "../../params/event";
+import { totalData } from "./../../interface/base";
 
-export interface totalData {
-  title: string;
-  num: any;
-  fontcolor: string;
-}
 
 @IonicPage()
 @Component({

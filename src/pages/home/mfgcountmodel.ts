@@ -67,6 +67,7 @@ export class MfgcountmodelPage {
     segmentChanged(event: any) {
         this.deptidx = 0;
         this.deptname = this.dataset[this.group].MFGDepts[0];
+        this.p = 1;
     }
 
 
@@ -77,10 +78,4 @@ export class MfgcountmodelPage {
 
     }
 
-    // /**
-    //  * 分页
-    //  */
-    // pageChange() {
-
-    // }
 }
