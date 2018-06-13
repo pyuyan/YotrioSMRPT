@@ -7,10 +7,8 @@ import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { HttpService } from "../../service/http";
 import { DateScene, DateService } from '../../service/date';
-import { debugHelper } from './../../util/helper/debug';
+import { arrayHelper } from './../../util/helper/array';
 
-import { DatePipe } from '@angular/common';
-import { timeParams } from './../../params/time';
 
 /*
 连接ESB系统获取数据
@@ -189,7 +187,7 @@ export class DatasvrProvider {
     return this.CallKeyDeptAPI().toPromise().then(
       result => {
         let depts: Array<any> = new Array<any>();
-        if (result['KeyDepts']) {
+        if (Array.isArray(result['KeyDepts']['KeyDept'])) {
           depts = result['KeyDepts']['KeyDept'];
         }
         return depts;
@@ -202,9 +200,14 @@ export class DatasvrProvider {
       if (values) {
         ContextData.GetKeyDepts().DeptNames.length = 0;
         ContextData.GetKeyDepts().DeptSalingTarget.length = 0;
-        values.forEach(value => {
-          ContextData.GetKeyDepts().DeptNames.push(value['Name']);
-          ContextData.GetKeyDepts().DeptSalingTarget.push(Math.round(value['TargetMoney']));
+        //这里先分组一遍
+        values = arrayHelper._group(values, 'Name');
+
+        Object.keys(values).forEach(el => {
+          let value = values[el];
+          ContextData.GetKeyDepts().DeptNames.push(el);
+          // ContextData.GetKeyDepts().DeptSalingTarget.push(Math.round(value['TargetMoney']));
+          ContextData.GetKeyDepts().DeptSalingTarget.push(arrayHelper._sum(arrayHelper._column(value, 'TargetMoney'), 0));
         });
         return true;
       }
@@ -261,6 +264,11 @@ export class DatasvrProvider {
       }
     ).then(value => {
       if (value) {
+
+        //这里还是属于法国组，比较特殊 2018年6月13日11:19:28
+        const uniqueDept = '永宏总经办', realDept = '法国组';
+        value.map(v => { if (v['SaleDept'] === uniqueDept) { v['SaleDept'] = realDept; } });  //end
+
         ContextData.OriginalDatas['TMP_SMTransferData'].DataValue = value;
         ContextData.OriginalDatas['TMP_SMTransferData'].UpdateFlag = {
           homepage: true,

@@ -317,7 +317,7 @@ export class HomePage extends Base {
         super.showAlert(this.alterCtrl, title, subTitle);
     }
 
-    colors: any = ['#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#59DF97'];
+    colors: any = ['#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#59DF97', '#E91E63', '#795548'];
     ManufactureDatas: any = {
         color: this.colors,
 

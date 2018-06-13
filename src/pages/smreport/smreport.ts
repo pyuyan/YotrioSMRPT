@@ -39,6 +39,8 @@ export class SmreportPage extends Base {
     smpieInstance: any
     smbarInstance: any
 
+    //所有的颜色
+    colors: string[] = ['#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#59DF97', '#607D8B', '#795548'];
 
     totalsalemnydatas: any = {
         backgroundColor: '#07213a',
@@ -112,6 +114,7 @@ export class SmreportPage extends Base {
         ],
 
         tooltip: {
+            show: false,
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c}",
         },
@@ -132,12 +135,13 @@ export class SmreportPage extends Base {
                 type: 'pie',
                 radius: ['0%', '65%'],
                 center: ['20%', '60%'],
-                color: ['#8064a2', '#4bacc6', '#f79646', '#c0504d', '#9bbb59', '#59DF97'],
+                color: this.colors,
                 label: {
-                    formatter: " {b}\n{c}",
-                    position: 'inner',
+                    // show:false,
+                    formatter: " {c}",
+                    // position: 'inner',
                     textStyle: {
-                        fontSize: 20,
+                        fontSize: 16,
                     }
                 },
                 tooltip: {
@@ -159,12 +163,20 @@ export class SmreportPage extends Base {
                 type: 'pie',
                 radius: ['0%', '65%'],
                 center: ['50%', '60%'],
-                color: ['#8064a2', '#4bacc6', '#f79646', '#c0504d', '#9bbb59', '#59DF97'],
+                color: this.colors,
+                // label: {
+                //     formatter: " {b}\n{c}",
+                //     position: 'inner',
+                //     textStyle: {
+                //         fontSize: 20,
+                //     }
+                // },
                 label: {
-                    formatter: " {b}\n{c}",
-                    position: 'inner',
+                    // show:false,
+                    formatter: " {c}",
+                    // position: 'inner',
                     textStyle: {
-                        fontSize: 20,
+                        fontSize: 16,
                     }
                 },
                 tooltip: {
@@ -186,12 +198,20 @@ export class SmreportPage extends Base {
                 type: 'pie',
                 radius: ['0%', '65%'],
                 center: ['80%', '60%'],
-                color: ['#8064a2', '#4bacc6', '#f79646', '#c0504d', '#9bbb59', '#59DF97'],
+                color: this.colors,
+                // label: {
+                //     formatter: " {b}\n{c} %",
+                //     position: 'inner',
+                //     textStyle: {
+                //         fontSize: 20,
+                //     }
+                // },
                 label: {
-                    formatter: " {b}\n{c} %",
-                    position: 'inner',
+                    // show:false,
+                    formatter: " {c}",
+                    // position: 'inner',
                     textStyle: {
-                        fontSize: 20,
+                        fontSize: 16,
                     }
                 },
                 tooltip: {
@@ -212,11 +232,11 @@ export class SmreportPage extends Base {
     };
 
 
-    colors: any = ['#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#59DF97'];
     profitdatas: any = {
         color: this.colors,
 
         tooltip: {
+            show: false,
             trigger: 'axis',
             axisPointer: {
                 type: 'cross'
@@ -448,11 +468,6 @@ export class SmreportPage extends Base {
                         areagrosses[areaidx] += tmp_gross;
                     }
 
-                    //计算国内市场部，主要是为了debug
-                    if (keydept == '国内市场部') {
-                        inlandSum += tmp_salemny;
-                    }
-
                     if (customer != '国内市场部客户' && keydept) {
                         //2018年5月11日16:07:15 这里截取到 "组" 做匹配，有些组名变动，e.g. TEST组 -> TEST组(失效)
                         let v_keydept = keydept.substr(0, keydept.indexOf("组") + 1);
@@ -482,6 +497,11 @@ export class SmreportPage extends Base {
                             topgroupvalues[custidx].GrossMoney += tmp_gross;
                         }
                         // }
+                    }
+
+                    //计算国内市场部，主要是为了debug
+                    if (keydept == '国内市场部') {
+                        inlandSum += tmp_salemny;
                     }
                 }
             });
