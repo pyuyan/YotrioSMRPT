@@ -389,7 +389,7 @@ export class ManagementPage extends Base {
     });
   }
 
-  presentPopover() {
+  presentPopover(event) {
     let popover = this.popoverCtrl.create(PopperiodPage, {
       title: '选择时间',
       data: this.period,

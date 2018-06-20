@@ -1,7 +1,7 @@
 {
-  "version": "1.1.27",
-  "release_date": "2018年6月13日11:27:23",
-  "desc": "版本：1.1.27 更新内容：1. 营销中心法国组增加一个特殊客户 2. 营销中心，经营业绩样式调整",
+  "version": "1.1.28",
+  "release_date": "2018年6月20日10:17:06",
+  "desc": "版本：1.1.28 更新内容：1. 库存中心样式调整 2. 经营中心修复在Firefox下点击日期无效问题",
   "app_name": "yotrioSMRPT",
   "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
   "app_url_iOS": ""

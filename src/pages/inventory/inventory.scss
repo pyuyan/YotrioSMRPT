@@ -1,6 +1,8 @@
 page-inventory {
   // 背景色
   $color-bg: rgb(7, 33, 58);
+  $top-card-color-bg: rgba(255, 255, 255, 0.1);
+  $sheet-card-color-bg: rgba(18, 42, 63, 0.6);
   $color-white: #FFFFFF; //ionic 的颜色
   $radio-md-color-on: rgb(141, 20, 20);
   ion-navbar {
@@ -136,6 +138,42 @@ page-inventory {
         font-size: 24px;
         border-width: 1px;
         border-style: none solid none solid;
+      }
+    }
+  }
+  .right-cards {
+    background-color: $top-card-color-bg;
+    height: 1060px;
+    ion-card-header {
+      overflow: auto;
+      color: $color-white;
+      font-size: 35px;
+      line-height: 35px;
+      text-align: center;
+      overflow: hide;
+      height: 60px;
+      border-width: 1px;
+      border-style: none none solid none;
+      background-color: rgb(0, 150, 136);
+    }
+    .right-cards-detail {
+      background-color: $top-card-color-bg; // height: 160px;
+      margin-top: 40px;
+      height: auto;
+      overflow: hidden;
+      .right-cards-detail-header {
+        color: $color-white;
+        font-size: 26px;
+        line-height: 45px;
+        text-align: center;
+        height: 45px;
+        border-width: 1px;
+        border-style: none none solid none;
+        background-color: rgb(96, 125, 139);
+      }
+      .right-cards-detail-content {
+        color: $color-white;
+        font-size: 22px;
       }
     }
   }

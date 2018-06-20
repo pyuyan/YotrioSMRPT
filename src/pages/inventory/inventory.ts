@@ -40,14 +40,22 @@ export class InventoryPage extends Base {
   currentYear: any;
 
   //库存数据 按时间分类
-  inventoryDataGroupByTime: any = {};
+  inventoryDataGroupByTime: any;
   //库存数据 按模块分类
-  inventoryDataGroupByModal: any = {};
+  inventoryDataGroupByModal: any;
+  //右侧card头部数据
+  cardYearType: string;
 
   //是否显示合计的条目bar
   showTotalBar: boolean = true;
   //pie的时间map
   pieYearMap: any = { lt_one_year: '1年以内', lt_two_year: '1-2年', lt_three_year: '2-3年', gt_three_year: '3年以上' };
+  yearMap: any[] = [
+    { col: 'lt_one_year', name: '1年以内' },
+    { col: 'lt_two_year', name: '1-2年' },
+    { col: 'lt_three_year', name: '2-3年' },
+    { col: 'gt_three_year', name: '3年以上' },
+  ];
   //bar的库存存放地
   barAreaType: string[] = ['国内', '国外'];
   //国外地区
@@ -77,7 +85,7 @@ export class InventoryPage extends Base {
       padding: 0,
       textStyle: {
         color: '#FFFFFF',
-        fontSize: 24
+        fontSize: 20
       }
     },
 
@@ -202,7 +210,11 @@ export class InventoryPage extends Base {
 
     //增加点击事件 2018年5月30日
     this.inventoryPieInstance.on('click', (params => {
-      this.presentModal(params);
+      super.debug(params)
+      // this.presentModal(params);
+      let _yearTypes = arrayHelper._column(this.yearMap, 'name');
+      let _realYearType = this.yearMap[_yearTypes.findIndex(el => el == params.seriesName)];
+      this.changeCard(_realYearType.col);
     }));
 
     this.inventoryBarInstance = this.echartServ.echarts.init(this.inventoryBarEle.nativeElement.querySelector('div'));
@@ -227,8 +239,8 @@ export class InventoryPage extends Base {
 
     if (needUpdate || inventoryUpdateFlag) {
       this.inventoryData = [];
-      this.inventoryDataGroupByTime = {};
-      this.inventoryDataGroupByModal = {};
+      this.inventoryDataGroupByTime = [];
+      this.inventoryDataGroupByModal = [];
       this.inventoryBarxAxisAppend = [];
       this.inventoryBarSeriesAppend = [];
 
@@ -240,6 +252,9 @@ export class InventoryPage extends Base {
 
       ContextData.InventoryDatas[ContextData.TableName].UpdateFlag = false;
       this.inventoryData = inventoryData;
+
+      //获取卡片数据
+      this.changeCard();
     }
 
     //页面切换后，显示真实选择的时间
@@ -389,6 +404,43 @@ export class InventoryPage extends Base {
     this.inventoryBarInstance.setOption(this.inventoryBarData);
   }
 
+  private exractGroupData(event: any = { seriesIndex: 3, name: '' }) {
+    super.debug(event)
+    let _data = arrayHelper._group(this.inventoryData, 'modal');
+    super.debug(_data)
+    let series = this.yearMap[event.seriesIndex];
+    let tmpData: any[] = [];
+    _data[event.name].forEach(el => {
+      el.value = el[series.col]
+      tmpData.push(el);
+    });
+
+    return {
+      date: this.currentYear + '年' + this.choosedMonth,
+      title: event.name,
+      value: series.name,
+      data: tmpData,
+      serise: event.name
+    }
+  }
+
+  private getInventoryDataGroupByTime(yearType: string) {
+    let _yearTypes = arrayHelper._column(this.yearMap, 'col');
+    let _realYearType = this.yearMap[_yearTypes.findIndex(el => el == yearType)];
+
+    let _data = arrayHelper._group(this.inventoryData, 'modal'), res: any[] = [];
+    Object.keys(_data).forEach(el => {
+      let tmpModalData = _data[el];
+      if (Array.isArray(tmpModalData)) {
+        let tmp = tmpModalData.filter(v => Number(v[yearType]) > 0).map(v => v = Object.assign({ showValue: arrayHelper._sum([v[yearType]], 2) }, v));
+        if (tmp.length > 0) res.push({ modal: el, data: tmp });
+      }
+    });
+
+    this.inventoryDataGroupByTime = res;
+    this.cardYearType = _realYearType['name'];
+  }
+
   /**
    * 改变月刷新数据
    */
@@ -412,6 +464,14 @@ export class InventoryPage extends Base {
     });
   }
 
+  /**
+   * 改变右侧卡片内容
+   * @param year 
+   */
+  changeCard(year: string = 'gt_three_year') {
+    this.getInventoryDataGroupByTime(year);
+  }
+
   presentPopover(event) {
     let popover = this.popoverCtrl.create(PopperiodPage, {
       title: '选择月份',
@@ -424,33 +484,10 @@ export class InventoryPage extends Base {
   }
 
   presentModal(event: any) {
-
-    const yearMap: any[] = [
-      { col: 'lt_one_year', name: '1年以内' },
-      { col: 'lt_two_year', name: '1-2年' },
-      { col: 'lt_three_year', name: '2-3年' },
-      { col: 'gt_three_year', name: '3年以上' },
-    ];
-    super.debug(event)
-    let _data = arrayHelper._group(this.inventoryData, 'modal');
-    super.debug(_data)
-    let series = yearMap[event.seriesIndex];
-    let tmpData: any[] = [];
-    _data[event.name].forEach(el => {
-      el.value = el[series.col]
-      tmpData.push(el);
-    });
-
     let expanded: boolean = true;
     let showIcon: boolean = false;
     let contracted: boolean = !expanded;
-    const modal = this.modalCtrl.create(InventorymodalPage, {
-      date: this.currentYear + '年' + this.choosedMonth,
-      title: event.name,
-      value: series.name,
-      data: tmpData,
-      serise: event.name
-    });
+    const modal = this.modalCtrl.create(InventorymodalPage, this.exractGroupData(event));
     modal.onDidDismiss(data => {
       expanded = false;
       contracted = !expanded;

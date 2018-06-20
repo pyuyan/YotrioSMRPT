@@ -24,7 +24,8 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <ion-col col-11>
+      <!--左侧-->
+      <ion-col col-9>
         <ion-card class="maincontenttopstyle">
           <ion-card-content>
             <div echarts #inventoryPie [options]="inventoryPieData" class="piediv"></div>
@@ -47,6 +48,35 @@
           </div>
         </ion-card>
       </ion-col>
+      <!--./左侧-->
+
+      <!--右侧-->
+      <ion-col col-3>
+        <!--不同行业企业详情card-->
+        <ion-card class="right-cards">
+          <ion-card-header>
+            {{cardYearType}}
+          </ion-card-header>
+          <ion-scroll scrollX="false" scrollY="true" style="height: 960px">
+            <ion-row>
+              <ion-col>
+                <ion-card class="right-cards-detail" *ngFor="let item of inventoryDataGroupByTime">
+                  <ion-row class="right-cards-detail-header">
+                    <ion-col text-center>{{item.modal}}</ion-col>
+                  </ion-row>
+
+                  <ion-row class="right-cards-detail-content" *ngFor="let invent of item.data">
+                    <ion-col text-center>{{invent.company}}</ion-col>
+                    <ion-col text-center>{{invent.showValue}}</ion-col>
+                  </ion-row>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-scroll>
+        </ion-card>
+        <!--./不同行业企业详情card-->
+      </ion-col>
+      <!--./右侧-->
     </ion-row>
   </ion-grid>
 </ion-content>
