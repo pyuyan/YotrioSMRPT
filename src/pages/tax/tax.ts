@@ -391,7 +391,10 @@ export class TaxPage extends Base {
         },
         tooltip: {
           show: true,
-          formatter: " {b}\n{c} "
+          formatter: " {b}\n{c} ",
+          textStyle: {
+            fontSize: 26,
+          }
         },
         itemStyle: {
           normal: {
@@ -576,6 +579,9 @@ export class TaxPage extends Base {
         })
       });
     }
+
+    //递减排序
+    res = arrayHelper._sortNum(res, 'showValue', 'desc');
 
     return {
       title: seriseName,
