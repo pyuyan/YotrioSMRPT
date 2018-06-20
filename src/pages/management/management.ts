@@ -234,13 +234,13 @@ export class ManagementPage extends Base {
       this.updateMidBarData();
 
       ContextData.ManagementDatas[ContextData.TableName].UpdateFlag = false;
+
+      //页面切换后，显示真实选择的时间
+      this.choosedPeriod = this.managementData[0].period_begin.substr(0, 4) + '年' + this.managementData[0].period_begin.substr(-2).replace('0', '') + '月';
     }
 
     super.debug('ManagementDatas');
     super.debug(this.managementData);
-
-    //页面切换后，显示真实选择的时间
-    this.choosedPeriod = this.managementData[0].period_begin.substr(0, 4) + '年' + this.managementData[0].period_begin.substr(-2).replace('0', '') + '月';
 
   }
 
@@ -308,7 +308,11 @@ export class ManagementPage extends Base {
 
   private exractGroupData(data: any, field: string) {
     let res: any = { industry: field, data: [] };
-    res.data = data.filter(el => el['is_merge'] == '否' && el['industry'] == field);
+    if (field == '永强投资') {
+      res.data = data.filter(el => el['industry'] == field);
+    } else {
+      res.data = data.filter(el => el['is_merge'] == '否' && el['industry'] == field);
+    }
     return res;
   }
 

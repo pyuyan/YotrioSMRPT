@@ -288,6 +288,16 @@ export class DatasvrProvider {
     return this.CallYearTaxAPI().subscribe(res => {
       let tmp_taxData = res['TaxDatas']['TaxData'];
       if (Array.isArray(tmp_taxData)) {
+
+        //接口数据调整，主要是所属行业调整。财务要求，2018年6月20日11:16:41 slyfalcon
+        tmp_taxData.map(v => {
+          if (v.Industry == '旅游机票') {
+            v.Industry = '北京联拓';
+          } else if (v.Industry == '投资') {
+            v.Industry = '永强投资';
+          }
+        }); //End
+
         ContextData.TaxDatas[ContextData.TableName].DataValue = tmp_taxData;
         ContextData.TaxDatas[ContextData.TableName].UpdateFlag = true;
       }

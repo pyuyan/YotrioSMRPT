@@ -114,9 +114,12 @@ export class SmreportPage extends Base {
         ],
 
         tooltip: {
-            show: false,
+            show: true,
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c}",
+            textStyle: {
+                fontSize: 26,
+            }
         },
         legend: {
             data: [],

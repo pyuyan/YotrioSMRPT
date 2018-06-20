@@ -1,0 +1,39 @@
+<div class="modal_content">
+  <ion-header>
+    <ion-segment id="segment">
+      <ion-segment-button style="font-size:25px;">
+        {{title}}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-header>
+
+  <ion-content padding="">
+    <div>
+      <ion-card class="maincontentstyle">
+        <ion-row style="padding:0%;width:100%">
+          <ion-col>
+            <div class="maingridstyle">
+              <ion-grid align-items-end="" style="overflow:auto;color:#FFFFFF;">
+                <ion-row align-items-end="" style="background-color:rgb(7,33,58);color:white;font-size:19px;">
+                  <ion-col text-center="">公司 </ion-col>
+                  <ion-col text-center=""> {{tax}} </ion-col>
+                </ion-row>
+                <ion-row style="font-size:19px;background-color:white;color:black;border-style: none none dotted none;border-width:1px;border-color: rgb(7,33,58);margin-top:10px"
+                  *ngFor="let row of dataset;index as n;">
+                  <ion-col text-center=""> {{row.company}} </ion-col>
+                  <ion-col text-center=""> {{row.showValue}} </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+  </ion-content>
+
+  <ion-footer>
+    <button (click)="dismiss()" color="danger" full="" ion-button="">
+      关闭
+    </button>
+  </ion-footer>
+</div>

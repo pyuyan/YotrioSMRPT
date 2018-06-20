@@ -73,8 +73,18 @@ export class InventoryPage extends Base {
     title: [],
 
     tooltip: {
+      show: true,
       trigger: 'item',
       formatter: "{a} <br/>{b}: {c}",
+    },
+
+    label: {
+      // show:false,
+      formatter: " {c}",
+      // position: 'inner',
+      textStyle: {
+        fontSize: 16,
+      }
     },
 
     legend: {
@@ -255,10 +265,10 @@ export class InventoryPage extends Base {
 
       //获取卡片数据
       this.changeCard();
-    }
 
-    //页面切换后，显示真实选择的时间
-    this.choosedMonth = inventoryData[0].period_begin.substr(-2).replace('0', '') + '月';
+      //页面切换后，显示真实选择的时间
+      this.choosedMonth = inventoryData[0].period_begin.substr(-2).replace('0', '') + '月';
+    }
   }
 
   private updatePieData(data) {
@@ -290,15 +300,18 @@ export class InventoryPage extends Base {
         radius: ["0%", "65%"],
         center: [15 + distance + '%', "60%"],
         color: this.colors,
-        label: {
-          formatter: " {b}\n{c} ",
-          position: "inner",
-          textStyle: {
-            fontSize: 20
-          }
-        },
+        // label: {
+        //   formatter: " {b}\n{c} ",
+        //   position: "inner",
+        //   textStyle: {
+        //     fontSize: 20
+        //   }
+        // },
         tooltip: {
-          formatter: " {b}\n{c} "
+          formatter: " {b}\n{c} ",
+          textStyle: {
+            fontSize: 26,
+          }
         },
         itemStyle: {
           normal: {

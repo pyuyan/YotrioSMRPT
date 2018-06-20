@@ -1,5 +1,6 @@
+import { TaxmodalPage } from './../taxmodal/taxmodal';
 import { PopperiodPage } from './../popperiod/popperiod';
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, group } from '@angular/core';
 import { NavController, IonicPage, ModalController, AlertController, LoadingController, NavParams, PopoverController, Events } from 'ionic-angular';
 
 import { NgxEchartsService, NgxEchartsModule } from 'ngx-echarts';  //备注：NgxEchartsModule 不能少
@@ -11,7 +12,6 @@ import { mathHelper } from './../../util/helper/math';
 import { DateScene, DateService } from './../../service/date';
 import { DatasvrProvider } from "./../../providers/datasvr/datasvr";
 import { eventParams } from "../../params/event";
-
 /**
  * @desc 税收报表信息页面 2018年4月28日09:09:45
  */
@@ -32,7 +32,9 @@ export class TaxPage extends Base {
   taxBarInstance: any
 
   //要求的排序 hardcode note 这里数据源经常变动
-  pieDataSort: string[] = [/*'户外家居'*/'户外休闲家具', /*'北京联拓'*/'旅游机票', /*'永强投资'*/'投资', '房地产', '其他'];
+  // pieDataSort: string[] = [/*'户外家居'*/'户外休闲家具', /*'北京联拓'*/'旅游机票', /*'永强投资'*/'投资', '房地产', '其他'];
+  // 财务那边要求改为以下。。2018年6月20日11:12:09 
+  pieDataSort: string[] = ['户外休闲家具', '北京联拓', '永强投资', '房地产', '其他'];
   barDataSort: string[] = ['临海', '黄岩', '宁波', '山东', '上海', '北京', '合肥', '境外'];
 
   //是否显示合计的条目bar
@@ -49,6 +51,8 @@ export class TaxPage extends Base {
   taxDataGroupByIndustry: any = {};
   //税种
   taxType: string[] = ['增值税', '所得税', '其他税费'];
+  //过滤后的数据
+  filterData: any = [];
 
   //按行业分组的饼图数据结构
   taxPieTitleColor: string[] = ['#FFFFFF', '#CCF600'];
@@ -59,6 +63,7 @@ export class TaxPage extends Base {
     title: [],
 
     tooltip: {
+      show: true,
       trigger: 'item',
       formatter: "{a} <br/>{b}: {c}",
     },
@@ -172,6 +177,7 @@ export class TaxPage extends Base {
     public event: Events,
     public dateServ: DateService,
     public dataProvider: DatasvrProvider,
+    public modalCtrl: ModalController,
     private echartServ: NgxEchartsService,
   ) {
     super();
@@ -196,6 +202,10 @@ export class TaxPage extends Base {
     this.taxPieInstance = this.echartServ.echarts.init(this.taxPieEle.nativeElement.querySelector('div'));
     this.taxPieInstance.setOption(this.taxPieData);
 
+    this.taxPieInstance.on('click', (params => {
+      this.presentModal(params);
+    }));
+
     this.taxBarInstance = this.echartServ.echarts.init(this.taxBarEle.nativeElement.querySelector('div'));
     this.taxBarInstance.setOption(this.taxBarData);
 
@@ -218,6 +228,10 @@ export class TaxPage extends Base {
     let taxUpdateFlag: boolean = ContextData.TaxDatas[ContextData.TableName].UpdateFlag;
 
     super.debug(arrayHelper._unique(arrayHelper._column(taxData, 'Industry')))
+
+    //taxData清洗
+    this.cleanData(taxData);
+    this.filterData = taxData;
 
     if (needUpdate || taxUpdateFlag) {
 
@@ -288,15 +302,27 @@ export class TaxPage extends Base {
       radius: ["0%", "65%"],
       center: ["15%", "60%"],
       color: this.taxPieSeriesColor,
+      // label: {
+      //   formatter: " {b}\n{c} ",
+      //   position: "inner",
+      //   textStyle: {
+      //     fontSize: 20
+      //   }
+      // },
       label: {
-        formatter: " {b}\n{c} ",
-        position: "inner",
+        // show:false,
+        formatter: " {c}",
+        // position: 'inner',
         textStyle: {
-          fontSize: 20
+          fontSize: 16,
         }
       },
       tooltip: {
-        formatter: " {b}\n{c} "
+        show: true,
+        formatter: " {b}\n{c} ",
+        textStyle: {
+          fontSize: 26,
+        }
       },
       itemStyle: {
         normal: {
@@ -348,14 +374,23 @@ export class TaxPage extends Base {
         radius: ["0%", "65%"],
         center: [30 + distance + '%', "60%"],
         color: this.taxPieSeriesColor,
+        // label: {
+        //   formatter: " {b}\n{c} ",
+        //   position: "inner",
+        //   textStyle: {
+        //     fontSize: 20
+        //   }
+        // },
         label: {
-          formatter: " {b}\n{c} ",
-          position: "inner",
+          // show:false,
+          formatter: " {c}",
+          // position: 'inner',
           textStyle: {
-            fontSize: 20
+            fontSize: 16,
           }
         },
         tooltip: {
+          show: true,
           formatter: " {b}\n{c} "
         },
         itemStyle: {
@@ -471,6 +506,84 @@ export class TaxPage extends Base {
     this.taxBarInstance.setOption(this.taxBarData);
   }
 
+  private cleanData(data: any) {
+    const regx = /有限公司|有限责任公司|合伙企业（有限合伙）/;
+    if (!Array.isArray(data)) return [];
+    data.map((v) => {
+      v['Org'] = v['Org'].replace(regx, '');
+      //增值税
+      v['VATax'] = Math.round(v['VATax']);
+      //企业所得税
+      v['IncomeTax'] = Math.round(v['IncomeTax']);
+      //其他税费
+      v['OtherTax'] = Math.round(v['OtherTax']);
+      //其他经费
+      v['OtherFee'] = Math.round(v['OtherFee']);
+      //出口退税总额
+      v['ExpDrawbackTax'] = Math.round(v['ExpDrawbackTax']);
+    });
+  }
+
+  private getTaxGroupData(industry: string) {
+    let res: any = [];
+    Object.keys(this.taxDataGroupByIndustry).forEach(el => {
+      if (el == industry) res = this.taxDataGroupByIndustry[el];
+    });
+    return res;
+  }
+
+  private getModalData(event) {
+    const taxTypeMap: any = [
+      { taxName: '增值税', col: 'VATax' },
+      { taxName: '所得税', col: 'IncomeTax' },
+      { taxName: '其他税费', col: 'OtherTax' }, //这个特殊 OtherTax+OtherFee
+      { taxName: '出口退税', col: 'ExpDrawbackTax' },
+    ];
+
+    let taxs: any = [];
+    taxs = arrayHelper._column(taxTypeMap, 'taxName');
+
+    let seriseName: string = event.seriesName, taxName: string = event.name;
+    let realTaxCol = taxTypeMap[taxs.findIndex(el => el == taxName)].col;
+    let res: any = [];
+
+    if (seriseName != '出口退税') {
+      let groupData = this.getTaxGroupData(seriseName);
+
+      if (taxName == '其他税费') {
+        groupData.forEach(el => {
+          let totalOther = Number(arrayHelper._sum([el['OtherTax'], el['OtherFee']], 0));
+          if (totalOther > 0) {
+            res.push({
+              company: el['Org'],
+              showValue: totalOther
+            });
+          }
+        });
+      } else {
+        groupData.filter(v => Number(v[realTaxCol]) > 0).map(v => {
+          res.push({
+            company: v['Org'],
+            showValue: v[realTaxCol]
+          })
+        });
+      }
+    } else {
+      this.filterData.filter(v => Number(v[realTaxCol]) > 0).map(el => {
+        res.push({
+          company: el['Org'],
+          showValue: el[realTaxCol]
+        })
+      });
+    }
+
+    return {
+      title: seriseName,
+      tax: taxName,
+      data: res,
+    };
+  }
+
   /**
    * 改变年份刷新数据
    */
@@ -497,6 +610,19 @@ export class TaxPage extends Base {
         this.update(true);
       }, 100);
     });
+  }
+
+  presentModal(event) {
+    let expanded: boolean = true;
+    let showIcon: boolean = false;
+    let contracted: boolean = !expanded;
+    const modal = this.modalCtrl.create(TaxmodalPage, this.getModalData(event));
+    modal.onDidDismiss(data => {
+      expanded = false;
+      contracted = !expanded;
+      setTimeout(() => showIcon = true, 200);
+    });
+    modal.present();
   }
 
   /**
