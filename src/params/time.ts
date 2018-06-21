@@ -15,11 +15,11 @@ export class timeParams {
     };
     //股票上传时间
     public static readonly investstock: any = {
-        uploadDate: 16,
+        uploadDate: 12,
     };
     //股票上传时间
     public static readonly investright: any = {
-        uploadDate: 16,
+        uploadDate: 12,
     };
     //报告上传时间
     public static readonly report: any = {
@@ -27,7 +27,7 @@ export class timeParams {
     };
     //经营数据上传时间
     public static readonly management: any = {
-        uploadDate: 16,
+        uploadDate: 25,
     };
 
 }

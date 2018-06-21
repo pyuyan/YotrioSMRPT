@@ -133,7 +133,7 @@ export class InveststockPage extends Base {
         },
         axisLabel: {
           interval: 0,
-          rotate: -30,
+          rotate: -45,
           fontSize: 16
         },
       }
@@ -186,16 +186,16 @@ export class InveststockPage extends Base {
               show: false
             }
           },
-          emphasis: {
-            label: {
-              show: true,
-              position: 'center',
-              textStyle: {
-                fontSize: '30',
-                fontWeight: 'bold'
-              }
-            }
-          }
+          // emphasis: {
+          //   label: {
+          //     show: true,
+          //     position: 'center',
+          //     textStyle: {
+          //       fontSize: '30',
+          //       fontWeight: 'bold'
+          //     }
+          //   }
+          // }
         },
         data: []
       }

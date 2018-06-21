@@ -115,7 +115,7 @@ export class InvestrightPage extends Base {
         },
         axisLabel: {
           interval: 0,
-          rotate: -30,
+          rotate: -20,
           fontSize: 16
         },
       }
@@ -133,7 +133,7 @@ export class InvestrightPage extends Base {
         },
         axisLabel: {
           interval: 0,
-          rotate: -30,
+          rotate: -45,
           fontSize: 16
         },
       }
@@ -162,6 +162,14 @@ export class InvestrightPage extends Base {
       trigger: 'item',
       formatter: "{a} <br/>{b} : {c} ({d}%)"
     },
+    label: {
+      // show:false,
+      formatter: " {c}",
+      // position: 'inner',
+      textStyle: {
+        fontSize: 20,
+      }
+    },
     legend: {
       orient: 'vertical',
       x: 'left',
@@ -186,16 +194,16 @@ export class InvestrightPage extends Base {
               show: false
             }
           },
-          emphasis: {
-            label: {
-              show: true,
-              position: 'center',
-              textStyle: {
-                fontSize: '30',
-                fontWeight: 'bold'
-              }
-            }
-          }
+          // emphasis: {
+          //   label: {
+          //     show: true,
+          //     position: 'center',
+          //     textStyle: {
+          //       fontSize: '30',
+          //       fontWeight: 'bold'
+          //     }
+          //   }
+          // }
         },
         data: []
       }
@@ -236,7 +244,7 @@ export class InvestrightPage extends Base {
         },
         axisLabel: {
           interval: 0,
-          rotate: -30,
+          rotate: -20,
           fontSize: 14
         },
         data: []
@@ -261,7 +269,7 @@ export class InvestrightPage extends Base {
         },
         axisLabel: {
           interval: 0,
-          rotate: -30,
+          // rotate: -30,
           fontSize: 14
         },
       }
@@ -437,10 +445,9 @@ export class InvestrightPage extends Base {
     this.investRightData.forEach(el => {
       //排除接口的空数据
       if (el.OrgName !== '' && el.InvDate !== '' && el.UpdateTime !== '') {
-        el.OrgName = el.OrgName.replace('股份有限公司', '');
-        if (el.OrgName.indexOf('有限公司') > 0) {
-          el.OrgName = el.OrgName.replace('有限公司', '');
-        }
+        const regx = /股份有限公司|有限公司|有限责任公司|合伙企业（有限合伙）|（有限合伙）/;
+
+        el.OrgName = el.OrgName.replace(regx, '');
         el.InvMoney = Math.round(el.InvMoney);
         el.InvIncoming = Math.round(el.InvIncoming);
         el.InvBalance = Math.round(el.InvBalance);
