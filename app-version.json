@@ -1,7 +1,7 @@
 {
-  "version": "1.1.31",
-  "release_date": "2018年6月21日11:02:41",
-  "desc": "版本：1.1.31 更新内容：1. 股权,股票投资中心样式微调 2. 各个上传时间调整",
+  "version": "1.2.0",
+  "release_date": "2018年6月21日14:59:32",
+  "desc": "版本：1.2.0 更新内容：1. 营销数据中心接单毛利率排序更改 2. 经营数据中心设置去年为默认数据",
   "app_name": "yotrioSMRPT",
   "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
   "app_url_iOS": ""

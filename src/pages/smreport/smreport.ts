@@ -575,23 +575,31 @@ export class SmreportPage extends Base {
                     groupvalue.GrossRate = groupvalue.GrossMoney / groupvalue.OrderMoney;
                 }
             });
+            console.log('sdfsdfdsfds');
+            console.log(topgroupvalues);
             //毛利率递减排序
-            topgroupvalues.sort(function (a, b) {
-                return Number.parseFloat(a.GrossRate) > Number.parseFloat(b.GrossRate) ? -1 : 1;
-            });
-            table_values.orderbyratevalues.length = 0;
-            for (let i = 0; i < 10; i++) {
-                table_values.orderbyratevalues.push(topgroupvalues[i]);
-            }
+            // topgroupvalues.sort(function (a, b) {
+            //     return Number.parseFloat(a.GrossRate) > Number.parseFloat(b.GrossRate) ? -1 : 1;
+            // });
+            // table_values.orderbyratevalues.length = 0;
+            // for (let i = 0; i < 10; i++) {
+            //     table_values.orderbyratevalues.push(topgroupvalues[i]);
+            // }
+
+            let tmpDataSet = topgroupvalues.filter(v => v.OrderMoney >= 1000);
+
+            table_values.orderbyratevalues = arrayHelper._top(tmpDataSet, 'GrossRate', 10, 'asc');
 
             //前10销售金额数据刷新 订单金额递减
-            topgroupvalues.sort(function (a, b) {
-                return Number.parseFloat(a.OrderMoney) > Number.parseFloat(b.OrderMoney) ? -1 : 1;
-            });
-            table_values.orderbymnyvalues.length = 0;
-            for (let i = 0; i < 10; i++) {
-                table_values.orderbymnyvalues.push(topgroupvalues[i]);
-            }
+            // topgroupvalues.sort(function (a, b) {
+            //     return Number.parseFloat(a.OrderMoney) > Number.parseFloat(b.OrderMoney) ? -1 : 1;
+            // });
+            // table_values.orderbymnyvalues.length = 0;
+            // for (let i = 0; i < 10; i++) {
+            //     table_values.orderbymnyvalues.push(topgroupvalues[i]);
+            // }
+
+            table_values.orderbymnyvalues = arrayHelper._top(topgroupvalues, 'OrderMoney', 10, 'desc');
 
             ContextData.OriginalDatas[ContextData.TableName].UpdateFlag['smreportpage'] = false;
         }

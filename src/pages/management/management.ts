@@ -236,7 +236,7 @@ export class ManagementPage extends Base {
       ContextData.ManagementDatas[ContextData.TableName].UpdateFlag = false;
 
       //页面切换后，显示真实选择的时间
-      this.choosedPeriod = this.managementData[0].period_begin.substr(0, 4) + '年' + this.managementData[0].period_begin.substr(-2).replace('0', '') + '月';
+      this.choosedPeriod = this.managementData[0].period_end.substr(0, 4) + '年' + this.managementData[0].period_end.substr(-2).replace('0', '') + '月';
     }
 
     super.debug('ManagementDatas');

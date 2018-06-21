@@ -175,7 +175,9 @@ export class DatasvrProvider {
       params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     } else {
       //获取上个月的数据
-      params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+      // params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+      //TODO 暂时获取是去年的数据
+      params = this.dateServ.setLastYear().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     }
     return this.httpServ.get(endpoint, params);
   }
