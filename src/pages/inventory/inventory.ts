@@ -360,7 +360,7 @@ export class InventoryPage extends Base {
       //国内的数据
       _data.forEach(modal => {
         let tmp_total = arrayHelper._sum([modal['lt_one_year'], modal['lt_two_year'], modal['lt_three_year'], modal['gt_three_year']]);
-        if (this.abroadArea.indexOf(modal['company']) > -1) {
+        if (this.abroadArea.indexOf(modal['company']) == -1) {
           mainlandTotal = arrayHelper._sum([mainlandTotal, tmp_total], 0);
         } else {
           abroadTotal = arrayHelper._sum([abroadTotal, tmp_total], 0);
