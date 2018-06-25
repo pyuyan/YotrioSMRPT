@@ -47,6 +47,7 @@ export class InveststockPage extends Base {
     { col: '', name: '股票代码' },
     { col: 'StockValueInit', name: '持股成本' },
     { col: 'StockNum', name: '持股股数' },
+    { col: 'StockBuyVal', name: '买入价' },
     { col: 'ClosePrice', name: '收盘价' },
     { col: 'StockValueCurrent', name: '持股市值' },
     { col: 'StockProfit', name: '持股盈亏' },
@@ -431,12 +432,12 @@ export class InveststockPage extends Base {
     let investsStockData: Array<any> = ContextData.InvestsStock[ContextData.TableName].DataValue;
     let updateFlag: boolean = ContextData.InvestsStock[ContextData.TableName].UpdateFlag;
 
+    this.cleanData(investsStockData);
+
     if (forceUpdate || updateFlag) {
       this.totalData = [];
       this.invesStockData = [];
       this.invesStockData = investsStockData;
-      //数据清洗
-      this.cleanData();
       //合计数据
       this.calcTotalData();
       //图表数据更新
@@ -531,22 +532,19 @@ export class InveststockPage extends Base {
     super.debug(this.totalData);
   }
 
-  private cleanData() {
-    if (!this.invesStockData || this.invesStockData.length == 0) return;
-    // let tmpInvestData: any[] = [];
-    this.invesStockData.forEach(el => {
-      //排除接口的空数据
-      if (el.StockValueInit !== '' && !!el.StockProfit !== true) {
-        el.StockValueInit = Number.parseFloat((el.StockValueInit / 10000).toString()).toFixed(1);
-        el.StockValueCurrent = Number.parseFloat((el.StockValueCurrent / 10000).toString()).toFixed(1);
-        el.StockNum = Math.round(el.StockNum);
-        el.StockProfit = arrayHelper._sum([
-          Number(el.StockValueCurrent),
-          -Number(el.StockValueInit)
+  private cleanData(res: any) {
+    if (Array.isArray(res) && res.length) {
+      res.filter(v => Number(v.StockValueInit) > 0).map(v => {
+        v.StockBuyVal = (Number(v.StockValueInit) / Number(v.StockNum)).toFixed(2);
+        v.StockValueInit = Number.parseFloat((v.StockValueInit / 10000).toString()).toFixed(1);
+        v.StockValueCurrent = Number.parseFloat((v.StockValueCurrent / 10000).toString()).toFixed(1);
+        v.StockNum = Math.round(v.StockNum);
+        v.StockProfit = arrayHelper._sum([
+          Number(v.StockValueCurrent),
+          -Number(v.StockValueInit)
         ], 1);
-        // tmpInvestData.push(el);
-      }
-    });
+      });
+    }
   }
 
   private processDateRange() {
