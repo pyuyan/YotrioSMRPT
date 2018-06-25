@@ -1,7 +1,7 @@
 {
-  "version": "1.2.11",
-  "release_date": "2018年6月25日08:36:01",
-  "desc": "版本：1.2.11 更新内容：1. 股票投资中心增加买入价",
+  "version": "1.2.12",
+  "release_date": "2018年6月25日16:54:05",
+  "desc": "版本：1.2.12 更新内容：1. 经营数据中心修改默认显示时间，bar y轴指标动态调整 2. 制造中心数据毛利率按件毛利率修改",
   "app_name": "yotrioSMRPT",
   "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
   "app_url_iOS": ""

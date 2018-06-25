@@ -12,6 +12,7 @@ import { InventoryPage } from '../pages/inventory/inventory';
 import { ManagementPage } from '../pages/management/management';
 import { InveststockPage } from './../pages/investstock/investstock';
 import { InvestrightPage } from './../pages/investright/investright';
+import { ReworkPage } from './../pages/rework/rework';
 import { DatasvrProvider } from '../providers/datasvr/datasvr';
 
 import { urlParams } from "./../params/url";
@@ -51,6 +52,7 @@ export class YotrioSMRPT {
     //screenOrientation.lock('landscape-primary');
     // used for an example of ngFor and navigation
     this.pages = [
+      // ******总经办******
       { title: '制造数据中心', component: HomePage },
       { title: '营销数据中心', component: SmreportPage },
       { title: '税务数据中心', component: TaxPage },
@@ -59,6 +61,11 @@ export class YotrioSMRPT {
       { title: '股票投资数据', component: InveststockPage },
       { title: '股权投资数据', component: InvestrightPage },
       // { title: '投资简报数据', component: ReportPage },
+
+      // ******制造中心******
+      // { title: '返工数据中心', component: ReworkPage },
+
+
       //{ title: '', component: SOCountPage }
     ];
 

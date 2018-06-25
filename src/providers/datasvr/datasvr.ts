@@ -175,9 +175,9 @@ export class DatasvrProvider {
       params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     } else {
       //获取上个月的数据
-      // params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+      params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
       //TODO 暂时获取是去年的数据
-      params = this.dateServ.setLastYear().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+      // params = this.dateServ.setLastYear().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
     }
     return this.httpServ.get(endpoint, params);
   }
@@ -350,11 +350,12 @@ export class DatasvrProvider {
    */
   syncBizProfitData() {
     let api: any;
-    if (debugParams.activeDebug) {
-      api = this.CallBizProfitAPI(2017, 12, 2017, 12);
-    } else {
-      api = this.CallBizProfitAPI();
-    }
+    // if (debugParams.activeDebug && false) {
+    //   api = this.CallBizProfitAPI(2017, 12, 2017, 12);
+    // } else {
+    //   api = this.CallBizProfitAPI();
+    // }
+    api = this.CallBizProfitAPI();
     return api.subscribe(res => {
       let tmpData = res['BusinessProfits']['bp'];
       if (Array.isArray(tmpData)) {

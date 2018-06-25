@@ -40,6 +40,9 @@ export class ManagementPage extends Base {
   //行业排序
   private groupOrder: string[] = ['户外家居', '房地产', '北京联拓', '东都节能', '永强投资', '西克曼', '其他'];
 
+  //柱状图 y 轴 最高指标值
+  private baryAxisaMax: number = 200000;
+
   @ViewChild('midBar') midBarEle: ElementRef;
   midBarInstance: any;
 
@@ -132,7 +135,7 @@ export class ManagementPage extends Base {
       type: "value",
       name: "金额",
       min: 0,
-      max: 200000,
+      max: this.baryAxisaMax,
       position: "left",
       interval: 10000,
       axisLine: {
@@ -226,6 +229,10 @@ export class ManagementPage extends Base {
       this.initData();
       this.managementData = BizData;
       this.mergeData = this.exractMergeData(BizData);
+      this.baryAxisaMax = 200000;
+      this.changeBarYMax(this.mergeData);
+      this.barData.yAxis[0]['max'] = this.baryAxisaMax;
+
       //合计数据
       this.calcTotalData();
       //右侧行业详细数据
@@ -287,9 +294,6 @@ export class ManagementPage extends Base {
       i++;
     });
     this.midBarInstance.setOption(this.barData);
-    super.debug('bardata');
-    super.debug(this.mergeData);
-    super.debug(this.barData);
   }
 
   private exractMergeData(data: any, is_merge: string = '是'): any {
@@ -356,6 +360,21 @@ export class ManagementPage extends Base {
     }
 
     this.period = tmpYears.concat(tmpMonth);
+  }
+
+  private changeBarYMax(data: any) {
+    const revenues = arrayHelper._column(data, 'revenue');
+    const maxRevenue = Math.max(...revenues);
+    if (maxRevenue < this.baryAxisaMax / 10) {
+      this.baryAxisaMax = this.baryAxisaMax / 10;
+    } else if (maxRevenue < this.baryAxisaMax / 4) {
+      this.baryAxisaMax = this.baryAxisaMax / 4;
+    } else if (maxRevenue < this.baryAxisaMax / 2) {
+      this.baryAxisaMax = this.baryAxisaMax / 2;
+    }
+    super.debug('changeBarYMax');
+    super.debug(revenues);
+    super.debug(maxRevenue);
   }
 
   changeGroup(industry: string) {

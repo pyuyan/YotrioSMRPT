@@ -876,23 +876,21 @@ export class HomePage extends Base {
                 }
             });
 
-            let averageGoss = goss / Number.parseFloat(datarows.length);    //平均毛利
-
             if (orderQty > 10000) {
                 gourpData[0].areamny += saleSum;
-                gourpData[0].areagross += averageGoss;
+                gourpData[0].areagross += goss;
             } else if (orderQty <= 10000 && orderQty > 5000) {
                 gourpData[1].areamny += saleSum;
-                gourpData[1].areagross += averageGoss;
+                gourpData[1].areagross += goss;
             } else if (orderQty <= 5000 && orderQty > 1000) {
                 gourpData[2].areamny += saleSum;
-                gourpData[2].areagross += averageGoss;
+                gourpData[2].areagross += goss;
             } else if (orderQty <= 1000 && orderQty > 200) {
                 gourpData[3].areamny += saleSum;
-                gourpData[3].areagross += averageGoss;
+                gourpData[3].areagross += goss;
             } else {
                 gourpData[4].areamny += saleSum;
-                gourpData[4].areagross += averageGoss;
+                gourpData[4].areagross += goss;
             }
         }
 
