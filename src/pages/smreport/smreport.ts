@@ -575,8 +575,6 @@ export class SmreportPage extends Base {
                     groupvalue.GrossRate = groupvalue.GrossMoney / groupvalue.OrderMoney;
                 }
             });
-            console.log('sdfsdfdsfds');
-            console.log(topgroupvalues);
             //毛利率递减排序
             // topgroupvalues.sort(function (a, b) {
             //     return Number.parseFloat(a.GrossRate) > Number.parseFloat(b.GrossRate) ? -1 : 1;

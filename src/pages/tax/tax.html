@@ -43,8 +43,8 @@
                 <ion-col text-center *ngFor="let header of taxBarxAxisAppend">{{header}}</ion-col>
               </ion-row>
               <ion-row class="profit-content" *ngFor="let rowdata of taxBarSeriesAppend;index as i;">
-                <ion-col text-left align-self-center>{{rowdata.name}}</ion-col>
-                <ion-col text-right align-self-center *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
+                <ion-col text-center align-self-center>{{rowdata.name}}</ion-col>
+                <ion-col text-center align-self-center *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
               </ion-row>
             </ion-grid>
           </div>

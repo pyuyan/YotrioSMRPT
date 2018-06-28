@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <p align="right" class="title-title">永强集团制造部返工数据中心</p>
+      <p align="center" class="title-select" (click)="presentPopover($event)">
+        <!-- {{currentYear}}年 {{choosedMonth}}月 -->
+        {{choosedPeriod}}
+        <ion-icon name="arrow-dropdown"></ion-icon>
+      </p>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button>
+        <!-- <p align="center">单位(万元)&nbsp;&nbsp;</p> -->
+        <ion-input [(ngModel)]="timevalue" #clockcontrol></ion-input>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <!--左侧-->
+      <ion-col col-9>
+        <!--返工合计数显示-->
+        <ion-row>
+          <ion-card class="top-card">
+            <ion-row>
+              <ion-col *ngFor="let item of totalData">
+                <ion-card>
+                  <ion-card-content>
+                    <ion-card-title align="center" [ngStyle]="{'color': item.fontcolor}">{{item.title}}</ion-card-title>
+                    <p align="center" [ngStyle]="{'color': item.fontcolor}">{{item.num}}</p>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ion-row>
+        <!--./返工合计数显示-->
+
+        <ion-row>
+          <!--返工数据显示-->
+          <ion-col col-8>
+            <ion-card class="maincontentstyle">
+              <div echarts #midBar [options]="barData" class="bardiv"></div>
+              <div class="profitgridstyle">
+                <ion-grid align-items-start>
+                  <ion-row class="profit-header">
+                    <ion-col></ion-col>
+                    <ion-col text-left *ngFor="let header of barData.xAxis[0].data" (click)="changeGroup(header)">{{header}}</ion-col>
+                  </ion-row>
+                  <ion-row class="profit-content" *ngFor="let rowdata of barData.series;index as i;">
+                    <ion-col text-left align-self-center>{{rowdata.name}}</ion-col>
+                    <ion-col text-center align-self-center *ngFor="let coldata of rowdata.data">
+                      {{coldata}}
+                      <!-- <span *ngIf="rowdata.name == '毛利率' ">%</span> -->
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+            </ion-card>
+          </ion-col>
+          <!--./返工数据显示-->
+          <!--返工原因等-->
+          <ion-col col-4>
+            <ion-card class="mid-pie-card">
+              <ion-card-header>
+                返工原因占比
+              </ion-card-header>
+              <ion-card-content>
+                <div echarts #midPie [options]="midPieData" class="right-echarts-div"></div>
+              </ion-card-content>
+            </ion-card>
+            <!-- <ion-card class="mid-pie-card">
+              <ion-card-header>
+                TODO
+              </ion-card-header>
+              <ion-card-content>
+                <div echarts #midPie [options]="midPieData" class="right-echarts-div"></div>
+              </ion-card-content>
+            </ion-card> -->
+          </ion-col>
+          <!--./返工原因等-->
+        </ion-row>
+      </ion-col>
+      <!--./左侧-->
+      <!--右侧-->
+      <ion-col col-3>
+        <!--不同行业企业详情card-->
+        <ion-card class="right-cards">
+          <ion-card-header>
+            {{groupData.dep}}
+          </ion-card-header>
+          <ion-scroll scrollX="false" scrollY="true" style="height: 1000px">
+            <ion-row>
+              <ion-col>
+                <ion-card class="right-cards-detail" *ngFor="let item of groupData.data">
+                  <ion-row class="right-cards-detail-header">
+                    <ion-col text-center>返工单号：{{item.RtnworkNo}}</ion-col>
+                  </ion-row>
+
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>返工单创建日期</ion-col>
+                    <ion-col text-center>{{item.RequestCreatedDate}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>返工开始日期</ion-col>
+                    <ion-col text-center>{{item.MOCreatedDate}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>返工完工日期</ion-col>
+                    <ion-col text-center>{{item.CompleteDate}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>料号</ion-col>
+                    <ion-col text-center>{{item.ItemCode}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>料品名称</ion-col>
+                    <ion-col text-center>{{item.ItemName}}</ion-col>
+                  </ion-row>
+
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>返工接收数量</ion-col>
+                    <ion-col text-center>{{item.RcvQty}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>返工完工数量</ion-col>
+                    <ion-col text-center>{{item.CompletedQty}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>返工报废数量</ion-col>
+                    <ion-col text-center>{{item.WaistedQty}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>入库数量</ion-col>
+                    <ion-col text-center>{{item.InStoreQty}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>入库报废数量</ion-col>
+                    <ion-col text-center>{{item.InStoreWaistQty}}</ion-col>
+                  </ion-row>
+                  <ion-row class="right-cards-detail-content">
+                    <ion-col text-center>返工原因</ion-col>
+                    <ion-col text-center>{{item.RtnReason}}</ion-col>
+                  </ion-row>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-scroll>
+        </ion-card>
+        <!--./不同行业企业详情card-->
+      </ion-col>
+      <!--./右侧-->
+    </ion-row>
+  </ion-grid>
+</ion-content>

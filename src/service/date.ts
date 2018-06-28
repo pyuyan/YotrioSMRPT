@@ -11,7 +11,8 @@ export enum DateScene {
     INVENTORY = 'Inventory',
     MANAGEMENT = 'Management',
     INVSTOCK = 'InvestStock',
-    INVRIGHT = 'InvestRight'
+    INVRIGHT = 'InvestRight',
+    REWORK = 'Rework',
 }
 
 export interface dateRange {

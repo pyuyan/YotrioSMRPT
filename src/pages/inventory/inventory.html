@@ -37,12 +37,12 @@
           <div class="profitgridstyle">
             <ion-grid align-items-start>
               <ion-row class="profit-header">
-                <ion-col>存放地点</ion-col>
+                <ion-col text-center>存放地点</ion-col>
                 <ion-col text-center *ngFor="let header of inventoryBarxAxisAppend">{{header}}</ion-col>
               </ion-row>
               <ion-row class="profit-content" *ngFor="let rowdata of inventoryBarSeriesAppend;index as i;">
-                <ion-col text-left align-self-center>{{rowdata.name}}</ion-col>
-                <ion-col text-right align-self-center *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
+                <ion-col text-center align-self-center>{{rowdata.name}}</ion-col>
+                <ion-col text-center align-self-center *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
               </ion-row>
             </ion-grid>
           </div>

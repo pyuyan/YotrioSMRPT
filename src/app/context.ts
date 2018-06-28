@@ -10,6 +10,12 @@ export class ContextData {
   //数据表名称
   public static readonly TableName: string = 'TMP_SMTransferData';
 
+  //当前登录人员的一些信息
+  public static currentUser: any = {
+    loginData: {},
+    accountData: {},
+  };
+
   //关键业务部门
   static KeyDepts: any = {
     DeptNames: [],
@@ -76,6 +82,16 @@ export class ContextData {
    * 股权投资本地数据
    */
   static InvestsRight: any = {
+    TMP_SMTransferData: {
+      UpdateFlag: false,
+      DataValue: []
+    },
+  }
+
+  /**
+   * 返工本地数据
+   */
+  static Rework: any = {
     TMP_SMTransferData: {
       UpdateFlag: false,
       DataValue: []

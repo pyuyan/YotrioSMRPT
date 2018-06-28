@@ -65,7 +65,7 @@ export class ManagementPage extends Base {
   //合并数据
   mergeData: any[] = [];
   //按照产业分组的数据
-  groupByIndustryData: any = { industry: '', data: [] };;
+  groupByIndustryData: any = { industry: '', data: [] };
 
   //柱状图数据
   barData: any = {
@@ -89,8 +89,8 @@ export class ManagementPage extends Base {
     },
     legend: {
       data: arrayHelper._column(this.barAreaTypeMap, 'name'),
-      right: '0%',
-      // orient: 'vertical',
+      x: 'center',
+      y: 'top',
       top: 0,
       padding: 0,
       textStyle: {

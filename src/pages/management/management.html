@@ -51,7 +51,7 @@
                   <ion-col text-center *ngFor="let header of barData.xAxis[0].data" (click)="changeGroup(header)">{{header}}</ion-col>
                 </ion-row>
                 <ion-row class="profit-content" *ngFor="let rowdata of barData.series;index as i;">
-                  <ion-col text-left align-self-center>{{rowdata.name}}</ion-col>
+                  <ion-col text-center align-self-center>{{rowdata.name}}</ion-col>
                   <ion-col text-center align-self-center *ngFor="let coldata of rowdata.data">
                     {{coldata}}
                     <span *ngIf="rowdata.name == '毛利率' ">%</span>

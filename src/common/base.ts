@@ -1,3 +1,4 @@
+import { ContextData } from './../app/context';
 import { NavController, IonicPage, ModalController, LoadingController, AlertController, ToastController, Toast } from 'ionic-angular';
 import { ViewChild, ElementRef } from '@angular/core';
 
@@ -22,8 +23,11 @@ export abstract class Base {
 
     @ViewChild('clockcontrol') clockctrl: any
 
+
     constructor() {
         this.updateCount = 0;
+        //TODO web 直接更改 hash 访问
+        // this.checkPermission();
     }
 
     /**
@@ -62,9 +66,12 @@ export abstract class Base {
      */
     protected showLoading(
         loadingCtrl: LoadingController,
-        message: string
+        message: string,
+        duration?: number
     ): any {
+        duration = Number(duration) > 0 ? duration : 1000;
         let loader = loadingCtrl.create({
+            duration: duration,
             content: message,
             dismissOnPageChange: true //页面变化的时候自动关闭 loading
         });
@@ -86,7 +93,7 @@ export abstract class Base {
     protected showAlert(
         alertCtrl: AlertController,
         title: string,
-        subTitle: string,
+        subTitle?: string,
         buttons: Array<string> = ['确定']
     ): any {
         let alert = alertCtrl.create({
@@ -155,5 +162,27 @@ export abstract class Base {
      */
     protected debug(message: any, type: string = 'log') {
         debugParams.activeDebug && debugHelper.show(message, type);
+    }
+
+    /**
+     * @desc 权限控制
+     */
+    private accessValid(): boolean {
+        // const user = ContextData.currentUser;
+        // if (!Array.isArray(Object.keys(user.accountData))) {
+        //     return false;
+        // }
+        return false;
+        // const pages = arrayHelper._column(user.accountData.workground, 'component');
+        // return pages.includes(this.getCurrentClassName());
+    }
+
+    /**
+     * @desc 权限检测
+     */
+    private checkPermission() {
+        if (!this.accessValid()) {
+            // console.log('无权限');
+        }
     }
 }

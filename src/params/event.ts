@@ -14,6 +14,7 @@ export class eventParams {
         after: {
             monthChanged: 'common:after:monthChanged',
             periodChanged: 'common:after:periodChanged',
+            login: 'common:after:login',
         },
     };
 
@@ -54,6 +55,14 @@ export class eventParams {
         before: {},
         after: {
             periodChanged: 'management:after:periodChanged',
+        },
+    };
+
+    //所有rework 制造部返工数据 topic
+    public static readonly rework: any = {
+        before: {},
+        after: {
+            periodChanged: 'rework:after:periodChanged',
         },
     };
 }
