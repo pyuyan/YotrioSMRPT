@@ -1,7 +1,7 @@
 {
-  "version": "1.3.0",
-  "release_date": "2018年6月28日11:12:06",
-  "desc": "版本：1.3.0 更新内容：1. 加入权限控制 2. 加入制造部返工数据中心",
+  "version": "1.3.1",
+  "release_date": "2018年6月28日16:36:15",
+  "desc": "版本：1.3.1 更新内容：1. 获取设备mac 根据mac自动登录",
   "app_name": "yotrioSMRPT",
   "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
   "app_url_iOS": ""

@@ -13,6 +13,7 @@ import { CacheService } from '../service/cache';
 import { HttpService } from '../service/http';
 import { DateService } from '../service/date';
 import { FTPService } from '../service/ftp';
+import { MacService } from './../service/mac';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
@@ -74,7 +75,7 @@ import { ReworkPageModule } from './../pages/rework/rework.module';
     ScreenOrientation,
     LoginsvrProvider,
     DatasvrProvider,
-    UpdateService, CacheService, HttpService, DateService, FTPService
+    UpdateService, CacheService, HttpService, DateService, FTPService, MacService
   ],
 })
 export class AppModule { }

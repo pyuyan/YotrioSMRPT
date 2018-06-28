@@ -12,6 +12,7 @@ import { debugParams as debug } from './../../params/debug';
 import { Base } from "./../../common/base";
 //检查更新service
 import { UpdateService } from "./../../service/update";
+import { MacService } from './../../service/mac';
 
 @Component({
   selector: 'page-login',
@@ -25,12 +26,12 @@ export class LoginPage extends Base {
   public backgroundImage = 'assets/imgs/mountin.jpeg';
 
   logindata: any = {
-    UserCode: debug.activeDebug ? '00300001' : '00100001',
+    UserCode: debug.activeDebug ? '003001' : '001001',
     UserName: '',
     OrgID: -1,
     OrgCode: '',
     OrgName: '',
-    UserPass: '123456',
+    UserPass: '',
     DeptID: '',
     DeptCode: '',
     DeptName: '',
@@ -50,17 +51,24 @@ export class LoginPage extends Base {
     public navParams: NavParams,
     private event: Events,
     private loginSvrTool: LoginsvrProvider,
-    private updateServ: UpdateService
+    private updateServ: UpdateService,
+    private macServ: MacService,
   ) {
     super();
     //初始化上下文
     this.contextdata = ContextData.Create();
     //这里做 更新检测
     this.updateServ.checkUpdate();
-    //TODO 获取设备信息, IP信息
+    //获取设备硬件信息信息
+    this.macServ.sendMacData();
+    //根据mac自动登录
+    if (!debug.activeDebug && this.macServ.platformIsAndroid()) {
+      this.autoLogin();
+    }
   }
 
   login() {
+    //这里有两套登录策略，1、根据mac地址可以自动登录 2、账号密码登录 3、还需要考虑web端的登录
 
     this.doLogin();
 
@@ -98,8 +106,16 @@ export class LoginPage extends Base {
     // this.navCtrl.push(ResetPasswordPage);
   }
 
+  private autoLogin() {
+    let accountObj = this.macServ.getAccountByMac();
+    if (Object.keys(accountObj).length == 0) {
+      return this.showAlert(this.alertCtrl, '自动登录失败，请您输入密码，手动登录！');
+    }
+    this.logindata.UserCode = accountObj['account'];
+    this.event.publish(this.eventTopicLogin, { loginData: this.logindata, accountData: accountObj });
+  }
+
   private doLogin() {
-    //这里有两套登录策略，1、根据mac地址可以自动登录 2、账号密码登录 3、还需要考虑web端的登录
     const accounts = accountParams.accounts;
     const userCodes = arrayHelper._column(accountParams.accounts, 'account');
 
