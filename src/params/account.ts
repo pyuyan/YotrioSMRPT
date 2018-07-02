@@ -17,7 +17,7 @@ export class accountParams {
     //不用考虑对接，hardcode 所有账号
     public static readonly accounts: any = [
         {
-            role: '总经理', name: '总经理', mac: '', account: '001001', password: '123456', org: '', workground: [
+            role: '总经理', name: '总经理', mac: '14:6b:9c:24:66:c6', account: '001001', password: '123456', org: '', workground: [
                 { title: '制造数据中心', component: HomePage },
                 { title: '营销数据中心', component: SmreportPage },
                 { title: '税务数据中心', component: TaxPage },
@@ -39,7 +39,7 @@ export class accountParams {
             ]
         },
         {
-            role: '制造部', name: '制造一部', mac: '', account: '003001', password: '123456', org: '1004910239461105', workground: [
+            role: '制造部', name: '制造一部', /*mac: '14:6b:9c:24:d2:7e'*/ mac: '', account: '003001', password: '123456', org: '1004910239461105', workground: [
                 { title: '返工数据中心', component: ReworkPage },
             ]
         },
@@ -55,6 +55,20 @@ export class accountParams {
                 { title: '税务数据中心', component: TaxPage },
             ]
         }, */
+
+        /**超级管理员 能看到全部tabs*/
+        {
+            role: 'admin', name: 'admin', mac: '', account: '123456', password: '123456', org: '', workground: [
+                { title: '制造数据中心', component: HomePage },
+                { title: '营销数据中心', component: SmreportPage },
+                { title: '税务数据中心', component: TaxPage },
+                { title: '库存数据中心', component: InventoryPage },
+                { title: '经营数据中心', component: ManagementPage },
+                { title: '股票投资数据', component: InveststockPage },
+                { title: '股权投资数据', component: InvestrightPage },
+                { title: '返工数据中心', component: ReworkPage },
+            ]
+        },
     ];
 
 
