@@ -124,21 +124,14 @@ export class LoginPage extends Base {
     const userCode = userData.UserCode;
     const userPass = userData.UserPass;
 
-    let errMsg: string = '';
-    if (!userCodes.includes(userCode)) {
-      errMsg = '账号不存在！';
-    } else {
+    try {
+      if (!userCodes.includes(userCode)) throw "账号不存在！";
       accountObj = accounts[userCodes.indexOf(userCode)];
-      if (accountObj.password != userPass) {
-        errMsg = '密码错误！';
-      }
-    }
-
-    if (errMsg.length) {
-      return this.showAlert(this.alertCtrl, errMsg);
-    } else {
+      if (accountObj.password != userPass) throw '密码错误！';
       this.logindata.UserCode = userCode;
       this.event.publish(this.eventTopicLogin, { loginData: this.logindata, accountData: accountObj });
+    } catch (error) {
+      return this.showAlert(this.alertCtrl, error);
     }
   }
 }

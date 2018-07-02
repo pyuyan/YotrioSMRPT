@@ -534,7 +534,7 @@ export class InveststockPage extends Base {
 
   private cleanData(res: any) {
     if (Array.isArray(res) && res.length) {
-      res.filter(v => Number(v.StockValueInit) > 0).map(v => {
+      res.filter(v => Number(v.StockValueInit) > 0 && !!v.StockProfit !== true).map(v => {
         v.StockBuyVal = (Number(v.StockValueInit) / Number(v.StockNum)).toFixed(2);
         v.StockValueInit = Number.parseFloat((v.StockValueInit / 10000).toString()).toFixed(1);
         v.StockValueCurrent = Number.parseFloat((v.StockValueCurrent / 10000).toString()).toFixed(1);
