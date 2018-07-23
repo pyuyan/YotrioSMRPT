@@ -17,7 +17,7 @@ export class accountParams {
     //不用考虑对接，hardcode 所有账号
     public static readonly accounts: any = [
         {
-            role: '总经理', name: '总经理', mac: '14:6b:9c:24:66:c6', account: '001001', password: '123456', org: '', workground: [
+            role: '总经理', name: '总经理', mac: /*'14:6b:9c:24:66:c6'*/'78:dd:d9:7b:43:1e', account: '001001', password: '123456', org: '', workground: [
                 { title: '制造数据中心', component: HomePage },
                 { title: '营销数据中心', component: SmreportPage },
                 { title: '税务数据中心', component: TaxPage },

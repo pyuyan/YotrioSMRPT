@@ -13,6 +13,7 @@ import { ContextData } from '../../app/context';
 import { deepCopy } from 'ionic-angular/util/util';
 import { MfgcountmodelPage } from './mfgcountmodel';
 import { SecloginmodelPage } from '../secloginmodel/secloginmodel';
+import { UpdateService } from "./../../service/update";
 
 @IonicPage()
 @Component({
@@ -313,7 +314,12 @@ export class HomePage extends Base {
      */
     ShowMsg() {
         let title: string = '程序信息';
-        let subTitle: string = 'client:' + document.documentElement.clientWidth.toString() + ':' + document.documentElement.clientHeight.toString() + '; window:' + window.screen.width.toString() + ':' + window.screen.height.toString();
+        let version = this.updateServ.versionNumber;
+        let subTitle: string = '当前版本:' + version;
+        subTitle += '; client:' + document.documentElement.clientWidth.toString() + ':' + document.documentElement.clientHeight.toString() + '; window:' + window.screen.width.toString() + ':' + window.screen.height.toString();
+        let viewport = document.querySelector("meta[name=viewport]");
+        subTitle += '; viewport:' + viewport.getAttribute('content');
+
         super.showAlert(this.alterCtrl, title, subTitle);
     }
 
@@ -489,7 +495,8 @@ export class HomePage extends Base {
         public modalCtrl: ModalController,
         private alterCtrl: AlertController,
         private loadingCtrl: LoadingController,
-        private cacheServ: CacheService
+        private cacheServ: CacheService,
+        private updateServ: UpdateService,
     ) {
         super();
         //初始化上下文
@@ -556,7 +563,7 @@ export class HomePage extends Base {
                 if (yaxis.name == '产值目标')
                     // barchartdatas.push({ data: [53000, 32000, 29000, 25000, 15000, 37000, 59500, 15000, 10000, 5000, 10000, 8000, 10000, 9000, 13000, 5000] });
                     //TODO 其他 栏目的目标为 多少？
-                    barchartdatas.push({ data: [53000, 32000, 29000, 25000, 15000, 37000, 59500, 15000, 10000, 5000, 10000, 8000, 10000, 9000, 13000, 5000, 5000] });
+                    barchartdatas.push({ data: [53000, 32000, 29000, 25000, 15000, 37000, 59500, 15000, 10000, 5000, 10000, 8000, 10000, 9000, 13000, 5000, 10000] });
                 else
                     // barchartdatas.push({ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] });
                     // 加入 其他 栏目

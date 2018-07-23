@@ -238,12 +238,15 @@ export class SmreportPage extends Base {
     profitdatas: any = {
         color: this.colors,
 
-        tooltip: {
-            show: false,
-            trigger: 'axis',
+        /* tooltip: {
+            show: true,
+            trigger: 'item',
             axisPointer: {
                 type: 'cross'
             }
+        }, */
+        tooltip: {
+            trigger: 'item',
         },
         grid: {
             left: '3%',
@@ -323,7 +326,7 @@ export class SmreportPage extends Base {
                 type: 'value',
                 name: '百分比',
                 min: 0,
-                max: 100,
+                max: 140,
                 position: 'right',
                 interval: 20,
                 boundaryGap: false,

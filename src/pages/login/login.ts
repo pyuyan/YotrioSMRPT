@@ -89,13 +89,35 @@ export class LoginPage extends Base {
   }
 
   ionViewWillEnter() {
-    //首页已经写死
+    //hardcode
+    const windowWidth = window.screen.width.toString();
+    const windowHeight = window.screen.height.toString();
+
+    let perfectWidth: number = 2380;
+
+    if (windowWidth == '1280' && windowHeight == '720') {
+      //这款是 MAXHUB
+      perfectWidth = 2300;
+    } else if (windowWidth == '1920' && windowHeight == '1080') {
+      //这款是 杂牌
+      perfectWidth = 2380;
+    } else if (windowWidth >= '1920') {
+      //其他的
+      perfectWidth = 2560;
+    } else {
+      perfectWidth = 2400;
+    }
+
     // let viewport = document.querySelector("meta[name=viewport]");
     // let content:string = 'viewport-fit=cover, width=device-width, initial-scale='+
     // Math.pow(document.documentElement.clientWidth/2380,1).toString()
     // Math.pow(window.screen.width/document.documentElement.clientWidth, 1).toString()
     // +', minimum-scale=0.2, maximum-scale=3.0, user-scalable=no';
     // viewport.setAttribute('content',content);   
+
+    let viewport = document.querySelector("meta[name=viewport]");
+    let content: string = 'viewport-fit=cover, width=device-width, initial-scale=' + Math.pow(document.documentElement.clientWidth / perfectWidth, 1).toString() + ', minimum-scale=0.2, maximum-scale=3.0, user-scalable=no';
+    viewport.setAttribute('content', content);
   }
 
   goToSignup() {
