@@ -9,7 +9,7 @@ export class mathHelper {
      */
     public static GetFormatValue(coldata, i): string {
         if (i == 3 || i == 4 || i == -1) {
-            return (Number.parseFloat(coldata)).toFixed(2).toString() + ' %';
+            return (Number.parseFloat(coldata)).toFixed(1).toString() + ' %';
         } else {
             return Math.round(Number.parseFloat(coldata)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }

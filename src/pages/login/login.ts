@@ -55,6 +55,8 @@ export class LoginPage extends Base {
     private macServ: MacService,
   ) {
     super();
+    //更改viewport
+    this.changeViewPort();
     //初始化上下文
     this.contextdata = ContextData.Create();
     //这里做 更新检测
@@ -62,7 +64,7 @@ export class LoginPage extends Base {
     //获取设备硬件信息信息
     this.macServ.sendMacData();
     //根据mac自动登录
-    if (!debug.activeDebug && this.macServ.platformIsAndroid()) {
+    if (!debug.activeDebug && this.macServ.platformIsAndroid() && !this.updateServ.isUpdating) {
       this.autoLogin();
     }
   }
@@ -88,8 +90,7 @@ export class LoginPage extends Base {
 
   }
 
-  ionViewWillEnter() {
-    //hardcode
+  changeViewPort() {
     const windowWidth = window.screen.width.toString();
     const windowHeight = window.screen.height.toString();
 
@@ -101,11 +102,9 @@ export class LoginPage extends Base {
     } else if (windowWidth == '1920' && windowHeight == '1080') {
       //这款是 杂牌
       perfectWidth = 2380;
-    } else if (windowWidth >= '1920') {
+    } else {
       //其他的
       perfectWidth = 2560;
-    } else {
-      perfectWidth = 2400;
     }
 
     // let viewport = document.querySelector("meta[name=viewport]");
