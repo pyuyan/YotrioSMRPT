@@ -37,6 +37,8 @@ export class UpdateService {
         'Content-Type': 'application/json'
     });
 
+    isUpdating:boolean = false;
+
     constructor(
         private appVersion: AppVersion,
         private file: File,
@@ -73,6 +75,7 @@ export class UpdateService {
                 if (mathHelper.versionCompare(targetVer, currentVer)) {
                     console.log(targetVer)
                     if (res['app_url_android']) {
+                        this.isUpdating = true;
                         this.apkUrl = res['app_url_android'];
                         this.updateDesc = res['desc'] || '';
                         this.doUpdate();
@@ -125,7 +128,8 @@ export class UpdateService {
 
         fileTransfer.download(this.apkUrl, apk).then(() => {
             this.fileOpener.open(apk, 'application/vnd.android.package-archive').then(() => {
-                console.log('File is opened')
+                console.log('File is opened');
+                this.isUpdating = false;
             }).catch(e => {
                 console.log('Error openening file', e)
             });

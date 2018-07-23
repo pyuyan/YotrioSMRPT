@@ -1,7 +1,7 @@
 {
-  "version": "1.3.22",
-  "release_date": "2018年7月23日09:09:33",
-  "desc": "版本：1.3.22 更新内容：1. 制造中心 营销中心 百分比最大值调整 2. 不同设备适配问题，适配MAXHUB",
+  "version": "1.3.23",
+  "release_date": "2018年7月23日11:39:31",
+  "desc": "版本：1.3.23 更新内容：1. 制造中心 营销中心 居中显示",
   "app_name": "yotrioSMRPT",
   "app_url_android": "http://192.168.0.97:6800/APK/android-armv7-debug.apk",
   "app_url_iOS": ""

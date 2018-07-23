@@ -85,7 +85,7 @@
                             </ion-row>
                             <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of ManufactureDatas.series;index as i;">
                                 <ion-col text-left style="font-size:21px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>
-                                <ion-col text-right align-self-center style="font-size:22px;border-width:1px;border-style: none solid none none;" *ngFor="let coldata of rowdata.data">{{GetFormatValue(coldata,i)}}</ion-col>
+                                <ion-col text-center align-self-center style="font-size:22px;border-width:1px;border-style: none solid none none;" *ngFor="let coldata of rowdata.data">{{GetFormatValue(coldata,i)}}</ion-col>
                             </ion-row>
                         </ion-grid>
                     </div>
