@@ -66,7 +66,7 @@ export class LoginPage extends Base {
     //获取设备硬件信息信息
     this.macServ.sendMacData();
     //根据mac自动登录
-    if (!debug.activeDebug && this.macServ.platformIsAndroid() && !this.updateServ.isUpdating) {
+    if (!debug.activeDebug && this.macServ.platformIsAndroid()) {
       this.lazyLogin = setTimeout(() => {
         this.autoLogin();
       }, 1500);
