@@ -29,6 +29,9 @@ export class HomePage extends Base {
 
     public backgroundImage = 'assets/imgs/bg2.jpg';
 
+    lazyLoadFirst: any = false;
+    lazyLoadInterval: any = false;
+
     manufacturebarInstance: any
 
     @ViewChild('manufacturebar') manufacturebar: ElementRef;
@@ -755,7 +758,7 @@ export class HomePage extends Base {
 
         //首次打开执行数据刷新
         if (this.tablevalues.alertvalues.totalmfgcodecount == 0) {
-            setTimeout(this.updateFunction, 500, this.tablevalues, this.chartObjList, true);
+            this.lazyLoadFirst = setTimeout(this.updateFunction, 500, this.tablevalues, this.chartObjList, true);
         }
     }
 
@@ -774,7 +777,12 @@ export class HomePage extends Base {
         super.showCurrentTime();
 
         //数据值定时刷新 1 分钟刷新
-        setInterval(this.updateFunction, 60000, this.tablevalues, this.chartObjList, false);
+        this.lazyLoadInterval = setInterval(this.updateFunction, 60000, this.tablevalues, this.chartObjList, false);
+    }
+
+    ionViewWillLeave() {
+        this.lazyLoadFirst && clearTimeout(this.lazyLoadFirst);
+        this.lazyLoadInterval && clearInterval(this.lazyLoadInterval);
     }
 
     OnManufactureBarClick(params: any) {

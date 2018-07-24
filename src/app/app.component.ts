@@ -95,7 +95,7 @@ export class YotrioSMRPT {
   private fireEvent() {
     this.event.subscribe(this.eventTopicLogin, data => {
       const loading = this.loadingCtl.create({
-        duration: 1000,
+        duration: 2000,
         content: '登录中...',
       });
       loading.present();
@@ -103,6 +103,7 @@ export class YotrioSMRPT {
       ContextData.currentUser = data;
 
       loading.onDidDismiss(() => {
+        this.event.unsubscribe(this.eventTopicLogin);
         this.pages = data.accountData.workground;
         this.nav.setRoot(this.pages[0].component);
       });
@@ -110,6 +111,7 @@ export class YotrioSMRPT {
   }
 
   private registerFunc() {
+    let timeOutRefresh: any = false;
     let TMPDataRefresh = function (datasvrprovider: DatasvrProvider) {
       datasvrprovider.IsNeedUpdate('TMP_SMTransferData').then(flag => {
         if (flag) {
@@ -129,6 +131,8 @@ export class YotrioSMRPT {
           datasvrprovider.syncBizProfitData();
           //制造部门的返工数据
           datasvrprovider.syncReworkData();
+          //清除定时器
+          timeOutRefresh && clearTimeout(timeOutRefresh);
         }
       });
     };
@@ -137,7 +141,7 @@ export class YotrioSMRPT {
       datasvrprovider.GetKeyDepts().then(result => { });
     };
 
-    setTimeout(TMPDataRefresh, 500, this.datasvr);
+    timeOutRefresh = setTimeout(TMPDataRefresh, 500, this.datasvr);
 
     setInterval(TMPDataRefresh, 300000, this.datasvr);
   }

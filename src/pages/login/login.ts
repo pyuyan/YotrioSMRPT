@@ -22,6 +22,8 @@ export class LoginPage extends Base {
 
   private readonly eventTopicLogin = eventParams.common.after.login;
 
+  private lazyLogin: any = false;
+
   public loginForm: any;
   public backgroundImage = 'assets/imgs/mountin.jpeg';
 
@@ -65,7 +67,9 @@ export class LoginPage extends Base {
     this.macServ.sendMacData();
     //根据mac自动登录
     if (!debug.activeDebug && this.macServ.platformIsAndroid() && !this.updateServ.isUpdating) {
-      this.autoLogin();
+      this.lazyLogin = setTimeout(() => {
+        this.autoLogin();
+      }, 1500);
     }
   }
 
@@ -134,6 +138,7 @@ export class LoginPage extends Base {
     }
     this.logindata.UserCode = accountObj['account'];
     this.event.publish(this.eventTopicLogin, { loginData: this.logindata, accountData: accountObj });
+    this.lazyLogin && clearTimeout(this.lazyLogin);
   }
 
   private doLogin() {

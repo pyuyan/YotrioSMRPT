@@ -39,6 +39,9 @@ export class SmreportPage extends Base {
     smpieInstance: any
     smbarInstance: any
 
+    lazyLoadFirst: any = false;
+    lazyLoadInterval: any = false;
+
     //所有的颜色
     colors: string[] = ['#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#59DF97', '#607D8B', '#795548'];
 
@@ -642,7 +645,7 @@ export class SmreportPage extends Base {
 
         //首次打开执行数据刷新
         if (this.tablevalues.orderbymnyvalues.length == 0) {
-            setTimeout(this.updateFunction, 500, this.tablevalues, this.chartObjList, true);
+            this.lazyLoadFirst = setTimeout(this.updateFunction, 500, this.tablevalues, this.chartObjList, true);
         }
     }
 
@@ -654,9 +657,13 @@ export class SmreportPage extends Base {
         super.showCurrentTime();
 
         //数据值定时刷新 1 分钟刷新
-        setInterval(this.updateFunction, 60000, this.tablevalues, this.chartObjList, false);
+        this.lazyLoadInterval = setInterval(this.updateFunction, 60000, this.tablevalues, this.chartObjList, false);
     }
 
+    ionViewWillLeave() {
+        this.lazyLoadFirst && clearTimeout(this.lazyLoadFirst);
+        this.lazyLoadInterval && clearInterval(this.lazyLoadInterval);
+    }
 
     onProfitbarClick(params: any) {
         super.debug(params);
