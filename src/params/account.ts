@@ -28,7 +28,7 @@ export class accountParams {
             ]
         },
         {
-            role: '财务', name: '财务总监', mac: '', account: '002001', password: '123456', org: '', workground: [
+            role: '财务', name: '财务总监', mac: '14:6b:9c:24:d5:2a', account: '002001', password: '123456', org: '', workground: [
                 { title: '制造数据中心', component: HomePage },
                 { title: '营销数据中心', component: SmreportPage },
                 { title: '税务数据中心', component: TaxPage },

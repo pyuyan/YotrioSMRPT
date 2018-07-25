@@ -35,7 +35,8 @@ export class MacService {
       IMEI: this.uid.IMEI,
       UUID: this.uid.UUID,
       ICCID: this.uid.ICCID,
-      IMSI: this.uid.IMSI
+      IMSI: this.uid.IMSI,
+      VIEWPORT: document.querySelector("meta[name=viewport]").getAttribute('content')
     };
 
     this.http.post(this.postUrl, { data: data, __SMRPT__: this.hiddenVal }, {
