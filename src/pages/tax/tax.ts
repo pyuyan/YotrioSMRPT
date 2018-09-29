@@ -45,6 +45,13 @@ export class TaxPage extends Base {
   //税收涉及的年份 今年 去年 前年
   Years: string[];
 
+  //涉及的时间
+  period: any[] = [];
+  //今年
+  currentYear: any;
+  //选择的时间
+  choosedPeriod: string;
+
   //税收数据按 地区分类
   taxDataGroupByArea: any = {};
   //税收数据按 产业分类
@@ -618,6 +625,28 @@ export class TaxPage extends Base {
     });
   }
 
+  /**
+   * 改变时间刷新数据
+   */
+  choosePeriod(val: any = '') {
+
+    //防止重复刷新
+    super.addUpdateCount();
+
+    if (this.choosedPeriod.indexOf('年度') > -1) {
+      let year = Number(this.choosedPeriod.replace('年度', '').trim());
+      this.dateServ.setDateRange(year, 12, year, 12);
+    } else {
+      let month = Number(this.choosedPeriod.split('年')[1].replace('月', '').trim());
+      this.dateServ.setDateRange(this.currentYear, month, this.currentYear, month);
+    }
+    this.dataProvider.syncYearTaxData().add(() => {
+      setTimeout(() => {
+        this.update(true);
+      }, 100);
+    });
+  }
+
   presentModal(event) {
     let expanded: boolean = true;
     let showIcon: boolean = false;
@@ -635,17 +664,26 @@ export class TaxPage extends Base {
    * 使用自定义组件popover
    */
   presentPopover(event) {
-    let popover = this.popoverCtrl.create(PopperiodPage, {
+    /* let popover = this.popoverCtrl.create(PopperiodPage, {
       title: '选择年份',
       data: this.Years,
       topic: this._topic,
     });
     popover.present({
       ev: event
+    }); */
+
+    let popover = this.popoverCtrl.create(PopperiodPage, {
+      title: '选择时间',
+      data: this.period,
+      topic: this._topic
+    });
+    popover.present({
+      ev: event
     });
   }
 
-  processDateRange() {
+  /* processDateRange() {
     //设置时间场景
     this.dateServ.setScene(DateScene.TAX);
 
@@ -658,16 +696,53 @@ export class TaxPage extends Base {
     ];
 
     this.choosedYear = this.Years[0];
+  } */
+
+  private processDateRange() {
+    //设置时间场景
+    this.dateServ.setScene(DateScene.TAX);
+    let years = this.dateServ.years;
+    this.currentYear = years.currentYear;
+
+    let month = this.dateServ.currentMonth - 1;
+
+    if (month == 0) {
+      this.choosedPeriod = years.lastYear + '   年度';
+    } else {
+      this.choosedPeriod = this.currentYear + '年' + month + '月';
+    }
+
+    //这里是组织用于popover的时间数据
+    let tmpYears: any = [];
+    for (let index = 2; index >= 1; index--) {
+      let year = (this.currentYear - index) + '   年度';
+      tmpYears.push(year);
+    }
+
+    let tmpMonth: any = [];
+    for (let m = 1; m < this.dateServ.currentMonth; m++) {
+      let month = this.currentYear + ' 年 ' + m + '月';
+      tmpMonth.push(month);
+    }
+
+    this.period = tmpYears.concat(tmpMonth);
   }
 
   fireEvent() {
     //监听年份改变事件 2018年5月14日
-    this.event.subscribe(this._topic, (year) => {
+    /* this.event.subscribe(this._topic, (year) => {
       super.debug("event 年份：" + year)
       this.choosedYear = year;
       setTimeout(() => {
         this.chooseYear();
       }, 10);
+    }); */
+
+    //按照月份去选
+    this.event.subscribe(this._topic, (period) => {
+      super.debug("时间：" + period);
+      this.choosedPeriod = period;
+      this.choosePeriod();
     });
   }
 }

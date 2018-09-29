@@ -1,18 +1,17 @@
 {
   "name": "YotrioSMRPT",
-  "app_id": "",
-  "type": "ionic-angular",
   "integrations": {
     "cordova": {}
   },
-    "proxies": [
+  "type": "ionic-angular",
+  "proxies": [
     {
       "path": "/esbsv",
       "proxyUrl": "http://192.168.0.197:8280"
     },
     {
       "path": "/openkm",
-      "proxyUrl":"http://192.168.0.97:8080/OpenKM"
+      "proxyUrl": "http://192.168.0.97:8080/OpenKM"
     }
   ]
 }
