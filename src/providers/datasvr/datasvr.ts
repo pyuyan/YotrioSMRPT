@@ -91,7 +91,17 @@ export class DatasvrProvider {
    */
   CallYearTaxAPI(beginyear: number = 0, beginmonth: number = 1, endyear: number = 0, endmonth: number = 0) {
     const endpoint: string = urlParams.common.endpoint.yearTax;
-    let params: any = this.dateServ.setScene(DateScene.TAX).getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    const dateScene = DateScene.TAX;
+    let params: any = {};
+
+    this.dateServ.setScene(dateScene);
+    if (this.dateServ.getDateRange(dateScene)) {
+      params = this.dateServ.getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    } else {
+      params = this.dateServ.setMonthPeriod().getFilteredDateRange(beginyear, beginmonth, endyear, endmonth);
+    }
+    //@NOTE 都是看累计数
+    params['beginmonth'] = 1;
     return this.httpServ.get(endpoint, params);
   }
 

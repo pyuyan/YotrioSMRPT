@@ -254,7 +254,10 @@ export class TaxPage extends Base {
     }
 
     //页面切换后，显示真实选择的时间
-    this.choosedYear = taxData[0].BEGINPERIOD.substr(0, 4) + '年';
+    // this.choosedYear = taxData[0].BEGINPERIOD.substr(0, 4) + '年';
+    //页面切换后，显示真实选择的时间
+    // console.log(taxData);
+    this.choosedPeriod = taxData[0].ENDPERIOD.substr(0, 4) + '年' + taxData[0].ENDPERIOD.substr(4, 2)+'月';
   }
 
   private updatePieData(data) {

@@ -29,5 +29,8 @@ export class timeParams {
     public static readonly management: any = {
         uploadDate: 25,
     };
-
+    //税务数据上传时间
+    public static readonly tax: any = {
+        uploadDate: 18,
+    };
 }

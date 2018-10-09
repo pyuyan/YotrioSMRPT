@@ -222,6 +222,9 @@ export class DateService {
             case DateScene.MANAGEMENT:
                 uploadDate = timeParams.management['uploadDate'];
                 break;
+            case DateScene.TAX:
+                uploadDate = timeParams.tax['uploadDate'];
+                break;
             default:
                 break;
         }
