@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <p align="right" class="title-title">永强集团税务数据中心</p>
+      <p align="center" class="title-select" (click)="presentPopover($event)">
+        <!-- {{choosedYear}} -->
+        {{choosedPeriod}}
+        <ion-icon name="arrow-dropdown"></ion-icon>
+
+        <!-- <ion-select [(ngModel)]="choosedYear" (ionChange)="chooseYear($event)" interface="popover">
+          <ion-option value="{{year}}" *ngFor="let year of Years">{{year}}年</ion-option>
+        </ion-select> -->
+      </p>
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button>
+        <p align="center">单位(万元)&nbsp;&nbsp;</p>
+        <ion-input [(ngModel)]="timevalue" #clockcontrol></ion-input>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-11>
+        <ion-card class="maincontenttopstyle">
+          <ion-card-content>
+            <div echarts #taxPie [options]="taxPieData" class="piediv"></div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="maincontentstyle">
+          <div echarts #taxBar [options]="taxBarData" class="bardiv"></div>
+          <div class="profitgridstyle">
+            <ion-grid align-items-start>
+              <ion-row class="profit-header">
+                <ion-col></ion-col>
+                <ion-col text-center *ngFor="let header of taxBarxAxisAppend">{{header}}</ion-col>
+              </ion-row>
+              <ion-row class="profit-content" *ngFor="let rowdata of taxBarSeriesAppend;index as i;">
+                <ion-col text-center align-self-center>{{rowdata.name}}</ion-col>
+                <ion-col text-center align-self-center *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

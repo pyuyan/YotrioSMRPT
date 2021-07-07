@@ -1,0 +1,6 @@
+<ion-content padding>
+  <ion-list>
+    <ion-list-header>{{_title}}</ion-list-header>
+    <button ion-item (click)="close(v)" *ngFor="let v of _data;index as i;">{{v}}</button>
+  </ion-list>
+</ion-content>

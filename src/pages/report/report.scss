@@ -1,0 +1,60 @@
+page-report {
+  // 背景色
+  $color-bg: rgb(7, 33, 58);
+  $top-card-color-bg: rgba(255, 255, 255, 0.1);
+  $sheet-card-color-bg: rgba(18, 42, 63, 0.6);
+  $color-white: #FFFFFF; //ionic 的颜色
+  $radio-md-color-on: rgb(141, 20, 20);
+  ion-navbar {
+    height: 80px;
+    ion-title {
+      padding: 0;
+      p {
+        display: inline-block;
+      }
+      .title-title {
+        color: $color-white;
+        font-size: 58px;
+        width: 70%;
+        display: inline-block;
+      }
+      .title-select {
+        display: inline-block;
+        width: 20%;
+        ion-label {
+          margin: 0;
+          margin-top: 8%;
+          font-size: 34px;
+        }
+        ion-select {
+          font-size: 36px;
+          padding: 5px 8px 0px 0px !important;
+          ion-option {
+            font-size: 34px;
+          }
+        }
+      }
+    }
+    ion-buttons {
+      margin-top: 22px;
+      button {
+        p {
+          color: $color-white;
+          font-size: 25px;
+        }
+        ion-input {
+          color: $color-white;
+          font-size: 25px;
+        }
+      }
+    }
+    button {
+      ion-icon {
+        font-size: 50px;
+      }
+    }
+  }
+  ion-content {
+    background-color: $color-bg !important;
+  }
+}

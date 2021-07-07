@@ -1,0 +1,57 @@
+page-inventorymodal {
+  ion-footer button {
+    margin: 0 !important;
+  }
+  .content {
+    background: transparent;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: .5;
+    background-color: rgba(51, 51, 51, .5);
+  }
+  .modal_content {
+    position: absolute;
+    top: calc(50% - (50%/2));
+    left: 0;
+    right: 0;
+    width: 35%;
+    height: 35%;
+    padding: 10px;
+    z-index: 100;
+    margin: 0 auto;
+    padding: 10px;
+    color: #333;
+    background: #e8e8e8;
+    background: -moz-linear-gradient(top, #fff 0%, #e8e8e8 100%);
+    background: -webkit-linear-gradient(top, #fff 0%, #e8e8e8 100%);
+    background: linear-gradient(to bottom, #fff 0%, #e8e8e8 100%);
+    border-radius: 5px;
+    box-shadow: 0 2px 3px rgba(51, 51, 51, .5);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    overflow: hidden;
+  }
+  .maincontentstyle {
+    color: #000;
+    background-color: white;
+    ion-card-header {
+      color: #FFFFFF;
+      background-color: rgb(7, 33, 58);
+    }
+    box-shadow: 0px 1px 3px white;
+    padding:0% 0% 0% 0%;
+  }
+  .maingridstyle {
+    color: #000;
+    background: white;
+    padding: 0% 0% 0% 0%;
+    margin: 0% 0% 0% 0px;
+    width: 100%;
+  }
+}

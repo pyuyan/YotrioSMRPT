@@ -3,24 +3,22 @@ import { IonicPageModule } from 'ionic-angular';
 import { HomePage } from './home';
 import { PipesModule } from '../../pipes/pipes.module';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { MfgcountmodelPage } from './mfgcountmodel';
+import { MfgcountmodelPageModule } from './mfgcountmodel.module';
+import { SecloginmodelPageModule } from '../secloginmodel/secloginmodel.module';
 
 @NgModule({
   declarations: [
     HomePage,
-    MfgcountmodelPage
   ],
   imports: [
     IonicPageModule.forChild(HomePage),
     PipesModule,
-    NgxEchartsModule
+    NgxEchartsModule,
+    SecloginmodelPageModule,
+    MfgcountmodelPageModule
   ],
-  exports:[
+  exports: [
     HomePage,
-    MfgcountmodelPage
-  ],
-  entryComponents: [
-    MfgcountmodelPage
   ],
 })
-export class HomePageModule {}
+export class HomePageModule { }

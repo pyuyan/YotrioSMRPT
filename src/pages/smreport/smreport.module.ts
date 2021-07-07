@@ -1,3 +1,4 @@
+import { SmreportmodalPageModule } from './../smreportmodal/smreportmodal.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { SmreportPage } from './smreport';
@@ -11,7 +12,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
   imports: [
     IonicPageModule.forChild(SmreportPage),
     PipesModule,
-    NgxEchartsModule
+    NgxEchartsModule,
+    SmreportmodalPageModule
   ],
 })
 export class SmreportPageModule {}

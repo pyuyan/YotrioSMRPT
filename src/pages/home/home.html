@@ -1,183 +1,197 @@
 <ion-header>
     <ion-navbar color="defaultbgcolor" style="height:80px" class="bar-positive" align-title="center" #navbar>
-    <button ion-button menuToggle>
-        <ion-icon style="font-size: 50px;" name="menu"></ion-icon>
-    </button>
-    <ion-title style="padding:0% 0% 0% 0%;"><p align="center" style="color:white;font-size:58px;">永强集团制造数据中心</p></ion-title> 
-    <ion-buttons end>
-        <button ion-button (click)="ShowMsg()">
-            <p align="center" style="color:white;font-size:25px;">单位(万元)&nbsp;&nbsp;</p>
-            <ion-input style="color:white;font-size:25px;" [(ngModel)]="timevalue" #clockcontrol></ion-input>
+        <button ion-button menuToggle>
+            <ion-icon style="font-size: 50px;" name="menu"></ion-icon>
         </button>
-      </ion-buttons>
+        <ion-title style="padding:0% 0% 0% 0%;">
+            <p align="center" style="color:white;font-size:58px;">永强集团制造数据中心</p>
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="ShowMsg()">
+                <p align="center" style="color:white;font-size:25px;">单位(万元)&nbsp;&nbsp;</p>
+                <ion-input style="color:white;font-size:25px;" [(ngModel)]="timevalue" #clockcontrol></ion-input>
+            </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
 <ion-content style="background-color:rgb(7,33,58);">
-  <ion-grid>
-    <ion-row>
-      <ion-col col-9>
-          <ion-card class="maincontenttopstyle">
-          <ion-card-content style="padding:0%">
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                    <ion-card class="topleftcard">
-                        <p align="center" style="color:#f79646;font-size:38px;">累计接单金额</p>
-                      <ion-input readonly text-center style="color:#f79646;font-size:38px;" [ngModel]="tablevalues.totalvalues.totalmny|thousands"></ion-input>
-                      <ion-grid style="padding:0% 25% 0% 25%;overflow:hide;color:white;" align-items-end>
-                          <ion-row style="overflow:hide; height: 40px;border-width:1px;border-style:dashed none dashed none;" *ngFor="let rowdata of tablevalues.groupvalues">
-                            <ion-col text-center style="border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                {{rowdata.groupname}}
-                            </ion-col>
-                            <ion-col text-center style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                {{rowdata.summny|thousands}}
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>    
-                    </ion-card>
-                </ion-col>
-                <ion-col>
-                    <ion-card class="topcentercard">
-                        <p align="center" style="color:#9bbb59;font-size:38px;">累计毛利金额</p>
-                        <ion-input readonly text-center style="color:#9bbb59;font-size:38px;" [ngModel]="tablevalues.totalvalues.totalgross|thousands"></ion-input>
-                        <ion-grid style="padding:0% 25% 0% 25%;overflow:hide;color:white;" align-items-end>
-                            <ion-row style="overflow:hide; height: 40px;border-width:1px;border-style: dashed none dashed none;" *ngFor="let rowdata of tablevalues.groupvalues">
-                              <ion-col text-center style="border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                  {{rowdata.groupname}}
-                              </ion-col>
-                              <ion-col text-center style="color:#9bbb59;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                  {{rowdata.sumgross|thousands}}
-                              </ion-col>
+    <ion-grid>
+        <ion-row>
+            <ion-col col-9>
+                <ion-card class="maincontenttopstyle">
+                    <ion-card-content style="padding:0%">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-card class="topleftcard">
+                                        <p align="center" style="color:#f79646;font-size:38px;">累计接单金额</p>
+                                        <ion-input readonly text-center style="color:#f79646;font-size:38px;" [ngModel]="tablevalues.totalvalues.totalmny|thousands"></ion-input>
+                                        <ion-grid style="padding:0% 25% 0% 25%;overflow:hide;color:white;" align-items-end>
+                                            <ion-row style="overflow:hide; height: 40px;border-width:1px;border-style:dashed none dashed none;" *ngFor="let rowdata of tablevalues.groupvalues">
+                                                <ion-col text-center style="border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                                    {{rowdata.groupname}}
+                                                </ion-col>
+                                                <ion-col text-center style="color:#f79646;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                                    {{rowdata.summny|thousands}}
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                    </ion-card>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-card class="topcentercard">
+                                        <p align="center" style="color:#9bbb59;font-size:38px;">累计毛利金额</p>
+                                        <ion-input readonly text-center style="color:#9bbb59;font-size:38px;" [ngModel]="tablevalues.totalvalues.totalgross|thousands"></ion-input>
+                                        <ion-grid style="padding:0% 25% 0% 25%;overflow:hide;color:white;" align-items-end>
+                                            <ion-row style="overflow:hide; height: 40px;border-width:1px;border-style: dashed none dashed none;" *ngFor="let rowdata of tablevalues.groupvalues">
+                                                <ion-col text-center style="border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                                    {{rowdata.groupname}}
+                                                </ion-col>
+                                                <ion-col text-center style="color:#9bbb59;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                                    {{rowdata.sumgross|thousands}}
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                    </ion-card>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-card class="toprightcard">
+                                        <p align="center" style="color:#c0504d;font-size:38px;">毛利率</p>
+                                        <ion-input readonly text-center style="color:#c0504d;font-size:38px;" [ngModel]="tablevalues.totalvalues.grossrate|percent"></ion-input>
+                                        <ion-grid style="padding:0% 25% 0% 25%;overflow:hide;color:white;" align-items-end>
+                                            <ion-row style="overflow:hide; height: 40px;border-width:1px;border-style: dashed none dashed none;" *ngFor="let rowdata of tablevalues.groupvalues">
+                                                <ion-col text-center style="border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                                    {{rowdata.groupname}}
+                                                </ion-col>
+                                                <ion-col text-center style="color:#c0504d;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
+                                                    {{rowdata.grossrate|percent}}
+                                                </ion-col>
+                                            </ion-row>
+                                        </ion-grid>
+                                    </ion-card>
+                                </ion-col>
                             </ion-row>
-                          </ion-grid>  
-                    </ion-card>
-                </ion-col>      
-                <ion-col>
-                    <ion-card class="toprightcard">
-                        <p align="center" style="color:#c0504d;font-size:38px;">毛利率</p>
-                        <ion-input readonly text-center style="color:#c0504d;font-size:38px;" [ngModel]="tablevalues.totalvalues.grossrate|percent"></ion-input>
-                        <ion-grid style="padding:0% 25% 0% 25%;overflow:hide;color:white;" align-items-end>
-                            <ion-row style="overflow:hide; height: 40px;border-width:1px;border-style: dashed none dashed none;" *ngFor="let rowdata of tablevalues.groupvalues">
-                              <ion-col text-center style="border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                  {{rowdata.groupname}}
-                              </ion-col>
-                              <ion-col text-center style="color:#c0504d;border-width:1px;border-style: none dashed none dashed;font-size:23px;">
-                                  {{rowdata.grossrate|percent}}
-                              </ion-col>
+                        </ion-grid>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card class="maincontentstyle">
+                    <div echarts #manufacturebar [options]="ManufactureDatas" class="bardiv" (chartClick)="OnManufactureBarClick($event)"></div>
+                    <div class="profitgridstyle">
+                        <ion-grid style="overflow:auto;color:#FFFFFF;" align-items-end>
+                            <ion-row style="font-size:25px;overflow:hide; height: 55px;border-width:1px;border-style: none none solid none;">
+                                <ion-col></ion-col>
+                                <ion-col text-center align-self-center *ngFor="let header of ManufactureDatas.xAxis[0].data" (click)="showGroupDetail(header)">{{header}}</ion-col>
                             </ion-row>
-                          </ion-grid>  
-                    </ion-card> 
-                </ion-col>                          
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-          </ion-card>       
-          <ion-card class="maincontentstyle">
-            <div echarts #manufacturebar [options]="ManufactureDatas" class="bardiv" (chartClick)="OnManufactureBarClick($event)"></div>
-            <div class="profitgridstyle">
-                <ion-grid style="overflow:auto;color:#FFFFFF;" align-items-end>
-                    <ion-row style="font-size:25px;overflow:hide; height: 55px;border-width:1px;border-style: none none solid none;">
-                      <ion-col></ion-col>
-                      <ion-col text-center align-self-center *ngFor="let header of ManufactureDatas.xAxis[0].data">{{header}}</ion-col>
-                    </ion-row>
-                    <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of ManufactureDatas.series;index as i;">
-                      <ion-col text-left style="font-size:21px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>
-                      <ion-col text-right align-self-center style="font-size:22px;border-width:1px;border-style: none solid none none;" *ngFor="let coldata of rowdata.data">{{GetFormatValue(coldata,i)}}</ion-col>
-                    </ion-row>
-                  </ion-grid>      
-            </div>
-          </ion-card>         
-      </ion-col>
-      <ion-col>
-          <ion-card class="hintpartstyle">
-              <ion-grid style="padding:20% 15% 0% 0%;overflow:hide;color:#4bacc6;" align-items-end>
-                  <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
-                          累计制造令数量
-                      </ion-col>
-                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
-                        {{tablevalues.alertvalues.totalmfgcodecount}}
-                      </ion-col>
-                      <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
+                            <ion-row style="overflow:hide; height: 60px;border-width:1px;border-style: none none solid none;" *ngFor="let rowdata of ManufactureDatas.series;index as i;">
+                                <ion-col text-left style="font-size:21px;border-width:1px;border-style: none solid none solid;">{{rowdata.name}}</ion-col>
+                                <ion-col text-center align-self-center style="font-size:22px;border-width:1px;border-style: none solid none none;" *ngFor="let coldata of rowdata.data">{{GetFormatValue(coldata,i)}}</ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                </ion-card>
+            </ion-col>
+            <ion-col>
+                <ion-card class="hintpartstyle">
+                    <ion-grid style="padding:20% 15% 0% 0%;overflow:hide;color:#4bacc6;" align-items-end>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
+                            <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
+                                累计制造令数量
+                            </ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
+                                {{tablevalues.alertvalues.totalmfgcodecount}}
+                            </ion-col>
+                            <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
 
-                      </ion-col>
-                  </ion-row>
-                  <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
-                          无转移价制造令数量
-                      </ion-col>
-                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
-                          {{tablevalues.alertvalues.totalunsetpricecount}}
-                      </ion-col>
-                      <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
-                        <button [clear]="true" (click)="OpenDetail('',0,0)" style="padding:0%;height:40px !important;" color="colorseries1" ion-button icon-only><ion-icon name="md-search"></ion-icon></button>
-                      </ion-col>
-                  </ion-row>
-                  <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                      <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
-                          无转移价金额
-                      </ion-col>
-                      <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
-                          {{tablevalues.alertvalues.totalunsetpricemny|thousands}}
-                      </ion-col>
-                      <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
-                        <button [clear]="true" (click)="OpenDetail('',0,0)" style="padding:0%;height:40px !important;" color="colorseries1" ion-button icon-only><ion-icon name="md-search"></ion-icon></button>
-                      </ion-col>
-                  </ion-row>
-                </ion-grid>    
-                <ion-grid style="padding:20% 15% 0% 0%;overflow:hide;color:#9bbb59;" align-items-end>
-                    <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: none none none none;">
-                        <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:28px;">分类统计</ion-col>
-                    </ion-row>
-                    <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                        <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">类型</ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">接单金额</ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:26px;">毛利率</ion-col>
-                        <ion-col col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;"></ion-col>
-                    </ion-row>
-                    <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.groupbykindvalues;index as n;">
-                        <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">
-                            {{rowdata.kind}}
-                        </ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">
-                            {{rowdata.ordermny|thousands}}
-                        </ion-col>
-                        <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:26px;">
-                            {{rowdata.grossrate|percent}}
-                        </ion-col>
-                        <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
-                            <button [clear]="true" (click)="OpenDetail(rowdata,n,1)" style="padding:0%;height:40px !important;" color="colorseries2" ion-button icon-only><ion-icon name="md-search"></ion-icon></button>
-                        </ion-col>
-                    </ion-row>
-                  </ion-grid>  
-                  <ion-grid style="padding:10% 15% 0% 0%;overflow:hide;color:#8064a2;" align-items-end>
-                      <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: none none none none;">
-                          <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:28px;">数量分布统计</ion-col>
-                      </ion-row>
-                      <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
-                          <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">区间</ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">接单金额</ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:26px;">毛利率</ion-col>
-                          <ion-col col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;"></ion-col>
-                      </ion-row>
-                      <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.groupbyareavalues;index as n;">
-                          <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">
-                              {{rowdata.areaname}}
-                          </ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">
-                              {{rowdata.areamny|thousands}}
-                          </ion-col>
-                          <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:26px;">
-                              {{rowdata.grossrate|percent}}
-                          </ion-col>
-                          <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
-                            <button [clear]="true" (click)="OpenDetail(rowdata,n,2)" style="padding:0%;height:40px !important;" color="colorseries3" ion-button icon-only><ion-icon name="md-search"></ion-icon></button>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>  
-            </ion-card>	    
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
+                            <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
+                                无转移价制造令数量
+                            </ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
+                                {{tablevalues.alertvalues.totalunsetpricecount}}
+                            </ion-col>
+                            <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
+                                <button [clear]="true" (click)="OpenDetail('',0,0)" style="padding:0%;height:40px !important;" color="colorseries1" ion-button
+                                    icon-only>
+                                    <ion-icon name="md-search"></ion-icon>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
+                            <ion-col col-7 text-center style="border-width:1px;border-style: none dotted none none;color:#4bacc6;font-size:26px;">
+                                无转移价金额
+                            </ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#4bacc6;font-size:26px;">
+                                {{tablevalues.alertvalues.totalunsetpricemny|thousands}}
+                            </ion-col>
+                            <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
+                                <button [clear]="true" (click)="OpenDetail('',0,0)" style="padding:0%;height:40px !important;" color="colorseries1" ion-button
+                                    icon-only>
+                                    <ion-icon name="md-search"></ion-icon>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <ion-grid style="padding:20% 15% 0% 0%;overflow:hide;color:#9bbb59;" align-items-end>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: none none none none;">
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:28px;">分类统计</ion-col>
+                        </ion-row>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
+                            <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">类型</ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">接单金额</ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:26px;">毛利率</ion-col>
+                            <ion-col col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;"></ion-col>
+                        </ion-row>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.groupbykindvalues;index as n;">
+                            <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">
+                                {{rowdata.kind}}
+                            </ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#9bbb59;font-size:26px;">
+                                {{rowdata.ordermny|thousands}}
+                            </ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#9bbb59;font-size:26px;">
+                                {{rowdata.grossrate|percent}}
+                            </ion-col>
+                            <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
+                                <button [clear]="true" (click)="OpenDetail(rowdata,n,1)" style="padding:0%;height:40px !important;" color="colorseries2"
+                                    ion-button icon-only>
+                                    <ion-icon name="md-search"></ion-icon>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <ion-grid style="padding:10% 15% 0% 0%;overflow:hide;color:#8064a2;" align-items-end>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: none none none none;">
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:28px;">数量分布统计</ion-col>
+                        </ion-row>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;">
+                            <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">区间</ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">接单金额</ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:26px;">毛利率</ion-col>
+                            <ion-col col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;"></ion-col>
+                        </ion-row>
+                        <ion-row style="overflow:hide; height: 50px;border-width:1px;border-style: dotted none dotted none;" *ngFor="let rowdata of tablevalues.groupbyareavalues;index as n;">
+                            <ion-col col-5 text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">
+                                {{rowdata.areaname}}
+                            </ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none dotted none none;color:#8064a2;font-size:26px;">
+                                {{rowdata.areamny|thousands}}
+                            </ion-col>
+                            <ion-col text-center style="border-width:1px;border-style: none none none none;color:#8064a2;font-size:26px;">
+                                {{rowdata.grossrate|percent}}
+                            </ion-col>
+                            <ion-col align-self-center col-1 style="color:#FFF;border-width:1px;border-style: none none none none;font-size:26px;">
+                                <button [clear]="true" (click)="OpenDetail(rowdata,n,2)" style="padding:0%;height:40px !important;" color="colorseries3"
+                                    ion-button icon-only>
+                                    <ion-icon name="md-search"></ion-icon>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

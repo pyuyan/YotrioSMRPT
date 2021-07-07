@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <p align="right" class="title-title">永强集团库存数据中心</p>
+
+      <p align="center" class="title-select" (click)="presentPopover($event)">
+        {{currentYear}}年 {{choosedMonth}}
+        <ion-icon name="arrow-dropdown"></ion-icon>
+      </p>
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button>
+        <p align="center">单位(万元)&nbsp;&nbsp;</p>
+        <ion-input [(ngModel)]="timevalue" #clockcontrol></ion-input>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <!--左侧-->
+      <ion-col col-9>
+        <ion-card class="maincontenttopstyle">
+          <ion-card-content>
+            <div echarts #inventoryPie [options]="inventoryPieData" class="piediv"></div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="maincontentstyle">
+          <div echarts #inventoryBar [options]="inventoryBarData" class="bardiv"></div>
+          <div class="profitgridstyle">
+            <ion-grid align-items-start>
+              <ion-row class="profit-header">
+                <ion-col text-center>存放地点</ion-col>
+                <ion-col text-center *ngFor="let header of inventoryBarxAxisAppend">{{header}}</ion-col>
+              </ion-row>
+              <ion-row class="profit-content" *ngFor="let rowdata of inventoryBarSeriesAppend;index as i;">
+                <ion-col text-center align-self-center>{{rowdata.name}}</ion-col>
+                <ion-col text-center align-self-center *ngFor="let coldata of rowdata.data">{{coldata}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card>
+      </ion-col>
+      <!--./左侧-->
+
+      <!--右侧-->
+      <ion-col col-3>
+        <!--不同行业企业详情card-->
+        <ion-card class="right-cards">
+          <ion-card-header>
+            {{cardYearType}}
+          </ion-card-header>
+          <ion-scroll scrollX="false" scrollY="true" style="height: 940px">
+            <ion-row>
+              <ion-col>
+                <ion-card class="right-cards-detail" *ngFor="let item of inventoryDataGroupByTime">
+                  <ion-row class="right-cards-detail-header">
+                    <ion-col text-center>{{item.modal}}</ion-col>
+                  </ion-row>
+
+                  <ion-row class="right-cards-detail-content" *ngFor="let invent of item.data">
+                    <ion-col text-center>{{invent.company}}</ion-col>
+                    <ion-col text-center>{{invent.showValue}}</ion-col>
+                  </ion-row>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-scroll>
+        </ion-card>
+        <!--./不同行业企业详情card-->
+      </ion-col>
+      <!--./右侧-->
+    </ion-row>
+  </ion-grid>
+</ion-content>

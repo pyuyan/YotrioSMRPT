@@ -5,85 +5,91 @@
   Ionic pages and navigation.
 -->
 <div class="modal_content">
-    <ion-header>
-    </ion-header>
+  <ion-header>
+  </ion-header>
 
-    <ion-content padding="">
-        <div>
-            <ion-card class="maincontentstyle">
-                <ion-row style="padding:0%;width:100%">
-                    <ion-col>
-                        <div class="maingridstyle">
-                            <ion-grid align-items-end="" style="overflow:auto;color:#FFFFFF;">
-                                <ion-row align-items-end="" style="background-color:rgb(7,33,58);color:white;font-size:19px;">
-                                    <ion-col col-1="" text-left="">
-                                        日期
-                                    </ion-col>
-                                    <ion-col col-2="" text-left="">
-                                        客户名称
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        料号
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        制造令号
-                                    </ion-col>
-                                    <ion-col col-2="" text-left="">
-                                        产品名称
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        接单数量
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        接单金额
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        接单产值
-                                    </ion-col>
-                                    <ion-col col-2="" text-left="">
-                                        接单毛利率
-                                    </ion-col>
-                                </ion-row>
-                                <ion-row style="font-size:19px;background-color:white;color:black;border-style: none none dotted none;border-width:1px;border-color: rgb(7,33,58);" *ngFor="let row of dataset;index as n;">
-                                    <ion-col col-1="" text-left="">
-                                        {{row.BusinessDate}}
-                                    </ion-col>
-                                    <ion-col col-2="" text-left="">
-                                        {{row.Customer}}
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        {{row.ItemCode}}
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        {{row.MFGCode}}
-                                    </ion-col>
-                                    <ion-col col-2="" text-left="">
-                                        {{row.ItemName}}
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        {{row.OrderQty}}
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        {{row.SaleMoney}}
-                                    </ion-col>
-                                    <ion-col col-1="" text-left="">
-                                        {{row.TransferMoney}}
-                                    </ion-col>
-                                    <ion-col col-2="" text-left="">
-                                        {{row.GrossRate}}
-                                    </ion-col>
-                                </ion-row>
-                            </ion-grid>
-                        </div>
-                    </ion-col>
+  <ion-content padding="">
+    <div>
+      <ion-card class="maincontentstyle">
+        <ion-row>
+          <ion-col col-8 offset-4 style="font-size: 22px;padding-top: 0px;padding-bottom: 0px;">
+            <pagination-controls (pageChange)="p = $event" previousLabel="上一页" nextLabel="下一页" maxSize="10"></pagination-controls>
+          </ion-col>
+        </ion-row>
+        <ion-row style="padding:0%;width:100%">
+          <ion-col>
+            <div class="maingridstyle">
+              <ion-grid align-items-end="" style="overflow:auto;color:#FFFFFF;">
+                <ion-row align-items-end="" style="background-color:rgb(7,33,58);color:white;font-size:19px;">
+                  <ion-col col-1="" text-left="">
+                    日期
+                  </ion-col>
+                  <ion-col col-2="" text-left="">
+                    客户名称
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    料号
+                  </ion-col>
+                  <ion-col col-2="" text-left="">
+                    制造令号
+                  </ion-col>
+                  <ion-col col-2="" text-left="">
+                    产品名称
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    接单数量
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    接单金额
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    接单产值
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    接单毛利率
+                  </ion-col>
                 </ion-row>
-            </ion-card>
-        </div>
-    </ion-content>
+                <ion-row style="font-size:19px;background-color:white;color:black;border-style: none none dotted none;border-width:1px;border-color: rgb(7,33,58);"
+                  *ngFor="let row of dataset|paginate: { itemsPerPage: pagesize, currentPage: p };index as n;">
+                  <ion-col col-1="" text-left="">
+                    {{row.BusinessDate}}
+                  </ion-col>
+                  <ion-col col-2="" text-left="">
+                    {{row.Customer}}
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    {{row.ItemCode}}
+                  </ion-col>
+                  <ion-col col-2="" text-left="">
+                    {{row.MFGCode}}
+                  </ion-col>
+                  <ion-col col-2="" text-left="">
+                    {{row.ItemName}}
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    {{row.OrderQty}}
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    {{row.SaleMoney}}
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    {{row.TransferMoney}}
+                  </ion-col>
+                  <ion-col col-1="" text-left="">
+                    {{row.GrossRate}}
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+  </ion-content>
 
-    <ion-footer>
-        <button (click)="dismiss()" color="danger" full="" ion-button="">
-            关闭
-        </button>
-    </ion-footer>
+  <ion-footer>
+    <button (click)="dismiss()" color="danger" full="" ion-button="">
+      关闭
+    </button>
+  </ion-footer>
 </div>

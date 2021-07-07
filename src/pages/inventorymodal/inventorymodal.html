@@ -1,0 +1,49 @@
+<!--
+  Generated template for the SmreportmodalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<div class="modal_content">
+  <ion-header>
+    <ion-segment id="segment">
+      <ion-segment-button style="font-size:25px;">
+        {{serise}}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-header>
+
+  <ion-content padding="">
+    <div>
+      <ion-card class="maincontentstyle">
+        <ion-row style="padding:0%;width:100%">
+          <ion-col>
+            <div class="maingridstyle">
+              <ion-grid align-items-end="" style="overflow:auto;color:#FFFFFF;">
+                <ion-row align-items-end="" style="background-color:rgb(7,33,58);color:white;font-size:19px;">
+                  <ion-col col-3="" text-left=""> 日期 </ion-col>
+                  <ion-col col-3="" text-left="">公司 </ion-col>
+                  <ion-col col-3="" text-left=""> 类型 </ion-col>
+                  <ion-col col-3="" text-left=""> {{name}} </ion-col>
+                </ion-row>
+                <ion-row style="font-size:19px;background-color:white;color:black;border-style: none none dotted none;border-width:1px;border-color: rgb(7,33,58);"
+                  *ngFor="let row of dataset;index as n;">
+                  <ion-col col-3="" text-left=""> {{date}} </ion-col>
+                  <ion-col col-3="" text-left=""> {{row.company}} </ion-col>
+                  <ion-col col-3="" text-left=""> {{row.type}} </ion-col>
+                  <ion-col col-3="" text-left=""> {{row.value}} </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+  </ion-content>
+
+  <ion-footer>
+    <button (click)="dismiss()" color="danger" full="" ion-button="">
+      关闭
+    </button>
+  </ion-footer>
+</div>

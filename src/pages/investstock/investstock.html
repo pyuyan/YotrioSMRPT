@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-navbar color="defaultbgcolor" class="bar-positive" align-title="center" #navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <p align="right" class="title-title">永强集团股票投资数据</p>
+
+      <p align="center" class="title-select" (click)="presentPopover($event)">
+        <!-- {{currentYear}}年 {{choosedMonth}}月 -->
+        {{choosedPeriod}}
+        <ion-icon name="arrow-dropdown"></ion-icon>
+      </p>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button>
+        <p align="center">单位(万元)&nbsp;&nbsp;</p>
+        <ion-input [(ngModel)]="timevalue" #clockcontrol></ion-input>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <!--左侧-->
+      <ion-col col-9>
+        <!--累计显示-->
+        <ion-card class="top-card">
+          <ion-row>
+            <ion-col *ngFor="let item of totalData">
+              <ion-card>
+                <ion-card-content>
+                  <ion-card-title align="center" [ngStyle]="{'color': item.fontcolor}">{{item.title}}</ion-card-title>
+                  <p align="center" [ngStyle]="{'color': item.fontcolor}">{{item.num}}</p>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+        <!--./累计显示-->
+
+        <!--股票投资详情显示-->
+        <ion-card class="sheet-card">
+          <ion-grid align-items-end>
+            <ion-row class="sheet-row-header">
+              <ion-col text-center align-self-center *ngFor="let header of headers" (click)="_orderBy(header.col)">
+                {{header.name}}
+                <ion-icon *ngIf="orderByCol == header.col && orderByFlow == 'desc' " name="arrow-round-down" [ngStyle]="{'font-size': '1.0em'}"></ion-icon>
+                <ion-icon *ngIf="orderByCol == header.col && orderByFlow == 'asc' " name="arrow-round-up" [ngStyle]="{'font-size': '1.0em'}"></ion-icon>
+              </ion-col>
+            </ion-row>
+
+            <!--TODO:这里scroll高度应该是动态计算的-->
+            <ion-scroll scrollX="false" scrollY="true" style="height: 440px">
+              <ion-row class="sheet-row-content" *ngFor="let rowdata of invesStockData;index as i;">
+                <ion-col text-center align-self-center style="border-style: none solid none solid;">
+                  <span style="font-size:23px;color:rgba(97, 177, 202, 0.9);">
+                    {{rowdata.StockName}}
+                  </span>
+                </ion-col>
+                <ion-col text-center align-self-center>{{rowdata.StockID}}</ion-col>
+                <ion-col text-center align-self-center>{{rowdata.StockValueInit}}</ion-col>
+                <ion-col text-right align-self-center>{{rowdata.StockNum}}&nbsp;股</ion-col>
+                <ion-col text-center align-self-center>{{rowdata.StockBuyVal}}</ion-col>
+                <ion-col text-center align-self-center>{{rowdata.ClosePrice}}</ion-col>
+                <ion-col text-center align-self-center>{{rowdata.StockValueCurrent}}</ion-col>
+                <ion-col text-center align-self-center>
+                  <span [ngStyle]="{'color': rowdata.StockProfit > 0 ? 'rgba(255,68,22,0.9)' : rowdata.StockProfit == 0 ? 'white' : 'rgba(85,214,8,0.8)' }">{{rowdata.StockProfit}}</span>
+                </ion-col>
+              </ion-row>
+            </ion-scroll>
+          </ion-grid>
+        </ion-card>
+        <!--./股票投资详情显示-->
+      </ion-col>
+      <!--./左侧-->
+
+      <!--右侧-->
+      <ion-col col-3>
+        <!--最上水平条形图-->
+        <ion-card class="top-horizontalbar-card">
+          <ion-card-content>
+            <div echarts #topBar [options]="topBarData" class="right-echarts-div"></div>
+          </ion-card-content>
+        </ion-card>
+        <!--./最上水平条形图-->
+        <!--中间环形图-->
+        <ion-card class="mid-pie-card">
+          <ion-card-content>
+            <div echarts #midPie [options]="midPieData" class="right-echarts-div"></div>
+          </ion-card-content>
+        </ion-card>
+        <!--中间环形图-->
+        <!--最下柱状图-->
+        <!-- <ion-card class="bottom-bar-card">
+          <ion-card-content>
+            <div echarts #bottomBar [options]="bottomBarData" class="right-echarts-div"></div>
+          </ion-card-content>
+        </ion-card> -->
+        <!--最下柱状图-->
+      </ion-col>
+      <!--./右侧-->
+    </ion-row>
+
+    <!--最底部曲线图-->
+    <ion-row>
+      <ion-col>
+        <ion-card class="bottom-cur-card">
+          <ion-card-content>
+            <div echarts #bottomCur [options]="bottomCurData" class="right-echarts-div"></div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <!--./最底部曲线图-->
+  </ion-grid>
+</ion-content>
